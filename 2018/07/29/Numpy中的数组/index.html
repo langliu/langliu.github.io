@@ -1,0 +1,560 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+
+    
+
+    
+
+
+
+    <meta charset="utf-8">
+    
+    
+    
+    
+    <title>Numpy中的数组 | Allen&#39;s blog | 我的个人博客，用于记录在学习中的一些知识，加强记忆</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <meta name="theme-color" content="#3F51B5">
+    
+    
+    <meta name="keywords" content="NumPy">
+    <meta name="description" content="NumPy 中定义的最重要的对象是称为 ndarray 的N维数组类型。它描述相同类型的元素集合。可以使用基于零的索引访问集合中的项目。">
+<meta name="keywords" content="NumPy">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Numpy中的数组">
+<meta property="og:url" content="https://langliu.github.io/2018/07/29/Numpy中的数组/index.html">
+<meta property="og:site_name" content="Allen&#39;s blog">
+<meta property="og:description" content="NumPy 中定义的最重要的对象是称为 ndarray 的N维数组类型。它描述相同类型的元素集合。可以使用基于零的索引访问集合中的项目。">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2018-07-29T15:36:10.746Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Numpy中的数组">
+<meta name="twitter:description" content="NumPy 中定义的最重要的对象是称为 ndarray 的N维数组类型。它描述相同类型的元素集合。可以使用基于零的索引访问集合中的项目。">
+    
+        <link rel="alternate" type="application/atom+xml" title="Allen&#39;s blog" href="/atom.xml">
+    
+    <link rel="shortcut icon" href="http://ow4hqwlyg.bkt.clouddn.com/favicon.ico">
+    <link rel="stylesheet" href="//unpkg.com/hexo-theme-material-indigo@latest/css/style.css">
+    <script>window.lazyScripts=[]</script>
+
+    <!-- custom head -->
+    
+
+</head>
+
+<body>
+    <div id="loading" class="active"></div>
+
+    <aside id="menu" class="hide" >
+  <div class="inner flex-row-vertical">
+    <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
+        <i class="icon icon-lg icon-close"></i>
+    </a>
+    <div class="brand-wrap" style="background-image:url(http://ow4hqwlyg.bkt.clouddn.com/brand.jpg)">
+      <div class="brand">
+        <a href="/" class="avatar waves-effect waves-circle waves-light">
+          <img src="http://ow4hqwlyg.bkt.clouddn.com/blog-avatar.jpg">
+        </a>
+        <hgroup class="introduce">
+          <h5 class="nickname">Allen Liu</h5>
+          <a href="mailto:809721414@qq.com" title="809721414@qq.com" class="mail">809721414@qq.com</a>
+        </hgroup>
+      </div>
+    </div>
+    <div class="scroll-wrap flex-col">
+      <ul class="nav">
+        
+            <li class="waves-block waves-effect">
+              <a href="/"  >
+                <i class="icon icon-lg icon-home"></i>
+                主页
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/archives"  >
+                <i class="icon icon-lg icon-archives"></i>
+                Archives
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/tags"  >
+                <i class="icon icon-lg icon-tags"></i>
+                Tags
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/categories"  >
+                <i class="icon icon-lg icon-th-list"></i>
+                Categories
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://github.com/langliu" target="_blank" >
+                <i class="icon icon-lg icon-github"></i>
+                Github
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://www.zhihu.com/people/liu-lang-55-8/activities" target="_blank" >
+                <i class="icon icon-lg icon-coffee"></i>
+                知乎
+              </a>
+            </li>
+        
+      </ul>
+    </div>
+  </div>
+</aside>
+
+    <main id="main">
+        <header class="top-header" id="header">
+    <div class="flex-row">
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
+          <i class="icon icon-lg icon-navicon"></i>
+        </a>
+        <div class="flex-col header-title ellipsis">Numpy中的数组</div>
+        
+        <div class="search-wrap" id="search-wrap">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+                <i class="icon icon-lg icon-chevron-left"></i>
+            </a>
+            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="输入感兴趣的关键字">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
+                <i class="icon icon-lg icon-search"></i>
+            </a>
+        </div>
+        
+        
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menuShare">
+            <i class="icon icon-lg icon-share-alt"></i>
+        </a>
+        
+    </div>
+</header>
+<header class="content-header post-header">
+
+    <div class="container fade-scale">
+        <h1 class="title">Numpy中的数组</h1>
+        <h5 class="subtitle">
+            
+                <time datetime="2018-07-29T15:28:21.000Z" itemprop="datePublished" class="page-time">
+  2018-07-29
+</time>
+
+
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/Python/">Python</a></li></ul>
+
+            
+        </h5>
+    </div>
+
+    
+
+
+</header>
+
+
+<div class="container body-wrap">
+    
+    <aside class="post-widget">
+        <nav class="post-toc-wrap post-toc-shrink" id="post-toc">
+            <h4>TOC</h4>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#数组的使用"><span class="post-toc-number">1.</span> <span class="post-toc-text">数组的使用</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#创建"><span class="post-toc-number">1.1.</span> <span class="post-toc-text">创建</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#访问"><span class="post-toc-number">1.2.</span> <span class="post-toc-text">访问</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#数组运算"><span class="post-toc-number">1.3.</span> <span class="post-toc-text">数组运算</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#数组的常用方法"><span class="post-toc-number">1.4.</span> <span class="post-toc-text">数组的常用方法</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#数组的文件读写："><span class="post-toc-number">1.5.</span> <span class="post-toc-text">数组的文件读写：</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#其他"><span class="post-toc-number">1.6.</span> <span class="post-toc-text">其他</span></a></li></ol></li></ol>
+        </nav>
+    </aside>
+
+
+<article id="post-Numpy中的数组"
+  class="post-article article-type-post fade" itemprop="blogPost">
+
+    <div class="post-card">
+        <h1 class="post-card-title">Numpy中的数组</h1>
+        <div class="post-meta">
+            <time class="post-time" title="2018-07-29 23:28:21" datetime="2018-07-29T15:28:21.000Z"  itemprop="datePublished">2018-07-29</time>
+
+            
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/Python/">Python</a></li></ul>
+
+
+
+            
+<span id="busuanzi_container_page_pv" title="文章总阅读量" style='display:none'>
+    <i class="icon icon-eye icon-pr"></i><span id="busuanzi_value_page_pv"></span>
+</span>
+
+
+        </div>
+        <div class="post-content" id="post-content" itemprop="postContent">
+            <p>NumPy 中定义的最重要的对象是称为 <code>ndarray</code> 的N维数组类型。它描述相同类型的元素集合。可以使用基于零的索引访问集合中的项目。</p>
+<a id="more"></a>
+<p><code>ndarray</code> 中的每个元素在内存中使用相同大小的块。 <code>ndarray</code>中的每个元素是数据类型对象的对象(称为 <code>dtype</code>)。</p>
+<p>从 <code>ndarray</code> 对象提取的任何元素(通过切片)由一个数组标量类型的 Python 对象表示。</p>
+<h2 id="数组的使用"><a href="#数组的使用" class="headerlink" title="数组的使用"></a>数组的使用</h2><h3 id="创建"><a href="#创建" class="headerlink" title="创建"></a>创建</h3><p>通过已有列表创建：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"></span><br><span class="line">list_1 = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>]</span><br><span class="line">array_1 = np.array(list_1)  <span class="comment"># 1x4的一维数组</span></span><br><span class="line">array_2 = np.array([list_1, [<span class="number">5</span>, <span class="number">6</span>, <span class="number">7</span>, <span class="number">8</span>]])  <span class="comment"># 2x4的二维数组</span></span><br></pre></td></tr></table></figure>
+<p>通过 <code>arange()</code> 创建：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">array_3 = np.arange(<span class="number">5</span>)  <span class="comment"># [0 1 2 3 4]</span></span><br><span class="line">array_4 = np.arange(<span class="number">2</span>, <span class="number">5</span>)  <span class="comment"># [2 3 4]</span></span><br><span class="line">array_5 = np.arange(<span class="number">1</span>, <span class="number">10</span>, <span class="number">2</span>)  <span class="comment"># [1 3 5 7 9]</span></span><br></pre></td></tr></table></figure>
+<p>通过 <code>zeros()</code> 创建全零数组：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">array_6 = np.zeros(<span class="number">5</span>)  <span class="comment"># [0. 0. 0. 0. 0.]</span></span><br><span class="line">array_7 = np.zeros([<span class="number">2</span>, <span class="number">3</span>])  <span class="comment"># 2x3的全零数组</span></span><br></pre></td></tr></table></figure>
+<p>通过 <code>eye()</code> 创建单位数组：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">array_8 = np.eye(<span class="number">3</span>)  <span class="comment"># 3x3的单位数组</span></span><br></pre></td></tr></table></figure>
+<p>通过 <code>random.randn()</code> 创建随机数组：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">array_9 = np.random.randn(<span class="number">5</span>)  <span class="comment"># 会生成一个一行五列的随机数数组</span></span><br></pre></td></tr></table></figure>
+<p>通过 <code>random.randint()</code> 创建随机数组：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">array_10 = np.random.randint(<span class="number">6</span>, size=(<span class="number">3</span>, <span class="number">2</span>))  <span class="comment"># 生成一个元素小于6的3行2列的随机数组</span></span><br><span class="line">array_10 = np.random.randint(<span class="number">6</span>, size=<span class="number">3</span>)  <span class="comment"># 生成一个元素小于6的1行3列的随机数组</span></span><br></pre></td></tr></table></figure>
+<h3 id="访问"><a href="#访问" class="headerlink" title="访问"></a>访问</h3><p>获取数组的轴数：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">array_8.ndim  <span class="comment"># 3 表明数组有3列</span></span><br></pre></td></tr></table></figure>
+<p>获取数组的形状：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">array_6.shape  <span class="comment"># (5,) 表明array_6是一个 1x5 的数组</span></span><br><span class="line">array_8.shape  <span class="comment"># (3, 3) 表明array_8是一个 3x3 的数组</span></span><br></pre></td></tr></table></figure>
+<p>获取数组的大小：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">array_8.size  <span class="comment"># 9 表明array_8有9个元素</span></span><br></pre></td></tr></table></figure>
+<p>获数组元素的数据类型：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">array_5.dtype  <span class="comment"># int32</span></span><br><span class="line">array_8.dtype  <span class="comment"># 	float64</span></span><br></pre></td></tr></table></figure>
+<p>获取数组中的元素：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">array_1[<span class="number">0</span>]  <span class="comment"># 1 获取一维数组的第一个元素</span></span><br><span class="line">array_2[<span class="number">0</span>]  <span class="comment"># [1 2 3 4] 获取二维数组的第一行的元素</span></span><br><span class="line">array_2[<span class="number">1</span>][<span class="number">2</span>]  <span class="comment"># 3 获取二维数组第二行第三列的元素</span></span><br><span class="line">array_2[<span class="number">0</span>][:<span class="number">2</span>]  <span class="comment"># [1 2 3] 获取二维数组第一行的前三个元素</span></span><br><span class="line">array_2[:,:<span class="number">3</span>]  <span class="comment"># [[1 2 3] [1 2 3]] 获取数组第一行第一个元素至最后一行第3个元素区域的元素</span></span><br></pre></td></tr></table></figure>
+<h3 id="数组运算"><a href="#数组运算" class="headerlink" title="数组运算"></a>数组运算</h3><p>数组的加减法和乘法：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">arr_1 = np.array([1, 2, 3])</span><br><span class="line">arr_2 = np.array([4, 5, 6])</span><br><span class="line">arr_sum = arr_1 + arr_2  # [5, 7, 9]</span><br><span class="line">arr_sub = arr_2 - arr_1  # [3, 3, 3]</span><br><span class="line">arr_mul = arr_1 * arr_2  # [4 10 18]</span><br></pre></td></tr></table></figure>
+<p>数组的除法：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">arr_mul = arr_1 / arr_2  <span class="comment"># [0.25 0.4 0.5]</span></span><br><span class="line">arr_3 = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">0</span>]</span><br><span class="line">arr_mul1 = arr_1 / arr_3  <span class="comment"># [ 1.  1. inf] 除数为0时python会报警告，然后对应的结果为 `inf`</span></span><br></pre></td></tr></table></figure>
+<h3 id="数组的常用方法"><a href="#数组的常用方法" class="headerlink" title="数组的常用方法"></a>数组的常用方法</h3><p>重置数组的形状： <code>ndarry.reshape()</code></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">arr_4 = np.random.randint(<span class="number">10</span>, size=<span class="number">20</span>).reshape(<span class="number">4</span>, <span class="number">5</span>)  <span class="comment"># 生成一个4x5的随机数组</span></span><br></pre></td></tr></table></figure>
+<p>求数组中的元素：<code>np.unique(ndarray)</code></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">arr_5 = np.array([<span class="number">1</span>, <span class="number">3</span>, <span class="number">5</span>, <span class="number">2</span>, <span class="number">1</span>])</span><br><span class="line">arr_5_unique = np.unique(arr_5)  <span class="comment"># [1 2 3 5]</span></span><br></pre></td></tr></table></figure>
+<p>数组求和：<code>sum(ndarray)</code></p>
+<p>对于一维数组直接求取所有元素的和，对于二维数组则求取每列元素的和，返回一个新的数组。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">sum(arr_5)  <span class="comment"># 12</span></span><br><span class="line">arr_6 = np.array([[<span class="number">1</span>, <span class="number">3</span>, <span class="number">5</span>, <span class="number">2</span>, <span class="number">1</span>], [<span class="number">1</span>, <span class="number">3</span>, <span class="number">5</span>, <span class="number">2</span>, <span class="number">1</span>]])</span><br><span class="line">sum(arr_6)  <span class="comment"># [ 2  6 10  4  2]</span></span><br></pre></td></tr></table></figure>
+<p>求数组中元素的最大值：<code>ndarray.max()</code></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">arr_6.max()  <span class="comment"># 5</span></span><br><span class="line">max(arr_6[<span class="number">0</span>])  <span class="comment"># 5 求取第一行的最大值</span></span><br><span class="line">max(arr_6[:, <span class="number">0</span>])  <span class="comment"># 1 求取第一列的最大值</span></span><br></pre></td></tr></table></figure>
+<h3 id="数组的文件读写："><a href="#数组的文件读写：" class="headerlink" title="数组的文件读写："></a>数组的文件读写：</h3><p>单个数组的读写：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">arr = np.arange(<span class="number">10</span>)</span><br><span class="line">np.save(<span class="string">'arr.npy'</span>, arr)</span><br><span class="line">a = np.load(<span class="string">'arr.npy'</span>)  <span class="comment"># [0 1 2 3 4 5 6 7 8 9]</span></span><br></pre></td></tr></table></figure>
+<p>多个数组的读写：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">arr_1 = np.arange(<span class="number">10</span>)</span><br><span class="line">arr_2 = np.arange(<span class="number">0</span>, <span class="number">10</span>, <span class="number">2</span>)</span><br><span class="line">np.savez(<span class="string">'arr.npz'</span>, x=arr_1, y=arr_2)</span><br><span class="line">a = np.load(<span class="string">'arr.npz'</span>)</span><br><span class="line">print(a[<span class="string">'x'</span>])  <span class="comment"># [0 1 2 3 4 5 6 7 8 9]</span></span><br><span class="line">print(a[<span class="string">'y'</span>])  <span class="comment"># [0 2 4 6 8]</span></span><br></pre></td></tr></table></figure>
+<h3 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h3><p>如果数组创建时同时包含 <code>int</code> 和 <code>float</code> 类型的元素，则数组创建后所有元素都将被转为 <code>float</code> 类型。只有只包含 <code>int</code> 类型的元素的数组的元素才为 <code>int</code> 类型。</p>
+
+        </div>
+
+        <blockquote class="post-copyright">
+    
+    <div class="content">
+        
+
+        
+        感谢您的阅读
+        
+    </div>
+    
+    <footer>
+        <a href="https://langliu.github.io">
+            <img src="http://ow4hqwlyg.bkt.clouddn.com/blog-avatar.jpg" alt="Allen Liu">
+            Allen Liu
+        </a>
+    </footer>
+</blockquote>
+
+        
+<div class="page-reward">
+    <a id="rewardBtn" href="javascript:;" class="page-reward-btn waves-effect waves-circle waves-light">赏</a>
+</div>
+
+
+
+        <div class="post-footer">
+            
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/NumPy/">NumPy</a></li></ul>
+
+
+            
+<div class="page-share-wrap">
+    
+
+<div class="page-share" id="pageShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://langliu.github.io/2018/07/29/Numpy中的数组/&title=《Numpy中的数组》 — Allen's blog&pic=http://ow4hqwlyg.bkt.clouddn.com/blog-avatar.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://langliu.github.io/2018/07/29/Numpy中的数组/&title=《Numpy中的数组》 — Allen's blog&source=NumPy 中定义的最重要的对象是称为 ndarray 的N维数组类型。它描述相同类型的元素集合。可以使用基于零的索引访问集合中的项目。" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://langliu.github.io/2018/07/29/Numpy中的数组/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《Numpy中的数组》 — Allen's blog&url=https://langliu.github.io/2018/07/29/Numpy中的数组/&via=https://langliu.github.io" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://langliu.github.io/2018/07/29/Numpy中的数组/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+
+    <a href="javascript:;" id="shareFab" class="page-share-fab waves-effect waves-circle">
+        <i class="icon icon-share-alt icon-lg"></i>
+    </a>
+</div>
+
+
+
+        </div>
+    </div>
+
+    
+<nav class="post-nav flex-row flex-justify-between">
+  
+    <div class="waves-block waves-effect prev">
+      <a href="/2018/08/25/Vue-CLI3设置反向代理/" id="post-prev" class="post-nav-link">
+        <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i> Prev</div>
+        <h4 class="title">vue-cli3 设置反向代理</h4>
+      </a>
+    </div>
+  
+
+  
+    <div class="waves-block waves-effect next">
+      <a href="/2018/06/28/Python中的循环/" id="post-next" class="post-nav-link">
+        <div class="tips">Next <i class="icon icon-angle-right icon-lg icon-pl"></i></div>
+        <h4 class="title">Python中的循环</h4>
+      </a>
+    </div>
+  
+</nav>
+
+
+
+    
+
+
+
+
+
+
+
+
+
+
+
+    <!-- Valine Comments -->
+    <div class="comments vcomment" id="comments"></div>
+    <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+    <script src="//unpkg.com/valine@latest/dist/Valine.min.js"></script>
+    <!-- Valine Comments script -->
+    <script>
+        var GUEST_INFO = ['nick','mail','link'];
+        var guest_info = 'nick,mail,link'.split(',').filter(function(item){
+          return GUEST_INFO.indexOf(item) > -1
+        });
+        new Valine({
+            el: '#comments',
+            notify: 'false' == 'true',
+            verify: 'false' == 'true',
+            appId: "8pEg76EhXN7Qy4RCM4w1gqGo-gzGzoHsz",
+            appKey: "doV7nDLncqzphUmfzIvveojz",
+            avatar: "mm",
+            placeholder: "要不要说点什么呢？",
+            guest_info: guest_info.length == 0 ? GUEST_INFO : guest_info,
+            pageSize: "10"
+        })
+    </script>
+    <!-- Valine Comments end -->
+
+
+
+
+
+
+
+</article>
+
+<div id="reward" class="page-modal reward-lay">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <h3 class="reward-title">
+        <i class="icon icon-quote-left"></i>
+        谢谢大爷~
+        <i class="icon icon-quote-right"></i>
+    </h3>
+    <div class="reward-content">
+        
+        <div class="reward-code">
+            <img id="rewardCode" src="http://ow4hqwlyg.bkt.clouddn.com/wechat.jpg" alt="打赏二维码">
+        </div>
+        
+        <label class="reward-toggle">
+            <input id="rewardToggle" type="checkbox" class="reward-toggle-check"
+                data-wechat="http://ow4hqwlyg.bkt.clouddn.com/wechat.jpg" data-alipay="http://ow4hqwlyg.bkt.clouddn.com/alipay.jpg">
+            <div class="reward-toggle-ctrol">
+                <span class="reward-toggle-item wechat">微信</span>
+                <span class="reward-toggle-label"></span>
+                <span class="reward-toggle-item alipay">支付宝</span>
+            </div>
+        </label>
+        
+    </div>
+</div>
+
+
+
+</div>
+
+        <footer class="footer">
+    <div class="top">
+        
+<p>
+    <span id="busuanzi_container_site_uv" style='display:none'>
+        站点总访客数：<span id="busuanzi_value_site_uv"></span>
+    </span>
+    <span id="busuanzi_container_site_pv" style='display:none'>
+        站点总访问量：<span id="busuanzi_value_site_pv"></span>
+    </span>
+</p>
+
+
+        <p>
+            
+                <span><a href="/atom.xml" target="_blank" class="rss" title="rss"><i class="icon icon-lg icon-rss"></i></a></span>
+            
+            <span>博客内容遵循 <a rel="license" href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh">知识共享 署名 - 非商业性 - 相同方式共享 4.0 国际协议</a></span>
+        </p>
+    </div>
+    <div class="bottom">
+        <p><span>Allen Liu &copy; 2017 - 2018</span>
+            <span>
+                
+                Power by <a href="http://hexo.io/" target="_blank">Hexo</a> Theme <a href="https://github.com/yscoder/hexo-theme-indigo" target="_blank">indigo</a>
+            </span>
+        </p>
+    </div>
+</footer>
+
+    </main>
+    <div class="mask" id="mask"></div>
+<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
+
+
+
+<div class="global-share" id="globalShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://langliu.github.io/2018/07/29/Numpy中的数组/&title=《Numpy中的数组》 — Allen's blog&pic=http://ow4hqwlyg.bkt.clouddn.com/blog-avatar.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://langliu.github.io/2018/07/29/Numpy中的数组/&title=《Numpy中的数组》 — Allen's blog&source=NumPy 中定义的最重要的对象是称为 ndarray 的N维数组类型。它描述相同类型的元素集合。可以使用基于零的索引访问集合中的项目。" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://langliu.github.io/2018/07/29/Numpy中的数组/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《Numpy中的数组》 — Allen's blog&url=https://langliu.github.io/2018/07/29/Numpy中的数组/&via=https://langliu.github.io" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://langliu.github.io/2018/07/29/Numpy中的数组/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+<div class="page-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMYAAADGCAAAAACs8KCBAAACMUlEQVR42u3awY7CMAxFUf7/pzPSrJBQM/fZgKbOzQpBW3K6sBzbjwde63c9f37+hl/zen16V2vJkCHjtoy1Xa9b3N+1J11dT2D7e2XIkHECoxZkSYDmcfLqf9HzZciQIWMbBHmql25RhgwZMjoBd3/X/ohbSzFlyJAhgzwuLbrxFPCrZ3EZMmTckFFrDHzn88f7GzJkyPj3jBUu8oR+EzTelQwZMkYz9ikaL/fzRmbtqIzCsQwZMoYy+GgX+Z6Uz9J2JnrRMmTIOICRHiB5iOShvHZilSFDxjmMtPRPyvqdkQs+DitDhowTGOlRNoWlITttkcYHWhkyZNyQUds6OaZ2RjdikgwZMg5g8G2lwfe9vMvny5AhYzQjHfxKE8T+tuKjrAwZMoYy+EgEbyGkLyX9VYYMGecwSGq4wEpHx9KGZdCJlSFDxjgGD5SdXmHtdaRJpwwZMqYySMKXpmudNkOt2SlDhozZDN6S5KMVtbGJ2k5QnitDhowRDD4A0co6t9vlsD/SVhkyZIxj8IZi55pOEhnU5GTIkDGawZOzNIr3xzJQyihDhozRjFp4/VyATqNrsXYoQ4aMWzFWuNJQmH7Pf5UhQ8Y5jM54VlpKS4/QafooQ4aM2YxakO0fa2sBN3h/MmTIGMeolcPeO6hRq//LkCFDBvljHkZ56zTObWXIkCGjXehPG5Z8mkKGDBnnMHiJn9xFxiw4Aw1wyJAhYzSjNuJQC5HpZ/6rDBkyhjJ+AGOWIuDDulKyAAAAAElFTkSuQmCC" alt="微信分享二维码">
+</div>
+
+
+
+
+    <script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
+<script>
+var BLOG = { ROOT: '/', SHARE: true, REWARD: true };
+
+
+</script>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/main.min.js"></script>
+
+
+<div class="search-panel" id="search-panel">
+    <ul class="search-result" id="search-result"></ul>
+</div>
+<template id="search-tpl">
+<li class="item">
+    <a href="{path}" class="waves-block waves-effect">
+        <div class="title ellipsis" title="{title}">{title}</div>
+        <div class="flex-row flex-middle">
+            <div class="tags ellipsis">
+                {tags}
+            </div>
+            <time class="flex-col time">{date}</time>
+        </div>
+    </a>
+</li>
+</template>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/search.min.js" async></script>
+
+
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+<script>
+(function() {
+    var OriginTitile = document.title, titleTime;
+    document.addEventListener('visibilitychange', function() {
+        if (document.hidden) {
+            document.title = '死鬼去哪里了！';
+            clearTimeout(titleTime);
+        } else {
+            document.title = '(つェ⊂)咦!又好了!';
+            titleTime = setTimeout(function() {
+                document.title = OriginTitile;
+            },2000);
+        }
+    });
+})();
+</script>
+
+
+
+</body>
+</html>

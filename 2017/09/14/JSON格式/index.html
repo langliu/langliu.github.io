@@ -1,0 +1,545 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+
+    
+
+    
+
+
+
+    <meta charset="utf-8">
+    
+    
+    
+    
+    <title>JSON格式 | Allen&#39;s blog | 我的个人博客，用于记录在学习中的一些知识，加强记忆</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <meta name="theme-color" content="#3F51B5">
+    
+    
+    <meta name="keywords" content="JavaScript">
+    <meta name="description" content="JSON的全称是“JavaScript Object Notation”，意思是JavaScript对象表示法。它是一种基于文本，独立于语言的轻量级数据交换格式。">
+<meta name="keywords" content="JavaScript">
+<meta property="og:type" content="article">
+<meta property="og:title" content="JSON格式">
+<meta property="og:url" content="https://langliu.github.io/2017/09/14/JSON格式/index.html">
+<meta property="og:site_name" content="Allen&#39;s blog">
+<meta property="og:description" content="JSON的全称是“JavaScript Object Notation”，意思是JavaScript对象表示法。它是一种基于文本，独立于语言的轻量级数据交换格式。">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2017-12-31T15:59:02.729Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="JSON格式">
+<meta name="twitter:description" content="JSON的全称是“JavaScript Object Notation”，意思是JavaScript对象表示法。它是一种基于文本，独立于语言的轻量级数据交换格式。">
+    
+        <link rel="alternate" type="application/atom+xml" title="Allen&#39;s blog" href="/atom.xml">
+    
+    <link rel="shortcut icon" href="http://ow4hqwlyg.bkt.clouddn.com/favicon.ico">
+    <link rel="stylesheet" href="//unpkg.com/hexo-theme-material-indigo@latest/css/style.css">
+    <script>window.lazyScripts=[]</script>
+
+    <!-- custom head -->
+    
+
+</head>
+
+<body>
+    <div id="loading" class="active"></div>
+
+    <aside id="menu" class="hide" >
+  <div class="inner flex-row-vertical">
+    <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
+        <i class="icon icon-lg icon-close"></i>
+    </a>
+    <div class="brand-wrap" style="background-image:url(http://ow4hqwlyg.bkt.clouddn.com/brand.jpg)">
+      <div class="brand">
+        <a href="/" class="avatar waves-effect waves-circle waves-light">
+          <img src="http://ow4hqwlyg.bkt.clouddn.com/blog-avatar.jpg">
+        </a>
+        <hgroup class="introduce">
+          <h5 class="nickname">Allen Liu</h5>
+          <a href="mailto:809721414@qq.com" title="809721414@qq.com" class="mail">809721414@qq.com</a>
+        </hgroup>
+      </div>
+    </div>
+    <div class="scroll-wrap flex-col">
+      <ul class="nav">
+        
+            <li class="waves-block waves-effect">
+              <a href="/"  >
+                <i class="icon icon-lg icon-home"></i>
+                主页
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/archives"  >
+                <i class="icon icon-lg icon-archives"></i>
+                Archives
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/tags"  >
+                <i class="icon icon-lg icon-tags"></i>
+                Tags
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/categories"  >
+                <i class="icon icon-lg icon-th-list"></i>
+                Categories
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://github.com/langliu" target="_blank" >
+                <i class="icon icon-lg icon-github"></i>
+                Github
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://www.zhihu.com/people/liu-lang-55-8/activities" target="_blank" >
+                <i class="icon icon-lg icon-coffee"></i>
+                知乎
+              </a>
+            </li>
+        
+      </ul>
+    </div>
+  </div>
+</aside>
+
+    <main id="main">
+        <header class="top-header" id="header">
+    <div class="flex-row">
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
+          <i class="icon icon-lg icon-navicon"></i>
+        </a>
+        <div class="flex-col header-title ellipsis">JSON格式</div>
+        
+        <div class="search-wrap" id="search-wrap">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+                <i class="icon icon-lg icon-chevron-left"></i>
+            </a>
+            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="输入感兴趣的关键字">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
+                <i class="icon icon-lg icon-search"></i>
+            </a>
+        </div>
+        
+        
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menuShare">
+            <i class="icon icon-lg icon-share-alt"></i>
+        </a>
+        
+    </div>
+</header>
+<header class="content-header post-header">
+
+    <div class="container fade-scale">
+        <h1 class="title">JSON格式</h1>
+        <h5 class="subtitle">
+            
+                <time datetime="2017-09-14T15:26:50.000Z" itemprop="datePublished" class="page-time">
+  2017-09-14
+</time>
+
+
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/前端/">前端</a></li></ul>
+
+            
+        </h5>
+    </div>
+
+    
+
+
+</header>
+
+
+<div class="container body-wrap">
+    
+    <aside class="post-widget">
+        <nav class="post-toc-wrap post-toc-shrink" id="post-toc">
+            <h4>TOC</h4>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#在JavaScript中使用JSON"><span class="post-toc-number">1.</span> <span class="post-toc-text">在JavaScript中使用JSON</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#将JSON对象转换成字符串——JSON-stringify"><span class="post-toc-number">1.1.</span> <span class="post-toc-text">将JSON对象转换成字符串——JSON.stringify()</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#将字符串转换成JSON对象——JSON-parse"><span class="post-toc-number">1.2.</span> <span class="post-toc-text">将字符串转换成JSON对象——JSON.parse()</span></a></li></ol></li></ol>
+        </nav>
+    </aside>
+
+
+<article id="post-JSON格式"
+  class="post-article article-type-post fade" itemprop="blogPost">
+
+    <div class="post-card">
+        <h1 class="post-card-title">JSON格式</h1>
+        <div class="post-meta">
+            <time class="post-time" title="2017-09-14 23:26:50" datetime="2017-09-14T15:26:50.000Z"  itemprop="datePublished">2017-09-14</time>
+
+            
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/前端/">前端</a></li></ul>
+
+
+
+            
+<span id="busuanzi_container_page_pv" title="文章总阅读量" style='display:none'>
+    <i class="icon icon-eye icon-pr"></i><span id="busuanzi_value_page_pv"></span>
+</span>
+
+
+        </div>
+        <div class="post-content" id="post-content" itemprop="postContent">
+            <p>JSON的全称是“JavaScript Object Notation”，意思是JavaScript对象表示法。它是一种基于文本，独立于语言的轻量级数据交换格式。</p>
+<a id="more"></a>
+<p>JSON构建于两种数据结构：</p>
+<ul>
+<li>“名称：值”对的集合</li>
+<li>值的有序列表（数组）</li>
+</ul>
+<p>JSON的值可以是：</p>
+<ul>
+<li>数字</li>
+<li>字符串（<strong>JSON的字符串必须使用双引号</strong>）</li>
+<li>布尔值</li>
+<li>数组</li>
+<li>对象</li>
+<li>null</li>
+</ul>
+<h3 id="在JavaScript中使用JSON"><a href="#在JavaScript中使用JSON" class="headerlink" title="在JavaScript中使用JSON"></a>在JavaScript中使用JSON</h3><h4 id="将JSON对象转换成字符串——JSON-stringify"><a href="#将JSON对象转换成字符串——JSON-stringify" class="headerlink" title="将JSON对象转换成字符串——JSON.stringify()"></a>将JSON对象转换成字符串——JSON.stringify()</h4><p><code>JSON.stringify()</code> 方法将一个JavaScript值转换为一个 <code>JSON</code> 字符串，如果指定了一个 <code>replacer</code> 函数，则可以替换值，或者如果指定了一个 <code>replacer</code> 数组，可选地仅包括指定的属性。</p>
+<p><code>JSON.stringify()</code> 方法接收三个参数：</p>
+<ul>
+<li>第一个参数JavaScript对象</li>
+<li>第二个参数为一个数组或一个函数<ul>
+<li>如果参数为数组，那么 <code>JSON.stringify()</code> 的结果中将只包含数组中列出的属性</li>
+<li>如果参数为函数，该函数接收两个参数：一个键和一个值，对传入的对象进行操作，如果该函数返回 <code>undefined</code> ，则表示要从结果中删除相应的键；如果返回其他值，则将该值插入到结果中。</li>
+</ul>
+</li>
+<li>第三个参数为字符串缩进的空格数（不超过10）</li>
+</ul>
+<h4 id="将字符串转换成JSON对象——JSON-parse"><a href="#将字符串转换成JSON对象——JSON-parse" class="headerlink" title="将字符串转换成JSON对象——JSON.parse()"></a>将字符串转换成JSON对象——JSON.parse()</h4><p><code>JSON.parse()</code> 方法接收两个参数，第一个参数是要解析的JSON字符串，第二个参数是一个函数，该函数接收两个参数：一个键和一个值，对传入的JSON字符串进行操作，如果该函数返回 <code>undefined</code> ，则表示要从结果中删除相应的键；如果返回其他值，则将该值插入到结果中。</p>
+<p>若被解析的 <code>JSON</code> 字符串是非法的，则会抛出一个语法错误异常。</p>
+
+        </div>
+
+        <blockquote class="post-copyright">
+    
+    <div class="content">
+        
+
+        
+        感谢您的阅读
+        
+    </div>
+    
+    <footer>
+        <a href="https://langliu.github.io">
+            <img src="http://ow4hqwlyg.bkt.clouddn.com/blog-avatar.jpg" alt="Allen Liu">
+            Allen Liu
+        </a>
+    </footer>
+</blockquote>
+
+        
+<div class="page-reward">
+    <a id="rewardBtn" href="javascript:;" class="page-reward-btn waves-effect waves-circle waves-light">赏</a>
+</div>
+
+
+
+        <div class="post-footer">
+            
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/JavaScript/">JavaScript</a></li></ul>
+
+
+            
+<div class="page-share-wrap">
+    
+
+<div class="page-share" id="pageShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://langliu.github.io/2017/09/14/JSON格式/&title=《JSON格式》 — Allen's blog&pic=http://ow4hqwlyg.bkt.clouddn.com/blog-avatar.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://langliu.github.io/2017/09/14/JSON格式/&title=《JSON格式》 — Allen's blog&source=JSON的全称是“JavaScript Object Notation”，意思是JavaScript对象表示法。它是一种基于文本，独立于语言的轻量级数据交..." data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://langliu.github.io/2017/09/14/JSON格式/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《JSON格式》 — Allen's blog&url=https://langliu.github.io/2017/09/14/JSON格式/&via=https://langliu.github.io" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://langliu.github.io/2017/09/14/JSON格式/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+
+    <a href="javascript:;" id="shareFab" class="page-share-fab waves-effect waves-circle">
+        <i class="icon icon-share-alt icon-lg"></i>
+    </a>
+</div>
+
+
+
+        </div>
+    </div>
+
+    
+<nav class="post-nav flex-row flex-justify-between">
+  
+    <div class="waves-block waves-effect prev">
+      <a href="/2017/09/16/ES2015关于类的概念/" id="post-prev" class="post-nav-link">
+        <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i> Prev</div>
+        <h4 class="title">ES2015关于类的概念</h4>
+      </a>
+    </div>
+  
+
+  
+    <div class="waves-block waves-effect next">
+      <a href="/2017/06/22/路由/" id="post-next" class="post-nav-link">
+        <div class="tips">Next <i class="icon icon-angle-right icon-lg icon-pl"></i></div>
+        <h4 class="title">Angular路由</h4>
+      </a>
+    </div>
+  
+</nav>
+
+
+
+    
+
+
+
+
+
+
+
+
+
+
+
+    <!-- Valine Comments -->
+    <div class="comments vcomment" id="comments"></div>
+    <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+    <script src="//unpkg.com/valine@latest/dist/Valine.min.js"></script>
+    <!-- Valine Comments script -->
+    <script>
+        var GUEST_INFO = ['nick','mail','link'];
+        var guest_info = 'nick,mail,link'.split(',').filter(function(item){
+          return GUEST_INFO.indexOf(item) > -1
+        });
+        new Valine({
+            el: '#comments',
+            notify: 'false' == 'true',
+            verify: 'false' == 'true',
+            appId: "8pEg76EhXN7Qy4RCM4w1gqGo-gzGzoHsz",
+            appKey: "doV7nDLncqzphUmfzIvveojz",
+            avatar: "mm",
+            placeholder: "要不要说点什么呢？",
+            guest_info: guest_info.length == 0 ? GUEST_INFO : guest_info,
+            pageSize: "10"
+        })
+    </script>
+    <!-- Valine Comments end -->
+
+
+
+
+
+
+
+</article>
+
+<div id="reward" class="page-modal reward-lay">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <h3 class="reward-title">
+        <i class="icon icon-quote-left"></i>
+        谢谢大爷~
+        <i class="icon icon-quote-right"></i>
+    </h3>
+    <div class="reward-content">
+        
+        <div class="reward-code">
+            <img id="rewardCode" src="http://ow4hqwlyg.bkt.clouddn.com/wechat.jpg" alt="打赏二维码">
+        </div>
+        
+        <label class="reward-toggle">
+            <input id="rewardToggle" type="checkbox" class="reward-toggle-check"
+                data-wechat="http://ow4hqwlyg.bkt.clouddn.com/wechat.jpg" data-alipay="http://ow4hqwlyg.bkt.clouddn.com/alipay.jpg">
+            <div class="reward-toggle-ctrol">
+                <span class="reward-toggle-item wechat">微信</span>
+                <span class="reward-toggle-label"></span>
+                <span class="reward-toggle-item alipay">支付宝</span>
+            </div>
+        </label>
+        
+    </div>
+</div>
+
+
+
+</div>
+
+        <footer class="footer">
+    <div class="top">
+        
+<p>
+    <span id="busuanzi_container_site_uv" style='display:none'>
+        站点总访客数：<span id="busuanzi_value_site_uv"></span>
+    </span>
+    <span id="busuanzi_container_site_pv" style='display:none'>
+        站点总访问量：<span id="busuanzi_value_site_pv"></span>
+    </span>
+</p>
+
+
+        <p>
+            
+                <span><a href="/atom.xml" target="_blank" class="rss" title="rss"><i class="icon icon-lg icon-rss"></i></a></span>
+            
+            <span>博客内容遵循 <a rel="license" href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh">知识共享 署名 - 非商业性 - 相同方式共享 4.0 国际协议</a></span>
+        </p>
+    </div>
+    <div class="bottom">
+        <p><span>Allen Liu &copy; 2017 - 2018</span>
+            <span>
+                
+                Power by <a href="http://hexo.io/" target="_blank">Hexo</a> Theme <a href="https://github.com/yscoder/hexo-theme-indigo" target="_blank">indigo</a>
+            </span>
+        </p>
+    </div>
+</footer>
+
+    </main>
+    <div class="mask" id="mask"></div>
+<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
+
+
+
+<div class="global-share" id="globalShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://langliu.github.io/2017/09/14/JSON格式/&title=《JSON格式》 — Allen's blog&pic=http://ow4hqwlyg.bkt.clouddn.com/blog-avatar.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://langliu.github.io/2017/09/14/JSON格式/&title=《JSON格式》 — Allen's blog&source=JSON的全称是“JavaScript Object Notation”，意思是JavaScript对象表示法。它是一种基于文本，独立于语言的轻量级数据交..." data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://langliu.github.io/2017/09/14/JSON格式/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《JSON格式》 — Allen's blog&url=https://langliu.github.io/2017/09/14/JSON格式/&via=https://langliu.github.io" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://langliu.github.io/2017/09/14/JSON格式/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+<div class="page-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMYAAADGCAAAAACs8KCBAAACKklEQVR42u3ay2rDMBAF0Pz/T6fQbVFyryYpWD5aFRfHOloM89DjEa/n71o9X62/7/797+p3Ht9YGBgYl2W0W3n95PVGV5iE/YaKgYFxA8brIJuQ2nC5d3zL5xgYGBgvt/jcWkkaioGBgbEXcPfSwTYFxMDAwNhL0dqg2Rar/1SLY2BgXJDRDgb+8+8vzjcwMDAuwniOVx4i8yK53gMGBsbRjKSVll+/yEvQtoUXBWIMDIxDGfmFrb3R5rzpFiExMDCOZkwa/S14LwQXgwEMDIxDGZOLWe3oMTmgNrxGtTgGBsbFGW0NWNfHZbzPG3kYGBh3ZkySxTw4ttcmoncxMDCOZuSbyBO7Scj+wBFgYGAcxMg//KlkLh8AFKU1BgbGLRmTFv/qk3vHFMEwMDBuwGivPrTXI/IyNdnPKOpjYGBcnNG2vSbt/vb56IYIBgbGxRl5C7590qaPefjGwMC4JyN5bUJqU8ZkJ8umGwYGxm0YbeutDbXzBHR5ZwQDA+NoRvJzbcDda6uNKnIMDIyjGfkH9qrIyYAhatVhYGAczchbb8mYMw+vk8sWow4iBgbGpRjPcn0jfcyRy7cwMDCOZnx2tLnX4k8Oom38YWBgnMdIgmxelLalaZ5Qvgn3GBgYN2DMR5J7qdukiMXAwMCYBNw2iLfF8OiOBgYGxtGM9jpFPh6YBGIMDIz7MNqCs03+JuVuBMPAwDiasReU56OC9gpaPljFwMA4iPEDatsi4KDT/zoAAAAASUVORK5CYII=" alt="微信分享二维码">
+</div>
+
+
+
+
+    <script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
+<script>
+var BLOG = { ROOT: '/', SHARE: true, REWARD: true };
+
+
+</script>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/main.min.js"></script>
+
+
+<div class="search-panel" id="search-panel">
+    <ul class="search-result" id="search-result"></ul>
+</div>
+<template id="search-tpl">
+<li class="item">
+    <a href="{path}" class="waves-block waves-effect">
+        <div class="title ellipsis" title="{title}">{title}</div>
+        <div class="flex-row flex-middle">
+            <div class="tags ellipsis">
+                {tags}
+            </div>
+            <time class="flex-col time">{date}</time>
+        </div>
+    </a>
+</li>
+</template>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/search.min.js" async></script>
+
+
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+<script>
+(function() {
+    var OriginTitile = document.title, titleTime;
+    document.addEventListener('visibilitychange', function() {
+        if (document.hidden) {
+            document.title = '死鬼去哪里了！';
+            clearTimeout(titleTime);
+        } else {
+            document.title = '(つェ⊂)咦!又好了!';
+            titleTime = setTimeout(function() {
+                document.title = OriginTitile;
+            },2000);
+        }
+    });
+})();
+</script>
+
+
+
+</body>
+</html>

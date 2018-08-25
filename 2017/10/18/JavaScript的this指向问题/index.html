@@ -1,0 +1,540 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+
+    
+
+    
+
+
+
+    <meta charset="utf-8">
+    
+    
+    
+    
+    <title>JavaScript的this指向问题 | Allen&#39;s blog | 我的个人博客，用于记录在学习中的一些知识，加强记忆</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <meta name="theme-color" content="#3F51B5">
+    
+    
+    <meta name="keywords" content="JavaScript">
+    <meta name="description" content="和许多常见的其他语言不一样，JavaScript的 this 指向不是在定义时就确定了的，而是在调用时确定的。 指向全局指向在严格模式下，默认的 this 指向 undefined ，在非严格模式下，默认的 this 指向 window">
+<meta name="keywords" content="JavaScript">
+<meta property="og:type" content="article">
+<meta property="og:title" content="JavaScript的this指向问题">
+<meta property="og:url" content="https://langliu.github.io/2017/10/18/JavaScript的this指向问题/index.html">
+<meta property="og:site_name" content="Allen&#39;s blog">
+<meta property="og:description" content="和许多常见的其他语言不一样，JavaScript的 this 指向不是在定义时就确定了的，而是在调用时确定的。 指向全局指向在严格模式下，默认的 this 指向 undefined ，在非严格模式下，默认的 this 指向 window">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2017-12-31T15:38:54.308Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="JavaScript的this指向问题">
+<meta name="twitter:description" content="和许多常见的其他语言不一样，JavaScript的 this 指向不是在定义时就确定了的，而是在调用时确定的。 指向全局指向在严格模式下，默认的 this 指向 undefined ，在非严格模式下，默认的 this 指向 window">
+    
+        <link rel="alternate" type="application/atom+xml" title="Allen&#39;s blog" href="/atom.xml">
+    
+    <link rel="shortcut icon" href="http://ow4hqwlyg.bkt.clouddn.com/favicon.ico">
+    <link rel="stylesheet" href="//unpkg.com/hexo-theme-material-indigo@latest/css/style.css">
+    <script>window.lazyScripts=[]</script>
+
+    <!-- custom head -->
+    
+
+</head>
+
+<body>
+    <div id="loading" class="active"></div>
+
+    <aside id="menu" class="hide" >
+  <div class="inner flex-row-vertical">
+    <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
+        <i class="icon icon-lg icon-close"></i>
+    </a>
+    <div class="brand-wrap" style="background-image:url(http://ow4hqwlyg.bkt.clouddn.com/brand.jpg)">
+      <div class="brand">
+        <a href="/" class="avatar waves-effect waves-circle waves-light">
+          <img src="http://ow4hqwlyg.bkt.clouddn.com/blog-avatar.jpg">
+        </a>
+        <hgroup class="introduce">
+          <h5 class="nickname">Allen Liu</h5>
+          <a href="mailto:809721414@qq.com" title="809721414@qq.com" class="mail">809721414@qq.com</a>
+        </hgroup>
+      </div>
+    </div>
+    <div class="scroll-wrap flex-col">
+      <ul class="nav">
+        
+            <li class="waves-block waves-effect">
+              <a href="/"  >
+                <i class="icon icon-lg icon-home"></i>
+                主页
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/archives"  >
+                <i class="icon icon-lg icon-archives"></i>
+                Archives
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/tags"  >
+                <i class="icon icon-lg icon-tags"></i>
+                Tags
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/categories"  >
+                <i class="icon icon-lg icon-th-list"></i>
+                Categories
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://github.com/langliu" target="_blank" >
+                <i class="icon icon-lg icon-github"></i>
+                Github
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://www.zhihu.com/people/liu-lang-55-8/activities" target="_blank" >
+                <i class="icon icon-lg icon-coffee"></i>
+                知乎
+              </a>
+            </li>
+        
+      </ul>
+    </div>
+  </div>
+</aside>
+
+    <main id="main">
+        <header class="top-header" id="header">
+    <div class="flex-row">
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
+          <i class="icon icon-lg icon-navicon"></i>
+        </a>
+        <div class="flex-col header-title ellipsis">JavaScript的this指向问题</div>
+        
+        <div class="search-wrap" id="search-wrap">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+                <i class="icon icon-lg icon-chevron-left"></i>
+            </a>
+            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="输入感兴趣的关键字">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
+                <i class="icon icon-lg icon-search"></i>
+            </a>
+        </div>
+        
+        
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menuShare">
+            <i class="icon icon-lg icon-share-alt"></i>
+        </a>
+        
+    </div>
+</header>
+<header class="content-header post-header">
+
+    <div class="container fade-scale">
+        <h1 class="title">JavaScript的this指向问题</h1>
+        <h5 class="subtitle">
+            
+                <time datetime="2017-10-18T15:28:16.000Z" itemprop="datePublished" class="page-time">
+  2017-10-18
+</time>
+
+
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/前端/">前端</a></li></ul>
+
+            
+        </h5>
+    </div>
+
+    
+
+
+</header>
+
+
+<div class="container body-wrap">
+    
+    <aside class="post-widget">
+        <nav class="post-toc-wrap post-toc-shrink" id="post-toc">
+            <h4>TOC</h4>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#指向"><span class="post-toc-number">1.</span> <span class="post-toc-text">指向</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#全局指向"><span class="post-toc-number">1.1.</span> <span class="post-toc-text">全局指向</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#对象内部的指向"><span class="post-toc-number">1.2.</span> <span class="post-toc-text">对象内部的指向</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#构造函数中的this"><span class="post-toc-number">1.3.</span> <span class="post-toc-text">构造函数中的this</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#当-this-遇见-return"><span class="post-toc-number">1.4.</span> <span class="post-toc-text">当 this 遇见 return</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#箭头函数中的-this"><span class="post-toc-number">1.5.</span> <span class="post-toc-text">箭头函数中的 this</span></a></li></ol></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#bind、apply、call对this的影响"><span class="post-toc-number">2.</span> <span class="post-toc-text">bind、apply、call对this的影响</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#bind"><span class="post-toc-number">2.1.</span> <span class="post-toc-text">bind</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#call"><span class="post-toc-number">2.2.</span> <span class="post-toc-text">call</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#apply"><span class="post-toc-number">2.3.</span> <span class="post-toc-text">apply</span></a></li></ol></li></ol>
+        </nav>
+    </aside>
+
+
+<article id="post-JavaScript的this指向问题"
+  class="post-article article-type-post fade" itemprop="blogPost">
+
+    <div class="post-card">
+        <h1 class="post-card-title">JavaScript的this指向问题</h1>
+        <div class="post-meta">
+            <time class="post-time" title="2017-10-18 23:28:16" datetime="2017-10-18T15:28:16.000Z"  itemprop="datePublished">2017-10-18</time>
+
+            
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/前端/">前端</a></li></ul>
+
+
+
+            
+<span id="busuanzi_container_page_pv" title="文章总阅读量" style='display:none'>
+    <i class="icon icon-eye icon-pr"></i><span id="busuanzi_value_page_pv"></span>
+</span>
+
+
+        </div>
+        <div class="post-content" id="post-content" itemprop="postContent">
+            <p>和许多常见的其他语言不一样，JavaScript的 this 指向不是在定义时就确定了的，而是在调用时确定的。</p>
+<h2 id="指向"><a href="#指向" class="headerlink" title="指向"></a>指向</h2><h3 id="全局指向"><a href="#全局指向" class="headerlink" title="全局指向"></a>全局指向</h3><p>在严格模式下，默认的 this 指向 undefined ，在非严格模式下，默认的 this 指向 window</p>
+<a id="more"></a>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> x = <span class="number">1</span>;</span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">test</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="keyword">this</span>.x);</span><br><span class="line">&#125;</span><br><span class="line">test(); <span class="comment">// 严格模式下为： undefined ；非严格模式为： 1</span></span><br></pre></td></tr></table></figure>
+<h3 id="对象内部的指向"><a href="#对象内部的指向" class="headerlink" title="对象内部的指向"></a>对象内部的指向</h3><p>如果 this 是在对象内部定义的，一般来说 this 指向 this 定义时的上一级对象</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> obj = &#123;</span><br><span class="line">  name: <span class="string">"Allen"</span>,</span><br><span class="line">  getName: <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="keyword">this</span>.name);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;;</span><br><span class="line">obj.getName(); <span class="comment">// 'Allen'</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> obj = &#123;</span><br><span class="line">  name: <span class="string">"Allen"</span>,</span><br><span class="line">  getName: &#123;</span><br><span class="line">    name: <span class="string">"Youngor"</span>,</span><br><span class="line">    fn: <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">      <span class="built_in">console</span>.log(<span class="keyword">this</span>.name);</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;;</span><br><span class="line">obj.getName.fn(); <span class="comment">// 'Youngor'</span></span><br></pre></td></tr></table></figure>
+<p>在上面的例子中，第一个例子的 <code>this</code> 指向对象 <code>obj</code> ，第二个例子的 <code>this</code> 指向对象 <code>obj</code> 的属性 <code>getName</code>（因为该属性也是一个对象），如果 <code>getName</code> 属性中不存在对象属性 <code>name</code> ，那么 <code>this.name</code> 则为 <code>undefined</code> ，<code>this</code> 并不会在向上一级寻找。</p>
+<p>有一种情况有点特殊，需要我们注意下：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> obj = &#123;</span><br><span class="line">  name: <span class="string">"Allen"</span>,</span><br><span class="line">  getName: &#123;</span><br><span class="line">    name: <span class="string">"Youngor"</span>,</span><br><span class="line">    fn: <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">      <span class="built_in">console</span>.log(<span class="keyword">this</span>.name);</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;;</span><br><span class="line"><span class="keyword">let</span> fn = obj.getName.fn;</span><br><span class="line">fn(); <span class="comment">// undefined</span></span><br></pre></td></tr></table></figure>
+<p>我们发现结果和我们预期的有点不一样，这是为什么呢？我们需要记住这句话 <strong>this永远指向的是最后调用它的对象</strong> ，在上面的例子中，我们把 <code>obj.getName.fn</code> 赋值给一个变量 <code>fn</code> ，通过这个变量来执行this，这时候最后调用它的对象已经从对象 <code>obj</code> 的属性 <code>getName</code> 变为全局对象了，所以执行的结果是 <code>undefined</code>。</p>
+<h3 id="构造函数中的this"><a href="#构造函数中的this" class="headerlink" title="构造函数中的this"></a>构造函数中的this</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">Person</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="keyword">this</span>.name = <span class="string">"Allen"</span>;</span><br><span class="line">  <span class="keyword">this</span>.age = <span class="number">21</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> person = <span class="keyword">new</span> Person();</span><br><span class="line"><span class="built_in">console</span>.log(person.name); <span class="comment">// 'Allen'</span></span><br><span class="line"><span class="built_in">console</span>.log(person.age); <span class="comment">// 21</span></span><br></pre></td></tr></table></figure>
+<p><code>new</code> 关键字可以改变 this 的指向，将其指向新建的对象，在这里指向 <code>person</code> 对象</p>
+<h3 id="当-this-遇见-return"><a href="#当-this-遇见-return" class="headerlink" title="当 this 遇见 return"></a>当 this 遇见 return</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">fun</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="keyword">this</span>.name = <span class="string">"Allen"</span>;</span><br><span class="line">  <span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> f = <span class="keyword">new</span> fun();</span><br><span class="line"><span class="built_in">console</span>.log(f.name); <span class="comment">// 'Allen'</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">fun</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="keyword">this</span>.name = <span class="string">"Allen"</span>;</span><br><span class="line">  <span class="keyword">return</span> &#123;&#125;;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> f = <span class="keyword">new</span> fun();</span><br><span class="line"><span class="built_in">console</span>.log(f.name); <span class="comment">// undefined</span></span><br></pre></td></tr></table></figure>
+<p>如果返回值是一个对象，那么this指向的就是那个返回的对象（null除外）；如果返回值不是一个对象，那么this指向的还是那个函数的实例。</p>
+<h3 id="箭头函数中的-this"><a href="#箭头函数中的-this" class="headerlink" title="箭头函数中的 this"></a>箭头函数中的 this</h3><p>函数体内的this对象，就是定义时所在的对象，而不是使用时所在的对象。 </p>
+<h2 id="bind、apply、call对this的影响"><a href="#bind、apply、call对this的影响" class="headerlink" title="bind、apply、call对this的影响"></a>bind、apply、call对this的影响</h2><h3 id="bind"><a href="#bind" class="headerlink" title="bind"></a>bind</h3><p><code>bind()</code>  的作用是将当前函数与指定的对象绑定，并返回一个新的函数，这个新函数无论以什么样的方式调用，其 this 始终指向绑定的对象。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">test</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="keyword">this</span>.name);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> obj1 = &#123;</span><br><span class="line">    name: <span class="string">'hi'</span></span><br><span class="line">&#125;;</span><br><span class="line"><span class="keyword">let</span> fun = test.bind(obj1); <span class="comment">// 第一次bind</span></span><br><span class="line">fun(); <span class="comment">// 'hi'</span></span><br><span class="line">fun.bind(&#123;<span class="attr">name</span>: <span class="string">'srd'</span>&#125;); <span class="comment">// 第二次bind</span></span><br><span class="line">fun(); <span class="comment">// 'hi'</span></span><br></pre></td></tr></table></figure>
+<h3 id="call"><a href="#call" class="headerlink" title="call"></a>call</h3><p><code>call()</code> 方法调用一个函数, 其具有一个指定的this值和分别地提供的参数(参数的列表)。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">fun</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="keyword">this</span>.name);</span><br><span class="line">&#125;</span><br><span class="line">fun.call(&#123; <span class="attr">name</span>: <span class="string">"Allen"</span> &#125;); <span class="comment">// 'Allen'</span></span><br></pre></td></tr></table></figure>
+<h3 id="apply"><a href="#apply" class="headerlink" title="apply"></a>apply</h3><p><code>apply()</code> 方法调用一个函数, 其具有一个指定的this值，以及作为一个数组（或类似数组的对象）提供的参数。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">fun</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="keyword">this</span>.name);</span><br><span class="line">&#125;</span><br><span class="line">fun.apply(&#123; <span class="attr">name</span>: <span class="string">"Allen"</span> &#125;); <span class="comment">// 'Allen'</span></span><br></pre></td></tr></table></figure>
+        </div>
+
+        <blockquote class="post-copyright">
+    
+    <div class="content">
+        
+
+        
+        感谢您的阅读
+        
+    </div>
+    
+    <footer>
+        <a href="https://langliu.github.io">
+            <img src="http://ow4hqwlyg.bkt.clouddn.com/blog-avatar.jpg" alt="Allen Liu">
+            Allen Liu
+        </a>
+    </footer>
+</blockquote>
+
+        
+<div class="page-reward">
+    <a id="rewardBtn" href="javascript:;" class="page-reward-btn waves-effect waves-circle waves-light">赏</a>
+</div>
+
+
+
+        <div class="post-footer">
+            
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/JavaScript/">JavaScript</a></li></ul>
+
+
+            
+<div class="page-share-wrap">
+    
+
+<div class="page-share" id="pageShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://langliu.github.io/2017/10/18/JavaScript的this指向问题/&title=《JavaScript的this指向问题》 — Allen's blog&pic=http://ow4hqwlyg.bkt.clouddn.com/blog-avatar.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://langliu.github.io/2017/10/18/JavaScript的this指向问题/&title=《JavaScript的this指向问题》 — Allen's blog&source=和许多常见的其他语言不一样，JavaScript的 this 指向不是在定义时就确定了的，而是在调用时确定的。
+指向全局指向在严格模式下，默认的 this..." data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://langliu.github.io/2017/10/18/JavaScript的this指向问题/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《JavaScript的this指向问题》 — Allen's blog&url=https://langliu.github.io/2017/10/18/JavaScript的this指向问题/&via=https://langliu.github.io" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://langliu.github.io/2017/10/18/JavaScript的this指向问题/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+
+    <a href="javascript:;" id="shareFab" class="page-share-fab waves-effect waves-circle">
+        <i class="icon icon-share-alt icon-lg"></i>
+    </a>
+</div>
+
+
+
+        </div>
+    </div>
+
+    
+<nav class="post-nav flex-row flex-justify-between">
+  
+    <div class="waves-block waves-effect prev">
+      <a href="/2017/10/22/JavaScript-Array类型/" id="post-prev" class="post-nav-link">
+        <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i> Prev</div>
+        <h4 class="title">JavaScript-Array类型</h4>
+      </a>
+    </div>
+  
+
+  
+    <div class="waves-block waves-effect next">
+      <a href="/2017/10/14/配置CentOS云端NodeJS环境/" id="post-next" class="post-nav-link">
+        <div class="tips">Next <i class="icon icon-angle-right icon-lg icon-pl"></i></div>
+        <h4 class="title">配置CentOS云端NodeJS环境</h4>
+      </a>
+    </div>
+  
+</nav>
+
+
+
+    
+
+
+
+
+
+
+
+
+
+
+
+    <!-- Valine Comments -->
+    <div class="comments vcomment" id="comments"></div>
+    <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+    <script src="//unpkg.com/valine@latest/dist/Valine.min.js"></script>
+    <!-- Valine Comments script -->
+    <script>
+        var GUEST_INFO = ['nick','mail','link'];
+        var guest_info = 'nick,mail,link'.split(',').filter(function(item){
+          return GUEST_INFO.indexOf(item) > -1
+        });
+        new Valine({
+            el: '#comments',
+            notify: 'false' == 'true',
+            verify: 'false' == 'true',
+            appId: "8pEg76EhXN7Qy4RCM4w1gqGo-gzGzoHsz",
+            appKey: "doV7nDLncqzphUmfzIvveojz",
+            avatar: "mm",
+            placeholder: "要不要说点什么呢？",
+            guest_info: guest_info.length == 0 ? GUEST_INFO : guest_info,
+            pageSize: "10"
+        })
+    </script>
+    <!-- Valine Comments end -->
+
+
+
+
+
+
+
+</article>
+
+<div id="reward" class="page-modal reward-lay">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <h3 class="reward-title">
+        <i class="icon icon-quote-left"></i>
+        谢谢大爷~
+        <i class="icon icon-quote-right"></i>
+    </h3>
+    <div class="reward-content">
+        
+        <div class="reward-code">
+            <img id="rewardCode" src="http://ow4hqwlyg.bkt.clouddn.com/wechat.jpg" alt="打赏二维码">
+        </div>
+        
+        <label class="reward-toggle">
+            <input id="rewardToggle" type="checkbox" class="reward-toggle-check"
+                data-wechat="http://ow4hqwlyg.bkt.clouddn.com/wechat.jpg" data-alipay="http://ow4hqwlyg.bkt.clouddn.com/alipay.jpg">
+            <div class="reward-toggle-ctrol">
+                <span class="reward-toggle-item wechat">微信</span>
+                <span class="reward-toggle-label"></span>
+                <span class="reward-toggle-item alipay">支付宝</span>
+            </div>
+        </label>
+        
+    </div>
+</div>
+
+
+
+</div>
+
+        <footer class="footer">
+    <div class="top">
+        
+<p>
+    <span id="busuanzi_container_site_uv" style='display:none'>
+        站点总访客数：<span id="busuanzi_value_site_uv"></span>
+    </span>
+    <span id="busuanzi_container_site_pv" style='display:none'>
+        站点总访问量：<span id="busuanzi_value_site_pv"></span>
+    </span>
+</p>
+
+
+        <p>
+            
+                <span><a href="/atom.xml" target="_blank" class="rss" title="rss"><i class="icon icon-lg icon-rss"></i></a></span>
+            
+            <span>博客内容遵循 <a rel="license" href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh">知识共享 署名 - 非商业性 - 相同方式共享 4.0 国际协议</a></span>
+        </p>
+    </div>
+    <div class="bottom">
+        <p><span>Allen Liu &copy; 2017 - 2018</span>
+            <span>
+                
+                Power by <a href="http://hexo.io/" target="_blank">Hexo</a> Theme <a href="https://github.com/yscoder/hexo-theme-indigo" target="_blank">indigo</a>
+            </span>
+        </p>
+    </div>
+</footer>
+
+    </main>
+    <div class="mask" id="mask"></div>
+<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
+
+
+
+<div class="global-share" id="globalShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://langliu.github.io/2017/10/18/JavaScript的this指向问题/&title=《JavaScript的this指向问题》 — Allen's blog&pic=http://ow4hqwlyg.bkt.clouddn.com/blog-avatar.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://langliu.github.io/2017/10/18/JavaScript的this指向问题/&title=《JavaScript的this指向问题》 — Allen's blog&source=和许多常见的其他语言不一样，JavaScript的 this 指向不是在定义时就确定了的，而是在调用时确定的。
+指向全局指向在严格模式下，默认的 this..." data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://langliu.github.io/2017/10/18/JavaScript的this指向问题/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《JavaScript的this指向问题》 — Allen's blog&url=https://langliu.github.io/2017/10/18/JavaScript的this指向问题/&via=https://langliu.github.io" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://langliu.github.io/2017/10/18/JavaScript的this指向问题/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+<div class="page-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAN4AAADeCAAAAAB3DOFrAAACv0lEQVR42u3aQW7DMAwEQP//0+21QGtnSYqAC0xOQZMqGh9EYqnril9fj6+f3/n9X3d/uVvn+devjRceHh7e2tbvtpt8P/k0eRz5nvHw8PC2eXcnavVAz7eenOHJfj5Y8PDw8F7De26a8xa5ysbDw8P7j7y8aU5KRd4o4+Hh4b2Nd2q5XnSbxArrWQseHh5ezMunSO95vzLfw8PDwxtP1SeH+GT9pImPVsPDw8Nb4OUHbs5IWudeaNvcJx4eHt5RXvVaVf736oFevbIQRSR4eHh4a7zeJad8PDYJGqoP69gdLjw8PLwBL2+IkwO9VwyqVDw8PLxtXnIBKy8J1Ytcvald9NDx8PDwlnm98LQ6DEvwyeAtaq/x8PDwFni9YKI6HqvGwdXgOCppeHh4eEd5vWtVk/C314j3ygkeHh7eWV7vOlS1XU4a5d7j+LACHh4e3hpvXgDygVn1isDoIgIeHh7eGi8fTVVj1rxUJL+SRLrluwx4eHh4RV510WSLvRFa9fpCdfyGh4eHd4rXO9zLrW1r5NYLi/+IcfHw8PCO8iZB6uSKVVIwkkgieqx4eHh4R3m9WCEPF3olJLnKEA3n8PDw8NZ4k2Y3Z0zKQx5J3A7A8PDw8NZ4ScM6OeLnrXNhn3h4eHgLvOqBmw+xegOz6gWs8pQPDw8P7xCvVwbmwUR16/k6WceNh4eHd4aXt86nDu48tG2WFjw8PLw1XvXQ70USze6+GOle85qGh4eHF5eEfBN5M52HF71m/fZTPDw8vAXeZDzfi3p7m87fH7t9gIeHh/f460kxqLbX1edaDXkLoQkeHh7eGi8JZ+dF5cBAq7pPPDw8vFfykhWq6zw363nBwMPDw3sDL2mmJ0f5V+t1TZ49Hh4eXouXN77ziCHfSbVQ3RYGPDw8vKO86lH+XB7yMVUvCM7jDDw8PLwF3jc3d32CWJPw4wAAAABJRU5ErkJggg==" alt="微信分享二维码">
+</div>
+
+
+
+
+    <script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
+<script>
+var BLOG = { ROOT: '/', SHARE: true, REWARD: true };
+
+
+</script>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/main.min.js"></script>
+
+
+<div class="search-panel" id="search-panel">
+    <ul class="search-result" id="search-result"></ul>
+</div>
+<template id="search-tpl">
+<li class="item">
+    <a href="{path}" class="waves-block waves-effect">
+        <div class="title ellipsis" title="{title}">{title}</div>
+        <div class="flex-row flex-middle">
+            <div class="tags ellipsis">
+                {tags}
+            </div>
+            <time class="flex-col time">{date}</time>
+        </div>
+    </a>
+</li>
+</template>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/search.min.js" async></script>
+
+
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+<script>
+(function() {
+    var OriginTitile = document.title, titleTime;
+    document.addEventListener('visibilitychange', function() {
+        if (document.hidden) {
+            document.title = '死鬼去哪里了！';
+            clearTimeout(titleTime);
+        } else {
+            document.title = '(つェ⊂)咦!又好了!';
+            titleTime = setTimeout(function() {
+                document.title = OriginTitile;
+            },2000);
+        }
+    });
+})();
+</script>
+
+
+
+</body>
+</html>

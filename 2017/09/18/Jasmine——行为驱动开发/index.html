@@ -1,0 +1,567 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+
+    
+
+    
+
+
+
+    <meta charset="utf-8">
+    
+    
+    
+    
+    <title>Jasmine——行为驱动开发 | Allen&#39;s blog | 我的个人博客，用于记录在学习中的一些知识，加强记忆</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <meta name="theme-color" content="#3F51B5">
+    
+    
+    <meta name="keywords" content="前端工具">
+    <meta name="description" content="Jasmine是测试 JavaScript 代码行为驱动开发框架。它并不取决于任何其他 JavaScript 框架。它不需要 dom。它有清洁、 明显的语法，使您可以轻松编写测试。">
+<meta name="keywords" content="前端工具">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Jasmine——行为驱动开发">
+<meta property="og:url" content="https://langliu.github.io/2017/09/18/Jasmine——行为驱动开发/index.html">
+<meta property="og:site_name" content="Allen&#39;s blog">
+<meta property="og:description" content="Jasmine是测试 JavaScript 代码行为驱动开发框架。它并不取决于任何其他 JavaScript 框架。它不需要 dom。它有清洁、 明显的语法，使您可以轻松编写测试。">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2017-12-31T15:25:01.322Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Jasmine——行为驱动开发">
+<meta name="twitter:description" content="Jasmine是测试 JavaScript 代码行为驱动开发框架。它并不取决于任何其他 JavaScript 框架。它不需要 dom。它有清洁、 明显的语法，使您可以轻松编写测试。">
+    
+        <link rel="alternate" type="application/atom+xml" title="Allen&#39;s blog" href="/atom.xml">
+    
+    <link rel="shortcut icon" href="http://ow4hqwlyg.bkt.clouddn.com/favicon.ico">
+    <link rel="stylesheet" href="//unpkg.com/hexo-theme-material-indigo@latest/css/style.css">
+    <script>window.lazyScripts=[]</script>
+
+    <!-- custom head -->
+    
+
+</head>
+
+<body>
+    <div id="loading" class="active"></div>
+
+    <aside id="menu" class="hide" >
+  <div class="inner flex-row-vertical">
+    <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
+        <i class="icon icon-lg icon-close"></i>
+    </a>
+    <div class="brand-wrap" style="background-image:url(http://ow4hqwlyg.bkt.clouddn.com/brand.jpg)">
+      <div class="brand">
+        <a href="/" class="avatar waves-effect waves-circle waves-light">
+          <img src="http://ow4hqwlyg.bkt.clouddn.com/blog-avatar.jpg">
+        </a>
+        <hgroup class="introduce">
+          <h5 class="nickname">Allen Liu</h5>
+          <a href="mailto:809721414@qq.com" title="809721414@qq.com" class="mail">809721414@qq.com</a>
+        </hgroup>
+      </div>
+    </div>
+    <div class="scroll-wrap flex-col">
+      <ul class="nav">
+        
+            <li class="waves-block waves-effect">
+              <a href="/"  >
+                <i class="icon icon-lg icon-home"></i>
+                主页
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/archives"  >
+                <i class="icon icon-lg icon-archives"></i>
+                Archives
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/tags"  >
+                <i class="icon icon-lg icon-tags"></i>
+                Tags
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/categories"  >
+                <i class="icon icon-lg icon-th-list"></i>
+                Categories
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://github.com/langliu" target="_blank" >
+                <i class="icon icon-lg icon-github"></i>
+                Github
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://www.zhihu.com/people/liu-lang-55-8/activities" target="_blank" >
+                <i class="icon icon-lg icon-coffee"></i>
+                知乎
+              </a>
+            </li>
+        
+      </ul>
+    </div>
+  </div>
+</aside>
+
+    <main id="main">
+        <header class="top-header" id="header">
+    <div class="flex-row">
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
+          <i class="icon icon-lg icon-navicon"></i>
+        </a>
+        <div class="flex-col header-title ellipsis">Jasmine——行为驱动开发</div>
+        
+        <div class="search-wrap" id="search-wrap">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+                <i class="icon icon-lg icon-chevron-left"></i>
+            </a>
+            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="输入感兴趣的关键字">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
+                <i class="icon icon-lg icon-search"></i>
+            </a>
+        </div>
+        
+        
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menuShare">
+            <i class="icon icon-lg icon-share-alt"></i>
+        </a>
+        
+    </div>
+</header>
+<header class="content-header post-header">
+
+    <div class="container fade-scale">
+        <h1 class="title">Jasmine——行为驱动开发</h1>
+        <h5 class="subtitle">
+            
+                <time datetime="2017-09-18T13:39:25.000Z" itemprop="datePublished" class="page-time">
+  2017-09-18
+</time>
+
+
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/前端/">前端</a></li></ul>
+
+            
+        </h5>
+    </div>
+
+    
+
+
+</header>
+
+
+<div class="container body-wrap">
+    
+    <aside class="post-widget">
+        <nav class="post-toc-wrap post-toc-shrink" id="post-toc">
+            <h4>TOC</h4>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#安装"><span class="post-toc-number">1.</span> <span class="post-toc-text">安装</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#初始化一个项目"><span class="post-toc-number">2.</span> <span class="post-toc-text">初始化一个项目</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#配置"><span class="post-toc-number">3.</span> <span class="post-toc-text">配置</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#运行测试"><span class="post-toc-number">4.</span> <span class="post-toc-text">运行测试</span></a></li></ol></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#编写测试代码"><span class="post-toc-number"></span> <span class="post-toc-text">编写测试代码</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#fail函数"><span class="post-toc-number">1.</span> <span class="post-toc-text">fail函数</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#not"><span class="post-toc-number">2.</span> <span class="post-toc-text">not</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#挂起的测试"><span class="post-toc-number">3.</span> <span class="post-toc-text">挂起的测试</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#更多"><span class="post-toc-number">4.</span> <span class="post-toc-text">更多</span></a></li></ol>
+        </nav>
+    </aside>
+
+
+<article id="post-Jasmine——行为驱动开发"
+  class="post-article article-type-post fade" itemprop="blogPost">
+
+    <div class="post-card">
+        <h1 class="post-card-title">Jasmine——行为驱动开发</h1>
+        <div class="post-meta">
+            <time class="post-time" title="2017-09-18 21:39:25" datetime="2017-09-18T13:39:25.000Z"  itemprop="datePublished">2017-09-18</time>
+
+            
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/前端/">前端</a></li></ul>
+
+
+
+            
+<span id="busuanzi_container_page_pv" title="文章总阅读量" style='display:none'>
+    <i class="icon icon-eye icon-pr"></i><span id="busuanzi_value_page_pv"></span>
+</span>
+
+
+        </div>
+        <div class="post-content" id="post-content" itemprop="postContent">
+            <p>Jasmine是测试 JavaScript 代码行为驱动开发框架。它并不取决于任何其他 JavaScript 框架。它不需要 dom。它有清洁、 明显的语法，使您可以轻松编写测试。</p>
+<a id="more"></a>
+<h3 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">npm install jasmine --save-dev // 安装到项目</span><br><span class="line"></span><br><span class="line">npm install jasmine --global // 全局安装</span><br></pre></td></tr></table></figure>
+<h3 id="初始化一个项目"><a href="#初始化一个项目" class="headerlink" title="初始化一个项目"></a>初始化一个项目</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">./node_modules/.bin/jasmine</span><br></pre></td></tr></table></figure>
+<h3 id="配置"><a href="#配置" class="headerlink" title="配置"></a>配置</h3><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  "spec_dir": "spec", // spec所在目录</span><br><span class="line">  "spec_files": [</span><br><span class="line">    "**/*[sS]pec.js" // 测试文件（以[sS]pec.js结尾的js文件，可以自己更改后缀名）</span><br><span class="line">  ],</span><br><span class="line">  "helpers": [</span><br><span class="line">    "helpers/**/*.js" // 测试前辅助文件，相对于spec_dir</span><br><span class="line">  ],</span><br><span class="line">  "stopSpecOnExpectationFailure": false,</span><br><span class="line">  "random": false</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="运行测试"><a href="#运行测试" class="headerlink" title="运行测试"></a>运行测试</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">jasmine // 根据配置运行所有的测试</span><br><span class="line"></span><br><span class="line">jasmine spec/test.spec.js // 运行某个测试</span><br></pre></td></tr></table></figure>
+<h2 id="编写测试代码"><a href="#编写测试代码" class="headerlink" title="编写测试代码"></a>编写测试代码</h2><p>上面我们已经成功将Jasmine安装到我们的项目中了，现在我们可以开始编写单元测试的代码了</p>
+<p>一个最基本的单元测试代码：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">describe(<span class="string">"A suite"</span>, <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  it(<span class="string">"contains spec with an expectation"</span>, <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    expect(<span class="literal">true</span>).toBe(<span class="literal">true</span>);</span><br><span class="line">  &#125;);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<p>每个测试都在一个测试集中运行，Suite就是一个测试集，用describe函数封装。 Spec表示每个测试用例，用it函数封装。通过expect函数，作为程序断言来判断相等关系。</p>
+<p><code>describe</code> 函数包含两个参数：</p>
+<ul>
+<li><code>string</code> name 一个测试套件的名称</li>
+<li><code>function</code> fn 实现测试套件的代码块</li>
+</ul>
+<p><code>it</code> 函数定义两个参数：</p>
+<ul>
+<li><code>string</code> name spec的标题</li>
+<li><code>function</code> fn spec的函数</li>
+</ul>
+<p><code>expect</code> 函数 接收一个 <code>value</code> , 返回一个链式匹配对象<br>拥有以下匹配规则函数：</p>
+<ul>
+<li>toBe // 引用全等 ‘===’</li>
+<li>toEqual // 深度遍历，值全等</li>
+<li>toMatch // 正则匹配，支持字符串和正则表达式</li>
+<li>toContain // 判断字符串或数组中是否包含某个字符或元素</li>
+<li>toBeNull // === null</li>
+<li>toBeDefined // expect !== undefined</li>
+<li>toBeUndefined // expect === undefined</li>
+<li>toBeTruthy // Boolean(expect) === true</li>
+<li>toBeFalsy // Boolean(expect) === false</li>
+<li>toBeLessThan // expect的参数小于 &lt; value；expect(2).toBeLessThan(3);</li>
+<li>toBeGreaterThan // expect的参数大于 &gt; value</li>
+<li>toBeCloseTo // value - precision &lt;= expect &lt; value + precision；expect(3.1415926).toBeCloseTo(2.78, 0);</li>
+<li>toThrow // expect throw ‘xx’</li>
+<li>toThrowError // expect throw type or match error message</li>
+</ul>
+<p><strong>一个suite 可以有多个 describe, 一个 describe 可以有多个 it, 一个it 可以有多个 expect</strong></p>
+<h3 id="fail函数"><a href="#fail函数" class="headerlink" title="fail函数"></a>fail函数</h3><p><code>fail</code> 函数, 直接指定spec的错误原因：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">describe(<span class="string">"A suite is just a function"</span>, <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="keyword">let</span> a;</span><br><span class="line">    it(<span class="string">"and so is a spec"</span>, <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">        a = <span class="literal">true</span>;</span><br><span class="line">        expect(<span class="number">1</span>).toBe(<span class="string">'1'</span>);</span><br><span class="line">        fail(<span class="string">'两个值并不全等'</span>);</span><br><span class="line">    &#125;);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<p>在上面的测试代码中，通过fail函数将测试不通过的原因指定为我们自定义的信息，如果为添加 <code>fail</code> 函数，Jasmine将会使用框架提供的提示，像下面这样： <code>Expected 1 to be &#39;1&#39;.</code>；而如果使用了 <code>fail</code> 函数，错误的提示信息将会变为： <code>两个值并不全等</code></p>
+<h3 id="not"><a href="#not" class="headerlink" title="not"></a>not</h3><p>任何匹配表达式都可以有 <code>not</code> 前缀对象， 表示与期待的相反. 如：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">describe(<span class="string">'a suite'</span>, <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">    it(<span class="string">'should not equal false if expect is true'</span>, <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">        expect(<span class="literal">true</span>).not.toBe(<span class="literal">false</span>);</span><br><span class="line">    &#125;);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<h3 id="挂起的测试"><a href="#挂起的测试" class="headerlink" title="挂起的测试"></a>挂起的测试</h3><p>如果我们写了某个测试规则，但不想让这个测试跑的话，我们有三种方式可以实现：</p>
+<ul>
+<li>需要将该规则的声明关键字变为 <code>xit</code> ，这样该测试规则在测试运行的时候就会被忽略。</li>
+<li>使用 <code>it</code> 声明，但是没有函数体</li>
+<li>在规则内部使用 <code>pending()</code> 声明</li>
+</ul>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">describe(<span class="string">"Pending specs"</span>, <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">    xit(<span class="string">"can be declared 'xit'"</span>, <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">        expect(<span class="literal">true</span>).toBe(<span class="literal">false</span>);</span><br><span class="line">    &#125;);</span><br><span class="line">    it(<span class="string">"can be declared with 'it' but without a function"</span>);</span><br><span class="line">    it(<span class="string">"can be declared by calling 'pending' in the spec body"</span>, <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">        expect(<span class="literal">true</span>).toBe(<span class="literal">false</span>);</span><br><span class="line">        pending(<span class="string">'this is why it is pending'</span>);</span><br><span class="line">    &#125;);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<h3 id="更多"><a href="#更多" class="headerlink" title="更多"></a>更多</h3><p>更多的内容可以参考Jasmine的官方说明： <a href="https://jasmine.github.io/edge/introduction.html" target="_blank" rel="noopener">https://jasmine.github.io/edge/introduction.html</a></p>
+
+        </div>
+
+        <blockquote class="post-copyright">
+    
+    <div class="content">
+        
+
+        
+        感谢您的阅读
+        
+    </div>
+    
+    <footer>
+        <a href="https://langliu.github.io">
+            <img src="http://ow4hqwlyg.bkt.clouddn.com/blog-avatar.jpg" alt="Allen Liu">
+            Allen Liu
+        </a>
+    </footer>
+</blockquote>
+
+        
+<div class="page-reward">
+    <a id="rewardBtn" href="javascript:;" class="page-reward-btn waves-effect waves-circle waves-light">赏</a>
+</div>
+
+
+
+        <div class="post-footer">
+            
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/前端工具/">前端工具</a></li></ul>
+
+
+            
+<div class="page-share-wrap">
+    
+
+<div class="page-share" id="pageShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://langliu.github.io/2017/09/18/Jasmine——行为驱动开发/&title=《Jasmine——行为驱动开发》 — Allen's blog&pic=http://ow4hqwlyg.bkt.clouddn.com/blog-avatar.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://langliu.github.io/2017/09/18/Jasmine——行为驱动开发/&title=《Jasmine——行为驱动开发》 — Allen's blog&source=Jasmine是测试 JavaScript 代码行为驱动开发框架。它并不取决于任何其他 JavaScript 框架。它不需要 dom。它有清洁、 明显的语..." data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://langliu.github.io/2017/09/18/Jasmine——行为驱动开发/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《Jasmine——行为驱动开发》 — Allen's blog&url=https://langliu.github.io/2017/09/18/Jasmine——行为驱动开发/&via=https://langliu.github.io" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://langliu.github.io/2017/09/18/Jasmine——行为驱动开发/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+
+    <a href="javascript:;" id="shareFab" class="page-share-fab waves-effect waves-circle">
+        <i class="icon icon-share-alt icon-lg"></i>
+    </a>
+</div>
+
+
+
+        </div>
+    </div>
+
+    
+<nav class="post-nav flex-row flex-justify-between">
+  
+    <div class="waves-block waves-effect prev">
+      <a href="/2017/09/22/Ajax技术/" id="post-prev" class="post-nav-link">
+        <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i> Prev</div>
+        <h4 class="title">Ajax技术</h4>
+      </a>
+    </div>
+  
+
+  
+    <div class="waves-block waves-effect next">
+      <a href="/2017/09/17/Babel的使用/" id="post-next" class="post-nav-link">
+        <div class="tips">Next <i class="icon icon-angle-right icon-lg icon-pl"></i></div>
+        <h4 class="title">Babel的使用</h4>
+      </a>
+    </div>
+  
+</nav>
+
+
+
+    
+
+
+
+
+
+
+
+
+
+
+
+    <!-- Valine Comments -->
+    <div class="comments vcomment" id="comments"></div>
+    <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+    <script src="//unpkg.com/valine@latest/dist/Valine.min.js"></script>
+    <!-- Valine Comments script -->
+    <script>
+        var GUEST_INFO = ['nick','mail','link'];
+        var guest_info = 'nick,mail,link'.split(',').filter(function(item){
+          return GUEST_INFO.indexOf(item) > -1
+        });
+        new Valine({
+            el: '#comments',
+            notify: 'false' == 'true',
+            verify: 'false' == 'true',
+            appId: "8pEg76EhXN7Qy4RCM4w1gqGo-gzGzoHsz",
+            appKey: "doV7nDLncqzphUmfzIvveojz",
+            avatar: "mm",
+            placeholder: "要不要说点什么呢？",
+            guest_info: guest_info.length == 0 ? GUEST_INFO : guest_info,
+            pageSize: "10"
+        })
+    </script>
+    <!-- Valine Comments end -->
+
+
+
+
+
+
+
+</article>
+
+<div id="reward" class="page-modal reward-lay">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <h3 class="reward-title">
+        <i class="icon icon-quote-left"></i>
+        谢谢大爷~
+        <i class="icon icon-quote-right"></i>
+    </h3>
+    <div class="reward-content">
+        
+        <div class="reward-code">
+            <img id="rewardCode" src="http://ow4hqwlyg.bkt.clouddn.com/wechat.jpg" alt="打赏二维码">
+        </div>
+        
+        <label class="reward-toggle">
+            <input id="rewardToggle" type="checkbox" class="reward-toggle-check"
+                data-wechat="http://ow4hqwlyg.bkt.clouddn.com/wechat.jpg" data-alipay="http://ow4hqwlyg.bkt.clouddn.com/alipay.jpg">
+            <div class="reward-toggle-ctrol">
+                <span class="reward-toggle-item wechat">微信</span>
+                <span class="reward-toggle-label"></span>
+                <span class="reward-toggle-item alipay">支付宝</span>
+            </div>
+        </label>
+        
+    </div>
+</div>
+
+
+
+</div>
+
+        <footer class="footer">
+    <div class="top">
+        
+<p>
+    <span id="busuanzi_container_site_uv" style='display:none'>
+        站点总访客数：<span id="busuanzi_value_site_uv"></span>
+    </span>
+    <span id="busuanzi_container_site_pv" style='display:none'>
+        站点总访问量：<span id="busuanzi_value_site_pv"></span>
+    </span>
+</p>
+
+
+        <p>
+            
+                <span><a href="/atom.xml" target="_blank" class="rss" title="rss"><i class="icon icon-lg icon-rss"></i></a></span>
+            
+            <span>博客内容遵循 <a rel="license" href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh">知识共享 署名 - 非商业性 - 相同方式共享 4.0 国际协议</a></span>
+        </p>
+    </div>
+    <div class="bottom">
+        <p><span>Allen Liu &copy; 2017 - 2018</span>
+            <span>
+                
+                Power by <a href="http://hexo.io/" target="_blank">Hexo</a> Theme <a href="https://github.com/yscoder/hexo-theme-indigo" target="_blank">indigo</a>
+            </span>
+        </p>
+    </div>
+</footer>
+
+    </main>
+    <div class="mask" id="mask"></div>
+<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
+
+
+
+<div class="global-share" id="globalShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://langliu.github.io/2017/09/18/Jasmine——行为驱动开发/&title=《Jasmine——行为驱动开发》 — Allen's blog&pic=http://ow4hqwlyg.bkt.clouddn.com/blog-avatar.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://langliu.github.io/2017/09/18/Jasmine——行为驱动开发/&title=《Jasmine——行为驱动开发》 — Allen's blog&source=Jasmine是测试 JavaScript 代码行为驱动开发框架。它并不取决于任何其他 JavaScript 框架。它不需要 dom。它有清洁、 明显的语..." data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://langliu.github.io/2017/09/18/Jasmine——行为驱动开发/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《Jasmine——行为驱动开发》 — Allen's blog&url=https://langliu.github.io/2017/09/18/Jasmine——行为驱动开发/&via=https://langliu.github.io" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://langliu.github.io/2017/09/18/Jasmine——行为驱动开发/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+<div class="page-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAN4AAADeCAAAAAB3DOFrAAACpklEQVR42u3aQU4DMQwFUO5/aZDYognfdlyK9GZV0WqSl0VivvPxET+f38/525+/Sf6ef3uew+jBw8PDa0396Xl69XlyT5/zZUrefJ4zHh4e3jbvfBhMNv3qpM8j5nPGw8PDewfe+cCItulBEY+Hh4f3H3nJAfB0bJxHSd6Dh4eH92686jDV0nmyZNX54OHh4W3zqgXuO3xe7O/h4eHhDbrqt46BSatscjjh4eHhbfDypv6khV/d6PPrBdGBgYeHh3eVl2zc+WB7IUU1gHg89/Dw8PAu8eZ7afWXecMsKbUfZ4KHh4e3wJtcvcon3WuzzWeFh4eHt8Grbru3GlfV8Ld6IOHh4eFt83oxQXIY9KKNPPj45Vs8PDy8l/N6EUNvae729PDw8PC2eXls2osb8hChmqAU8hU8PDy8S7y7A/cCiOpY+XLj4eHhbfCqLahJgyovsvNrWL+8Bw8PD2+Nl1ekc3wVUCiakztleHh4eJd4+XPrGlYvtigvEx4eHt4Cr3f1Kpn03oWtaoyCh4eHd5dXbWglEe2tJlYvusXDw8Pb5lX/+W/21oKF2IhC8PDw8DZ453/yq5v75IJUftgUwlw8PDy8Bd6kqK1eJpg0yZID6XE58PDw8BZ4SdHcK39vbf3VkhoPDw/v9bxJUyrnlYvjVnsMDw8Pb4NXLVirw0+29clM8PDw8LZ51Vi22tzqLdwowMXDw8Nb4H0Wn14hnsQQeUBcCILx8PDwFnjzUOCMr17PyqOHcoCLh4eHd5WXb9NJ6FA9Em4t1qinh4eHh9fi9QrlZAkmv+yFIM07ZXh4eHgv4VXjgN51rsnC4eHh4f0tr9esyi9pVcPcZn8PDw8P7xJvPkxvu8+L9WqbDQ8PD2+PV22AVQ+A/DrC3YYZHh4e3gLvCyTXkpclLMTOAAAAAElFTkSuQmCC" alt="微信分享二维码">
+</div>
+
+
+
+
+    <script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
+<script>
+var BLOG = { ROOT: '/', SHARE: true, REWARD: true };
+
+
+</script>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/main.min.js"></script>
+
+
+<div class="search-panel" id="search-panel">
+    <ul class="search-result" id="search-result"></ul>
+</div>
+<template id="search-tpl">
+<li class="item">
+    <a href="{path}" class="waves-block waves-effect">
+        <div class="title ellipsis" title="{title}">{title}</div>
+        <div class="flex-row flex-middle">
+            <div class="tags ellipsis">
+                {tags}
+            </div>
+            <time class="flex-col time">{date}</time>
+        </div>
+    </a>
+</li>
+</template>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/search.min.js" async></script>
+
+
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+<script>
+(function() {
+    var OriginTitile = document.title, titleTime;
+    document.addEventListener('visibilitychange', function() {
+        if (document.hidden) {
+            document.title = '死鬼去哪里了！';
+            clearTimeout(titleTime);
+        } else {
+            document.title = '(つェ⊂)咦!又好了!';
+            titleTime = setTimeout(function() {
+                document.title = OriginTitile;
+            },2000);
+        }
+    });
+})();
+</script>
+
+
+
+</body>
+</html>

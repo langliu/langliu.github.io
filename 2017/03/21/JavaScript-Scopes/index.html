@@ -1,0 +1,551 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+
+    
+
+    
+
+
+
+    <meta charset="utf-8">
+    
+    
+    
+    
+    <title>JavaScript作用域 | Allen&#39;s blog | 我的个人博客，用于记录在学习中的一些知识，加强记忆</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <meta name="theme-color" content="#3F51B5">
+    
+    
+    <meta name="keywords" content="JavaScript">
+    <meta name="description" content="作用域是什么几乎所有的编程语言最基础的功能之一，就是能够储存变量当中的值，并且能够在之后对这个值进行访问和修改。但是这些变量存储在哪里？程序需要的时候怎么找到这些变量呢？这时就需要一套设计良好的规则来存储变量，并且可以方便地找到这些变量，这套规则被称为作用域。">
+<meta name="keywords" content="JavaScript">
+<meta property="og:type" content="article">
+<meta property="og:title" content="JavaScript作用域">
+<meta property="og:url" content="https://langliu.github.io/2017/03/21/JavaScript-Scopes/index.html">
+<meta property="og:site_name" content="Allen&#39;s blog">
+<meta property="og:description" content="作用域是什么几乎所有的编程语言最基础的功能之一，就是能够储存变量当中的值，并且能够在之后对这个值进行访问和修改。但是这些变量存储在哪里？程序需要的时候怎么找到这些变量呢？这时就需要一套设计良好的规则来存储变量，并且可以方便地找到这些变量，这套规则被称为作用域。">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2017-12-31T15:19:57.240Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="JavaScript作用域">
+<meta name="twitter:description" content="作用域是什么几乎所有的编程语言最基础的功能之一，就是能够储存变量当中的值，并且能够在之后对这个值进行访问和修改。但是这些变量存储在哪里？程序需要的时候怎么找到这些变量呢？这时就需要一套设计良好的规则来存储变量，并且可以方便地找到这些变量，这套规则被称为作用域。">
+    
+        <link rel="alternate" type="application/atom+xml" title="Allen&#39;s blog" href="/atom.xml">
+    
+    <link rel="shortcut icon" href="http://ow4hqwlyg.bkt.clouddn.com/favicon.ico">
+    <link rel="stylesheet" href="//unpkg.com/hexo-theme-material-indigo@latest/css/style.css">
+    <script>window.lazyScripts=[]</script>
+
+    <!-- custom head -->
+    
+
+</head>
+
+<body>
+    <div id="loading" class="active"></div>
+
+    <aside id="menu" class="hide" >
+  <div class="inner flex-row-vertical">
+    <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
+        <i class="icon icon-lg icon-close"></i>
+    </a>
+    <div class="brand-wrap" style="background-image:url(http://ow4hqwlyg.bkt.clouddn.com/brand.jpg)">
+      <div class="brand">
+        <a href="/" class="avatar waves-effect waves-circle waves-light">
+          <img src="http://ow4hqwlyg.bkt.clouddn.com/blog-avatar.jpg">
+        </a>
+        <hgroup class="introduce">
+          <h5 class="nickname">Allen Liu</h5>
+          <a href="mailto:809721414@qq.com" title="809721414@qq.com" class="mail">809721414@qq.com</a>
+        </hgroup>
+      </div>
+    </div>
+    <div class="scroll-wrap flex-col">
+      <ul class="nav">
+        
+            <li class="waves-block waves-effect">
+              <a href="/"  >
+                <i class="icon icon-lg icon-home"></i>
+                主页
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/archives"  >
+                <i class="icon icon-lg icon-archives"></i>
+                Archives
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/tags"  >
+                <i class="icon icon-lg icon-tags"></i>
+                Tags
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/categories"  >
+                <i class="icon icon-lg icon-th-list"></i>
+                Categories
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://github.com/langliu" target="_blank" >
+                <i class="icon icon-lg icon-github"></i>
+                Github
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://www.zhihu.com/people/liu-lang-55-8/activities" target="_blank" >
+                <i class="icon icon-lg icon-coffee"></i>
+                知乎
+              </a>
+            </li>
+        
+      </ul>
+    </div>
+  </div>
+</aside>
+
+    <main id="main">
+        <header class="top-header" id="header">
+    <div class="flex-row">
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
+          <i class="icon icon-lg icon-navicon"></i>
+        </a>
+        <div class="flex-col header-title ellipsis">JavaScript作用域</div>
+        
+        <div class="search-wrap" id="search-wrap">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+                <i class="icon icon-lg icon-chevron-left"></i>
+            </a>
+            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="输入感兴趣的关键字">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
+                <i class="icon icon-lg icon-search"></i>
+            </a>
+        </div>
+        
+        
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menuShare">
+            <i class="icon icon-lg icon-share-alt"></i>
+        </a>
+        
+    </div>
+</header>
+<header class="content-header post-header">
+
+    <div class="container fade-scale">
+        <h1 class="title">JavaScript作用域</h1>
+        <h5 class="subtitle">
+            
+                <time datetime="2017-03-20T16:00:00.000Z" itemprop="datePublished" class="page-time">
+  2017-03-21
+</time>
+
+
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/前端/">前端</a></li></ul>
+
+            
+        </h5>
+    </div>
+
+    
+
+
+</header>
+
+
+<div class="container body-wrap">
+    
+    <aside class="post-widget">
+        <nav class="post-toc-wrap post-toc-shrink" id="post-toc">
+            <h4>TOC</h4>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#作用域是什么"><span class="post-toc-number">1.</span> <span class="post-toc-text">作用域是什么</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#词法作用域"><span class="post-toc-number">2.</span> <span class="post-toc-text">词法作用域</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#欺骗词法"><span class="post-toc-number">2.1.</span> <span class="post-toc-text">欺骗词法</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#eval"><span class="post-toc-number">2.1.1.</span> <span class="post-toc-text">eval</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#with"><span class="post-toc-number">2.1.2.</span> <span class="post-toc-text">with</span></a></li></ol></li></ol></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#函数作用域"><span class="post-toc-number">3.</span> <span class="post-toc-text">函数作用域</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#函数的用途"><span class="post-toc-number">3.1.</span> <span class="post-toc-text">函数的用途</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#立即执行函数表达式（IIFE）"><span class="post-toc-number">3.2.</span> <span class="post-toc-text">立即执行函数表达式（IIFE）</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#两种形式"><span class="post-toc-number">3.2.1.</span> <span class="post-toc-text">两种形式</span></a></li></ol></li></ol></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#块作用域"><span class="post-toc-number">4.</span> <span class="post-toc-text">块作用域</span></a></li></ol>
+        </nav>
+    </aside>
+
+
+<article id="post-JavaScript-Scopes"
+  class="post-article article-type-post fade" itemprop="blogPost">
+
+    <div class="post-card">
+        <h1 class="post-card-title">JavaScript作用域</h1>
+        <div class="post-meta">
+            <time class="post-time" title="2017-03-21 00:00:00" datetime="2017-03-20T16:00:00.000Z"  itemprop="datePublished">2017-03-21</time>
+
+            
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/前端/">前端</a></li></ul>
+
+
+
+            
+<span id="busuanzi_container_page_pv" title="文章总阅读量" style='display:none'>
+    <i class="icon icon-eye icon-pr"></i><span id="busuanzi_value_page_pv"></span>
+</span>
+
+
+        </div>
+        <div class="post-content" id="post-content" itemprop="postContent">
+            <h2 id="作用域是什么"><a href="#作用域是什么" class="headerlink" title="作用域是什么"></a>作用域是什么</h2><p>几乎所有的编程语言最基础的功能之一，就是能够储存变量当中的值，并且能够在之后对这个值进行访问和修改。但是这些变量存储在哪里？程序需要的时候怎么找到这些变量呢？这时就需要一套设计良好的规则来存储变量，并且可以方便地找到这些变量，这套规则被称为作用域。</p>
+<a id="more"></a>
+<p>所以说，作用域是一套规则，用于确定在何处以及如何查找变量。</p>
+<h2 id="词法作用域"><a href="#词法作用域" class="headerlink" title="词法作用域"></a>词法作用域</h2><p>词法作用域就是定义在词法阶段的作用域。简单说，就是由你写代码时写在哪里来决定的。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">foo</span>(<span class="params">a</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">var</span> b = a * <span class="number">2</span>;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">function</span> <span class="title">bar</span>(<span class="params">c</span>) </span>&#123;</span><br><span class="line">        <span class="built_in">console</span>.log(a, b, c);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">foo(<span class="number">2</span>); <span class="comment">// 2, 4, 12</span></span><br></pre></td></tr></table></figure>
+<p>上面的代码有三个逐级嵌套的作用域，在 js 中词法作用域规则:</p>
+<ol>
+<li>函数允许访问函数外的数据.</li>
+<li>整个代码结构中只有函数可以限定作用域.</li>
+<li>作用规则首先使用提升规则分析.</li>
+<li>作用域查找会在找到第一个匹配的标识符时停止.</li>
+</ol>
+<h3 id="欺骗词法"><a href="#欺骗词法" class="headerlink" title="欺骗词法"></a>欺骗词法</h3><p>由于词法作用域在写代码的时候就已经确定了，那么我们怎么才能在运行的时候来修改词法作用域呢？</p>
+<p>在JavaScript中有两种机制来实现这个目的（<code>eval</code>和<code>with</code>）。但这两种机制并不是什么好主意，因为他们会导致性能的下降，所以不推荐使用欺骗词法，只要知道有这么个东西就好了。</p>
+<h4 id="eval"><a href="#eval" class="headerlink" title="eval"></a>eval</h4><p>JavaScript中的<code>eval(..)</code>可以接受一个字符串作为参数，并将其中的内容视为好像在书写就存在于程序中这个位置的代码。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">foo</span>(<span class="params">str, a</span>) </span>&#123;</span><br><span class="line">    <span class="built_in">eval</span>(str); <span class="comment">//欺骗</span></span><br><span class="line">    <span class="built_in">console</span>.log(a, b);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> b = <span class="number">2</span>;</span><br><span class="line"></span><br><span class="line">foo(<span class="string">"var b = 1;"</span>, <span class="number">1</span>); <span class="comment">// 1, 1</span></span><br></pre></td></tr></table></figure>
+<p>从上面代码可以看出，当<code>eval(..)</code>调用传进去的字符串时，程序把该字符串当做本来就在那里一样来处理。因为在字符串中定义了变量b，所以外部的变量b被屏蔽了。</p>
+<h4 id="with"><a href="#with" class="headerlink" title="with"></a>with</h4><p>JavaScript中另一个欺骗词法作用域的机制就是<code>with</code>关键字。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">foo</span>(<span class="params">obj</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">with</span>(obj) &#123;</span><br><span class="line">        a = <span class="number">2</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> obj = &#123;</span><br><span class="line">    b: <span class="number">3</span></span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">foo(obj);</span><br><span class="line"><span class="built_in">console</span>.log(obj.a); <span class="comment">// undefined</span></span><br><span class="line"><span class="built_in">console</span>.log(a); <span class="comment">// 2</span></span><br></pre></td></tr></table></figure>
+<p>在上面的代码中，当执行<code>foo(obj)</code>时，<code>obj</code>并没有<code>a</code>属性，因此<code>obj.a</code>为<code>undefined</code>。但是在<code>foo(..)</code>函数中<code>a = 2;</code>却创建了一个全局变量<code>a</code>。</p>
+<p><strong>在严格模式的程序中，<code>eval(..)</code>在运行时有着自己的词法作用域，意味着其中的声明无法修改所在的作用域，而<code>with</code>则被完全禁止了。</strong></p>
+<h2 id="函数作用域"><a href="#函数作用域" class="headerlink" title="函数作用域"></a>函数作用域</h2><p>函数作用域的含义是指，属于这个函数的全部变量都可以在整个函数的范围内使用及复用。</p>
+<h3 id="函数的用途"><a href="#函数的用途" class="headerlink" title="函数的用途"></a>函数的用途</h3><ul>
+<li>隐藏内部实现</li>
+<li>代码复用</li>
+<li>组合调用</li>
+</ul>
+<h3 id="立即执行函数表达式（IIFE）"><a href="#立即执行函数表达式（IIFE）" class="headerlink" title="立即执行函数表达式（IIFE）"></a>立即执行函数表达式（IIFE）</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> a = <span class="number">2</span>;</span><br><span class="line">(<span class="function"><span class="keyword">function</span> <span class="title">foo</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="keyword">var</span> a = <span class="number">3</span>;</span><br><span class="line">    <span class="built_in">console</span>.log(a); <span class="comment">// 3</span></span><br><span class="line">&#125;)();</span><br><span class="line"><span class="built_in">console</span>.log(a); <span class="comment">// 2</span></span><br></pre></td></tr></table></figure>
+<p>由于函数被包含在一对( )括号内部，因此成为了一个表达式，通过在末尾加上另外一个( )可以立即执行这个函数。</p>
+<h4 id="两种形式"><a href="#两种形式" class="headerlink" title="两种形式"></a>两种形式</h4><ul>
+<li><code>(function(){ .. })()</code></li>
+<li><code>(function(){ .. }())</code></li>
+</ul>
+<h2 id="块作用域"><a href="#块作用域" class="headerlink" title="块作用域"></a>块作用域</h2><p>我在《JavaScript语言精粹》中看到过这样一句话“糟糕的是，尽管Javascript的代码块语法貌似支持块级作用域，实际上JavaScript并不支持。这个混淆之处可能成为错误之源。”</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> (<span class="keyword">var</span> i = <span class="number">0</span>; i &lt; <span class="number">10</span>; i++) &#123;</span><br><span class="line">    <span class="built_in">console</span>.log(i);</span><br><span class="line">&#125;</span><br><span class="line"><span class="built_in">console</span>.log(i); <span class="comment">// 10</span></span><br></pre></td></tr></table></figure>
+<p>在上面的代码中，我们可以看到在<code>for</code>循环内部定义的变量污染到了全局作用域中。</p>
+<p>那么JavaScript中真的没有块作用域吗？很少有人注意到JavaScript的ES3规范中规定<code>try/catch</code>的<code>catch</code>分句会创建一个块作用域，其中声明的变量仅在catch内部有效。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">try</span> &#123;</span><br><span class="line">    <span class="literal">undefined</span>();</span><br><span class="line">&#125; <span class="keyword">catch</span> (error) &#123;</span><br><span class="line">    <span class="built_in">console</span>.log(error); <span class="comment">// 能够正常运行</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="built_in">console</span>.log(error); <span class="comment">//</span></span><br></pre></td></tr></table></figure>
+<p>在ES6中，引入了新的<code>let</code>关键字，提供了除了<code>var</code>以外的另一种变量声明方式。<code>let</code>关键字可以将变量绑定到所在的任意作用域中（通常是<code>{ ... }</code>内部）</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> (<span class="keyword">let</span> i = <span class="number">0</span>; i &lt; <span class="number">10</span>; i++) &#123;</span><br><span class="line">    <span class="built_in">console</span>.log(i);</span><br><span class="line">&#125;</span><br><span class="line"><span class="built_in">console</span>.log(i); <span class="comment">// ReferenceError: i is not defined</span></span><br></pre></td></tr></table></figure>
+<p>对比上面的代码，我们可以发现使用<code>let</code>关键字时，块作用域外部并不能访问内部的变量。</p>
+<p>除了<code>let</code>以外，ES6还引入了<code>const</code>，同样可以用来创建块作用域变量，但其值是固定的（常量），之后任何试图修改值的操作都会引起错误。</p>
+
+        </div>
+
+        <blockquote class="post-copyright">
+    
+    <div class="content">
+        
+
+        
+        感谢您的阅读
+        
+    </div>
+    
+    <footer>
+        <a href="https://langliu.github.io">
+            <img src="http://ow4hqwlyg.bkt.clouddn.com/blog-avatar.jpg" alt="Allen Liu">
+            Allen Liu
+        </a>
+    </footer>
+</blockquote>
+
+        
+<div class="page-reward">
+    <a id="rewardBtn" href="javascript:;" class="page-reward-btn waves-effect waves-circle waves-light">赏</a>
+</div>
+
+
+
+        <div class="post-footer">
+            
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/JavaScript/">JavaScript</a></li></ul>
+
+
+            
+<div class="page-share-wrap">
+    
+
+<div class="page-share" id="pageShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://langliu.github.io/2017/03/21/JavaScript-Scopes/&title=《JavaScript作用域》 — Allen's blog&pic=http://ow4hqwlyg.bkt.clouddn.com/blog-avatar.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://langliu.github.io/2017/03/21/JavaScript-Scopes/&title=《JavaScript作用域》 — Allen's blog&source=作用域是什么几乎所有的编程语言最基础的功能之一，就是能够储存变量当中的值，并且能够在之后对这个值进行访问和修改。但是这些变量存储在哪里？程序需要的时候怎么..." data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://langliu.github.io/2017/03/21/JavaScript-Scopes/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《JavaScript作用域》 — Allen's blog&url=https://langliu.github.io/2017/03/21/JavaScript-Scopes/&via=https://langliu.github.io" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://langliu.github.io/2017/03/21/JavaScript-Scopes/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+
+    <a href="javascript:;" id="shareFab" class="page-share-fab waves-effect waves-circle">
+        <i class="icon icon-share-alt icon-lg"></i>
+    </a>
+</div>
+
+
+
+        </div>
+    </div>
+
+    
+<nav class="post-nav flex-row flex-justify-between">
+  
+    <div class="waves-block waves-effect prev">
+      <a href="/2017/06/21/图片垂直居中/" id="post-prev" class="post-nav-link">
+        <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i> Prev</div>
+        <h4 class="title">图片垂直居中</h4>
+      </a>
+    </div>
+  
+
+  
+</nav>
+
+
+
+    
+
+
+
+
+
+
+
+
+
+
+
+    <!-- Valine Comments -->
+    <div class="comments vcomment" id="comments"></div>
+    <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+    <script src="//unpkg.com/valine@latest/dist/Valine.min.js"></script>
+    <!-- Valine Comments script -->
+    <script>
+        var GUEST_INFO = ['nick','mail','link'];
+        var guest_info = 'nick,mail,link'.split(',').filter(function(item){
+          return GUEST_INFO.indexOf(item) > -1
+        });
+        new Valine({
+            el: '#comments',
+            notify: 'false' == 'true',
+            verify: 'false' == 'true',
+            appId: "8pEg76EhXN7Qy4RCM4w1gqGo-gzGzoHsz",
+            appKey: "doV7nDLncqzphUmfzIvveojz",
+            avatar: "mm",
+            placeholder: "要不要说点什么呢？",
+            guest_info: guest_info.length == 0 ? GUEST_INFO : guest_info,
+            pageSize: "10"
+        })
+    </script>
+    <!-- Valine Comments end -->
+
+
+
+
+
+
+
+</article>
+
+<div id="reward" class="page-modal reward-lay">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <h3 class="reward-title">
+        <i class="icon icon-quote-left"></i>
+        谢谢大爷~
+        <i class="icon icon-quote-right"></i>
+    </h3>
+    <div class="reward-content">
+        
+        <div class="reward-code">
+            <img id="rewardCode" src="http://ow4hqwlyg.bkt.clouddn.com/wechat.jpg" alt="打赏二维码">
+        </div>
+        
+        <label class="reward-toggle">
+            <input id="rewardToggle" type="checkbox" class="reward-toggle-check"
+                data-wechat="http://ow4hqwlyg.bkt.clouddn.com/wechat.jpg" data-alipay="http://ow4hqwlyg.bkt.clouddn.com/alipay.jpg">
+            <div class="reward-toggle-ctrol">
+                <span class="reward-toggle-item wechat">微信</span>
+                <span class="reward-toggle-label"></span>
+                <span class="reward-toggle-item alipay">支付宝</span>
+            </div>
+        </label>
+        
+    </div>
+</div>
+
+
+
+</div>
+
+        <footer class="footer">
+    <div class="top">
+        
+<p>
+    <span id="busuanzi_container_site_uv" style='display:none'>
+        站点总访客数：<span id="busuanzi_value_site_uv"></span>
+    </span>
+    <span id="busuanzi_container_site_pv" style='display:none'>
+        站点总访问量：<span id="busuanzi_value_site_pv"></span>
+    </span>
+</p>
+
+
+        <p>
+            
+                <span><a href="/atom.xml" target="_blank" class="rss" title="rss"><i class="icon icon-lg icon-rss"></i></a></span>
+            
+            <span>博客内容遵循 <a rel="license" href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh">知识共享 署名 - 非商业性 - 相同方式共享 4.0 国际协议</a></span>
+        </p>
+    </div>
+    <div class="bottom">
+        <p><span>Allen Liu &copy; 2017 - 2018</span>
+            <span>
+                
+                Power by <a href="http://hexo.io/" target="_blank">Hexo</a> Theme <a href="https://github.com/yscoder/hexo-theme-indigo" target="_blank">indigo</a>
+            </span>
+        </p>
+    </div>
+</footer>
+
+    </main>
+    <div class="mask" id="mask"></div>
+<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
+
+
+
+<div class="global-share" id="globalShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://langliu.github.io/2017/03/21/JavaScript-Scopes/&title=《JavaScript作用域》 — Allen's blog&pic=http://ow4hqwlyg.bkt.clouddn.com/blog-avatar.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://langliu.github.io/2017/03/21/JavaScript-Scopes/&title=《JavaScript作用域》 — Allen's blog&source=作用域是什么几乎所有的编程语言最基础的功能之一，就是能够储存变量当中的值，并且能够在之后对这个值进行访问和修改。但是这些变量存储在哪里？程序需要的时候怎么..." data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://langliu.github.io/2017/03/21/JavaScript-Scopes/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《JavaScript作用域》 — Allen's blog&url=https://langliu.github.io/2017/03/21/JavaScript-Scopes/&via=https://langliu.github.io" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://langliu.github.io/2017/03/21/JavaScript-Scopes/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+<div class="page-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMYAAADGCAAAAACs8KCBAAACK0lEQVR42u3aS27DMAxF0ex/0+60QBv5PlIJYOpqFORj83jAiCJfL7yuX4t8ev1Z6a9en1gyZMh4LONarnVYJIg1iV/z5tHIkCHjAMa7DLb+TgogyZfcV4YMGTIIY1fqrD0+GTJkyFhfjgB4OuYPQoYMGTJIEds/niNHbB+vxWXIkPFABg/r+68/0t+QIUPGoxhXuNImAW8etKKSIUPGaAZPcOkBWacwLsYjQ4aMoYz+GARPl/3S9+07MmTIGM2otQx5cOlxGz/yu/nfkCFDxjGMdDCidqzfKXeDXacMGTIey1gnRPJpv81ZG7P4p4iVIUPGaMbeQYddsIAnQ4aMYxi8rUhuX7tCWhijxoAMGTIeziApkmzg+sH1t5IyZMiYzUjLyDTV8k0nufLNo5EhQ8ZQBkmy6XFbZ6vHSTJkyDiBkQ5v7WpJ1ga/3oJlyJAxmpHegA+z8qZCJ03LkCHjBEbtuJ+Xl3xclTcA0LCFDBkyBjFqBS0ZGuMHcCk7KGtlyJAxiMG/ykPvlLhpA1WGDBlnMtZB7L197RHEZ4EyZMgYwagNWKTJmmPiaGXIkDGUcYWLJ1NS0JK0jqgyZMgYzeArDQ71TsN/hlqzU4YMGTMYaZIl6a+DSYfVZMiQcQ5j77hDcKDfKGJlyJAhgxSQabi1zWhxTkSGDBkHM9LB1rQxUBzykCFDxgEMPmbBN3a1I/5aQ0KGDBmzGbXSsZaCaw2GbU1NGTJkPI/xAxVCNpSJorezAAAAAElFTkSuQmCC" alt="微信分享二维码">
+</div>
+
+
+
+
+    <script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
+<script>
+var BLOG = { ROOT: '/', SHARE: true, REWARD: true };
+
+
+</script>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/main.min.js"></script>
+
+
+<div class="search-panel" id="search-panel">
+    <ul class="search-result" id="search-result"></ul>
+</div>
+<template id="search-tpl">
+<li class="item">
+    <a href="{path}" class="waves-block waves-effect">
+        <div class="title ellipsis" title="{title}">{title}</div>
+        <div class="flex-row flex-middle">
+            <div class="tags ellipsis">
+                {tags}
+            </div>
+            <time class="flex-col time">{date}</time>
+        </div>
+    </a>
+</li>
+</template>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/search.min.js" async></script>
+
+
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+<script>
+(function() {
+    var OriginTitile = document.title, titleTime;
+    document.addEventListener('visibilitychange', function() {
+        if (document.hidden) {
+            document.title = '死鬼去哪里了！';
+            clearTimeout(titleTime);
+        } else {
+            document.title = '(つェ⊂)咦!又好了!';
+            titleTime = setTimeout(function() {
+                document.title = OriginTitile;
+            },2000);
+        }
+    });
+})();
+</script>
+
+
+
+</body>
+</html>
