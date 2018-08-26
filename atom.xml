@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://langliu.github.io/"/>
-  <updated>2018-08-25T08:38:08.274Z</updated>
+  <updated>2018-08-26T04:24:28.408Z</updated>
   <id>https://langliu.github.io/</id>
   
   <author>
@@ -15,6 +15,29 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>Nginx在Windows下开机自动启动</title>
+    <link href="https://langliu.github.io/2018/08/26/Nginx%E5%9C%A8Windows%E4%B8%8B%E5%BC%80%E6%9C%BA%E8%87%AA%E5%8A%A8%E5%90%AF%E5%8A%A8/"/>
+    <id>https://langliu.github.io/2018/08/26/Nginx在Windows下开机自动启动/</id>
+    <published>2018-08-26T03:40:59.000Z</published>
+    <updated>2018-08-26T04:24:28.408Z</updated>
+    
+    <content type="html"><![CDATA[<h2 id="安装Nginx"><a href="#安装Nginx" class="headerlink" title="安装Nginx"></a>安装Nginx</h2><p>在<a href="http://nginx.org/en/download.html" target="_blank" rel="noopener">Nginx官网下载页面</a>下载Nginx Windows版本，下载后解压，然后运行目录下的 <code>nginx.exe</code> 启动nginx，这时打开浏览器输入 <code>http://localhost:80/</code> 就可以看见nginx的欢迎页面，说明nginx已经成功启动了。</p><figure class="image-bubble">                <div class="img-lightbox">                    <div class="overlay"></div>                    <img src="http://ow4hqwlyg.bkt.clouddn.com/nginx.png?limgeslim" alt="nginx" title="">                </div>                <div class="image-caption">nginx</div>            </figure><h2 id="Windows下开机自启动"><a href="#Windows下开机自启动" class="headerlink" title="Windows下开机自启动"></a>Windows下开机自启动</h2><p>关闭计算机后重新打开电脑，这时如果再去访问 <code>http://localhost:80/</code> 会报 <code>404</code> 错误，因为关机后再次开机并不会自动重启Nginx，如果我们需要每次开机后启动Nginx怎么办呢？难道一次次的去nginx目录下运行nginx.exe吗，不，我们有更简单的方式：</p><p>我们可以借助<a href="https://github.com/kohsuke/winsw/releases" target="_blank" rel="noopener">Windows Service Wrapper</a>小工具，将Nginx转换为Windows服务，这样就可以在开机时自动启动Nginx了。</p><p>下载后将该工具放入Nginx的安装目录下，并且将其重命名为 <code>nginx-service.exe</code> ，在该目录下新建 <code>nginx-service.xml</code> 文件，写入配置信息，配置好了之后就可以通过这个将Nginx注册为Windows服务。</p><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">&lt;!-- nginx-service.xml --&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">service</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">id</span>&gt;</span>nginx<span class="tag">&lt;/<span class="name">id</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">name</span>&gt;</span>nginx<span class="tag">&lt;/<span class="name">name</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">description</span>&gt;</span>nginx<span class="tag">&lt;/<span class="name">description</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">logpath</span>&gt;</span>D:nginx-1.14.0\<span class="tag">&lt;/<span class="name">logpath</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">logmode</span>&gt;</span>roll<span class="tag">&lt;/<span class="name">logmode</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">depend</span>&gt;</span><span class="tag">&lt;/<span class="name">depend</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">executable</span>&gt;</span>D:nginx-1.14.0\nginx.exe<span class="tag">&lt;/<span class="name">executable</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">stopexecutable</span>&gt;</span>D:nginx-1.14.0\nginx.exe -s stop<span class="tag">&lt;/<span class="name">stopexecutable</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">service</span>&gt;</span></span><br></pre></td></tr></table></figure><h3 id="服务命令"><a href="#服务命令" class="headerlink" title="服务命令"></a>服务命令</h3><p>以上内容配置好了之后，在nginx安装目录下以管理员运行命令：<code>.\nginx-service.exe install</code> 就成功将其注册为Windows服务了，然后运行 <code>.\nginx-service.exe start</code> 启动服务。这时我们可以在Windows任务管理器的服务中查看该是否成功启动。</p><p><strong>注：</strong></p><ul><li><code>nginx-service.exe install</code> 命令可注册对应的系统服务</li><li><code>nginx-service.exe uninstall</code> 命令可删除对应的系统服务</li><li><code>nginx-service.exe stop</code> 命令可停止对应的系统服务</li><li><code>nginx-service.exe start</code> 命令可启动对应的系统服务</li></ul>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;h2 id=&quot;安装Nginx&quot;&gt;&lt;a href=&quot;#安装Nginx&quot; class=&quot;headerlink&quot; title=&quot;安装Nginx&quot;&gt;&lt;/a&gt;安装Nginx&lt;/h2&gt;&lt;p&gt;在&lt;a href=&quot;http://nginx.org/en/download.html&quot; targe
+      
+    
+    </summary>
+    
+      <category term="环境配置" scheme="https://langliu.github.io/categories/%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE/"/>
+    
+    
+  </entry>
   
   <entry>
     <title>vue-cli3 设置反向代理</title>
