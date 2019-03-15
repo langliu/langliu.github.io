@@ -29,14 +29,14 @@
 <meta property="og:site_name" content="Allen&#39;s blog">
 <meta property="og:description" content="DataFrame数据选择选择行1234df = DataFrame(&amp;#123;    &apos;name&apos;: [&apos;Allen&apos;, &apos;Marry&apos;, &apos;Jack&apos;, &apos;Jason&apos;, &apos;Cherry&apos;, &apos;Aline&apos;, &apos;Timmy&apos;, &apos;Alain&apos;],    &apos;sex&apos;: [&apos;m&apos;, &apos;f&apos;, &apos;m&apos;, &apos;m&apos;, &apos;f&apos;, &apos;f&apos;, &apos;m&apos;, &apos;m&apos;]&amp;#125;) 获取前n行df.head(n:">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2018-08-29T23:28:09.254Z">
+<meta property="og:updated_time" content="2018-08-29T23:33:38.371Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="pandas入门">
 <meta name="twitter:description" content="DataFrame数据选择选择行1234df = DataFrame(&amp;#123;    &apos;name&apos;: [&apos;Allen&apos;, &apos;Marry&apos;, &apos;Jack&apos;, &apos;Jason&apos;, &apos;Cherry&apos;, &apos;Aline&apos;, &apos;Timmy&apos;, &apos;Alain&apos;],    &apos;sex&apos;: [&apos;m&apos;, &apos;f&apos;, &apos;m&apos;, &apos;m&apos;, &apos;f&apos;, &apos;f&apos;, &apos;m&apos;, &apos;m&apos;]&amp;#125;) 获取前n行df.head(n:">
     
         <link rel="alternate" type="application/atom+xml" title="Allen&#39;s blog" href="/atom.xml">
     
-    <link rel="shortcut icon" href="http://ow4hqwlyg.bkt.clouddn.com/favicon.ico">
+    <link rel="shortcut icon" href="http://qiniu.liu-lang.top/favicon.ico">
     <link rel="stylesheet" href="//unpkg.com/hexo-theme-material-indigo@latest/css/style.css">
     <script>window.lazyScripts=[]</script>
 
@@ -53,10 +53,10 @@
     <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
         <i class="icon icon-lg icon-close"></i>
     </a>
-    <div class="brand-wrap" style="background-image:url(http://ow4hqwlyg.bkt.clouddn.com/brand.jpg)">
+    <div class="brand-wrap" style="background-image:url(http://qiniu.liu-lang.top/brand.jpg)">
       <div class="brand">
         <a href="/" class="avatar waves-effect waves-circle waves-light">
-          <img src="http://ow4hqwlyg.bkt.clouddn.com/blog-avatar.jpg">
+          <img src="http://qiniu.liu-lang.top/blog-avatar.jpg">
         </a>
         <hgroup class="introduce">
           <h5 class="nickname">Allen Liu</h5>
@@ -213,7 +213,7 @@
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">s1.reindex(index=[<span class="string">'A'</span>, <span class="string">'B'</span>, <span class="string">'C'</span>, <span class="string">'D'</span>, <span class="string">'E'</span>])</span><br><span class="line"><span class="comment"># A    1.0</span></span><br><span class="line"><span class="comment"># B    2.0</span></span><br><span class="line"><span class="comment"># C    3.0</span></span><br><span class="line"><span class="comment"># D    4.0</span></span><br><span class="line"><span class="comment"># E    NaN</span></span><br><span class="line"><span class="comment"># dtype: float64</span></span><br></pre></td></tr></table></figure>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">s1.reindex(index=[<span class="string">'A'</span>, <span class="string">'B'</span>, <span class="string">'C'</span>, <span class="string">'D'</span>, <span class="string">'E'</span>], fill_value=<span class="number">0</span>)</span><br><span class="line"><span class="comment"># A    1</span></span><br><span class="line"><span class="comment"># B    2</span></span><br><span class="line"><span class="comment"># C    3</span></span><br><span class="line"><span class="comment"># D    4</span></span><br><span class="line"><span class="comment"># E    0</span></span><br><span class="line"><span class="comment"># dtype: int64</span></span><br></pre></td></tr></table></figure>
 <p>重置编号时使用 <code>method=&#39;ffill&#39;</code> 参数可以自动填充Series的值，如下例所示：因<code>index</code> 1，3，5有值，所以填充时1-3之间的填充 <code>index</code> 为1的值，3-5之间的填充 <code>index</code> 为3的值，而 <code>index</code> 为1的因为前面没有值，则为 <code>NaN</code>。</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">s2 = Series([<span class="string">'A'</span>, <span class="string">'B'</span>, <span class="string">'C'</span>], index=[<span class="number">1</span>, <span class="number">3</span>, <span class="number">5</span>])</span><br><span class="line">s2.reindex(index=range(<span class="number">5</span>), method=<span class="string">'ffill'</span>)</span><br><span class="line"><span class="comment"># 0    NaN</span></span><br><span class="line"><span class="comment"># 1      A</span></span><br><span class="line"><span class="comment"># 2      A</span></span><br><span class="line"><span class="comment"># 3      B</span></span><br><span class="line"><span class="comment"># 4      B</span></span><br><span class="line"><span class="comment"># dtype: object</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">s2 = Series([<span class="string">'A'</span>, <span class="string">'B'</span>, <span class="string">'C'</span>], index=[<span class="number">1</span>, <span class="number">3</span>, <span class="number">5</span>])</span><br><span class="line">s2 = s2.reindex(index=range(<span class="number">5</span>), method=<span class="string">'ffill'</span>)</span><br><span class="line"><span class="comment"># 0    NaN</span></span><br><span class="line"><span class="comment"># 1      A</span></span><br><span class="line"><span class="comment"># 2      A</span></span><br><span class="line"><span class="comment"># 3      B</span></span><br><span class="line"><span class="comment"># 4      B</span></span><br><span class="line"><span class="comment"># dtype: object</span></span><br></pre></td></tr></table></figure>
 <p>如果要删除某一行可以使用 <code>drop()</code> 方法：</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">s2.drop(<span class="number">0</span>)</span><br></pre></td></tr></table></figure>
         </div>
@@ -230,7 +230,7 @@
     
     <footer>
         <a href="https://langliu.github.io">
-            <img src="http://ow4hqwlyg.bkt.clouddn.com/blog-avatar.jpg" alt="Allen Liu">
+            <img src="http://qiniu.liu-lang.top/blog-avatar.jpg" alt="Allen Liu">
             Allen Liu
         </a>
     </footer>
@@ -255,7 +255,7 @@
 <div class="page-share" id="pageShare">
     <ul class="reset share-icons">
       <li>
-        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://langliu.github.io/2018/08/29/pandas入门/&title=《pandas入门》 — Allen's blog&pic=http://ow4hqwlyg.bkt.clouddn.com/blog-avatar.jpg" data-title="微博">
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://langliu.github.io/2018/08/29/pandas入门/&title=《pandas入门》 — Allen's blog&pic=http://qiniu.liu-lang.top/blog-avatar.jpg" data-title="微博">
           <i class="icon icon-weibo"></i>
         </a>
       </li>
@@ -300,7 +300,14 @@
     </div>
 
     
-<nav class="post-nav flex-row flex-justify-between flex-row-reverse">
+<nav class="post-nav flex-row flex-justify-between">
+  
+    <div class="waves-block waves-effect prev">
+      <a href="/2019/03/15/Test/" id="post-prev" class="post-nav-link">
+        <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i> Prev</div>
+        <h4 class="title">Test</h4>
+      </a>
+    </div>
   
 
   
@@ -369,12 +376,12 @@
     <div class="reward-content">
         
         <div class="reward-code">
-            <img id="rewardCode" src="http://ow4hqwlyg.bkt.clouddn.com/wechat.jpg" alt="打赏二维码">
+            <img id="rewardCode" src="http://qiniu.liu-lang.top/wechat.jpg" alt="打赏二维码">
         </div>
         
         <label class="reward-toggle">
             <input id="rewardToggle" type="checkbox" class="reward-toggle-check"
-                data-wechat="http://ow4hqwlyg.bkt.clouddn.com/wechat.jpg" data-alipay="http://ow4hqwlyg.bkt.clouddn.com/alipay.jpg">
+                data-wechat="http://qiniu.liu-lang.top/wechat.jpg" data-alipay="http://qiniu.liu-lang.top/alipay.jpg">
             <div class="reward-toggle-ctrol">
                 <span class="reward-toggle-item wechat">微信</span>
                 <span class="reward-toggle-label"></span>
@@ -410,7 +417,7 @@
         </p>
     </div>
     <div class="bottom">
-        <p><span>Allen Liu &copy; 2017 - 2018</span>
+        <p><span>Allen Liu &copy; 2017 - 2019</span>
             <span>
                 
                 Power by <a href="http://hexo.io/" target="_blank">Hexo</a> Theme <a href="https://github.com/yscoder/hexo-theme-indigo" target="_blank">indigo</a>
@@ -428,7 +435,7 @@
 <div class="global-share" id="globalShare">
     <ul class="reset share-icons">
       <li>
-        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://langliu.github.io/2018/08/29/pandas入门/&title=《pandas入门》 — Allen's blog&pic=http://ow4hqwlyg.bkt.clouddn.com/blog-avatar.jpg" data-title="微博">
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://langliu.github.io/2018/08/29/pandas入门/&title=《pandas入门》 — Allen's blog&pic=http://qiniu.liu-lang.top/blog-avatar.jpg" data-title="微博">
           <i class="icon icon-weibo"></i>
         </a>
       </li>
