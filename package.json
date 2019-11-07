@@ -1,0 +1,22 @@
+{
+  "name": "langliu.github.io",
+  "version": "1.0.0",
+  "description": "刘浪的个人博客",
+  "main": "index.js",
+  "homepage": "https://langliu.github.io",
+  "scripts": {
+    "start": "vuepress dev docs",
+    "publish": "vuepress build docs"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@vuepress/plugin-back-to-top": "^1.0.0-rc.1",
+    "@vuepress/plugin-pwa": "^1.0.0-rc.1",
+    "vuepress": "^1.2.0"
+  },
+  "dependencies": {
+    "vuepress-theme-reco": "^1.1.1"
+  }
+}
