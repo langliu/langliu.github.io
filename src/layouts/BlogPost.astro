@@ -1,0 +1,133 @@
+---
+import Layout from '@layouts/Layout.astro'
+import BaseHead from '@components/BaseHead.astro'
+import Sider from '@layouts/Sider.astro'
+import Tag from '@components/Tag.astro'
+
+export interface Props {
+  content: {
+    title: string
+    description: string
+    pubDate?: string
+    updatedDate?: string
+    heroImage?: string
+    tags?: string[]
+  }
+}
+
+const {
+  content: { title, description, pubDate, updatedDate, heroImage, tags },
+} = Astro.props as Props
+---
+
+<html lang='zh-CN'>
+  <head>
+    <BaseHead title={title} description={description} />
+    <style>
+      :root {
+        --astro-gradient: linear-gradient(0deg, #4f39fa, #da62c4);
+      }
+
+      h1 {
+        margin: 2rem 0;
+      }
+
+      main {
+        margin: 0;
+        padding: 1em;
+        flex: 1;
+        display: flex;
+        margin-left: 250px;
+        min-height: 100vh;
+      }
+
+      .text-gradient {
+        font-weight: 900;
+        background-image: var(--astro-gradient);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-size: 100% 200%;
+        background-position-y: 100%;
+        border-radius: 0.4rem;
+        animation: pulse 4s ease-in-out infinite;
+      }
+
+      @keyframes pulse {
+        0%,
+        100% {
+          background-position-y: 0%;
+        }
+        50% {
+          background-position-y: 80%;
+        }
+      }
+
+      .instructions {
+        line-height: 1.6;
+        margin: 1rem 0;
+        background: #4f39fa;
+        padding: 1rem;
+        border-radius: 0.4rem;
+        color: var(--color-bg);
+      }
+
+      .instructions code {
+        font-size: 0.875em;
+        border: 0.1em solid var(--color-border);
+        border-radius: 4px;
+        padding: 0.15em 0.25em;
+      }
+
+      .link-card-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(24ch, 1fr));
+        gap: 1rem;
+        padding: 0;
+      }
+
+      article {
+        padding: 1rem;
+        border-radius: 0.5rem;
+        background-color: #383539;
+      }
+
+      .title {
+        font-size: 1.8rem;
+        margin-bottom: 0.5rem;
+        margin-top: 0;
+      }
+    </style>
+  </head>
+  <body>
+    <Sider avatar='../eye.jpg' />
+    <main>
+      <article>
+        <h1 class='title'>{title}</h1>
+        {
+          pubDate && (
+            <time>
+              {new Date(pubDate).toLocaleDateString('zh-CN', {
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric',
+              })}
+            </time>
+          )
+        }
+        <div>
+          {tags?.map((tag) => <Tag>{tag}</Tag>)}
+        </div>
+        <hr />
+        {heroImage && <img width='100%' height={360} src={heroImage} alt='' />}
+        {
+          updatedDate && (
+            <div>
+              Last updated on <time>{updatedDate}</time>
+            </div>
+          )
+        }
+        <slot />
+      </article>
+    </main>
+  </body>
+</html>

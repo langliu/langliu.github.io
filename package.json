@@ -1,0 +1,27 @@
+{
+  "name": "blog",
+  "description": "",
+  "keywords": [
+    "astro"
+  ],
+  "author": "",
+  "license": "ISC",
+  "version": "0.0.1",
+  "private": true,
+  "scripts": {
+    "dev": "astro dev",
+    "start": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "astro": "astro"
+  },
+  "devDependencies": {
+    "@astrojs/mdx": "^0.10.0",
+    "@astrojs/rss": "^1.0.0",
+    "@astrojs/sitemap": "^1.0.0",
+    "astro": "^1.0.7",
+    "prettier": "^2.7.1",
+    "prettier-plugin-astro": "^0.5.1",
+    "typescript": "^4.7.4"
+  }
+}

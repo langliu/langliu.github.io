@@ -1,0 +1,28 @@
+---
+export interface Props {
+  text?: string
+}
+
+const { text } = Astro.props as Props
+---
+
+<span class='tag'><slot /></span>
+
+<style>
+  .tag {
+    box-sizing: border-box;
+    margin: 0px 0.25rem 0px 0px;
+    min-width: 0px;
+    border-radius: 50px;
+    color: var(--theme-ui-colors-textStrong, hsl(210, 38%, 98%));
+    text-decoration: none;
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
+    font-weight: 400;
+    font-size: 0.7rem;
+    transition: all 200ms ease-in-out 0s;
+    flex-shrink: 0;
+    display: inline-flex;
+    background-color: rgba(180, 194, 112, 0.5);
+  }
+</style>
