@@ -4,7 +4,7 @@ import sitemap from '@astrojs/sitemap'
 
 // https://astro.build/config
 export default defineConfig({
-  // site: '',
+  site: 'https://langiu.github.io',
   integrations: [mdx(), sitemap()],
   markdown: {
     syntaxHighlight: 'shiki',
