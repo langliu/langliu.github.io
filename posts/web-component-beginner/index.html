@@ -1,0 +1,153 @@
+<!DOCTYPE html><html lang="zh-CN" class="astro-NJH6PCKG">
+  <head>
+    <!-- Global Metadata --><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<link rel="shortcut icon" href="/favicon.ico">
+<meta name="generator" content="Astro v1.1.1">
+
+<!-- Primary Meta Tags -->
+<title>Web Components 入门</title>
+<meta name="title" content="Web Components 入门">
+<meta name="description" content="Lorem ipsum dolor sit amet">
+
+<!-- Open Graph / Facebook -->
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://langiu.github.io/posts/web-component-beginner/">
+<meta property="og:title" content="Web Components 入门">
+<meta property="og:description" content="Lorem ipsum dolor sit amet">
+<meta property="og:image" content="https://langiu.github.io/placeholder-social.jpg">
+
+<!-- Twitter -->
+<meta property="twitter:card" content="summary_large_image">
+<meta property="twitter:url" content="https://langiu.github.io/posts/web-component-beginner/">
+<meta property="twitter:title" content="Web Components 入门">
+<meta property="twitter:description" content="Lorem ipsum dolor sit amet">
+<meta property="twitter:image" content="https://langiu.github.io/placeholder-social.jpg">
+
+    
+  <link rel="stylesheet" href="/assets/4d0b01c5.ed503fb0.css" />
+<link rel="stylesheet" href="/assets/90339e04.90a6d814.css" />
+<link rel="stylesheet" href="/assets/bfe81928.f8b0ef76.css" /></head>
+  <body class="astro-NJH6PCKG">
+    <aside class="sider astro-X3UNDLD6">
+  <div class="header astro-X3UNDLD6">
+    <img class="avatar astro-X3UNDLD6" src="../../eye.jpg" alt="Avatar">
+    <p class="description astro-X3UNDLD6">刘浪的博客</p>
+  </div>
+  <div class="astro-X3UNDLD6">
+    <a class="nav astro-X3UNDLD6" href="/">首页</a>
+    <a class="nav astro-X3UNDLD6" href="/tag">标签</a>
+    <a class="nav astro-X3UNDLD6" href="/about">关于</a>
+  </div>
+</aside>
+
+
+    <main class="astro-NJH6PCKG">
+      <div class="content astro-NJH6PCKG">
+        <article class="astro-NJH6PCKG">
+          <h1 class="title astro-NJH6PCKG">Web Components 入门</h1>
+          <time class="astro-NJH6PCKG">
+                2022年8月28日
+              </time>
+          <div class="astro-NJH6PCKG">
+            <span class="tag astro-2DE5OC2S">Web Components</span>
+
+
+          </div>
+          <hr class="astro-NJH6PCKG">
+          <img class="hero astro-NJH6PCKG" width="100%" height="360" src="/Untitled1.png" alt="">
+          
+          <h2 id="简介">简介</h2>
+<p>Web Components 提供了基于原生支持的、对视图层的封装能力，可以让单个组件相关的 javaScript、css、html 模板运行在以 html 标签为界限的局部环境中，不会影响到全局，组件间也不会相互影响。  再简单来说：就是提供了我们自定义标签的能力，并且提供了标签内完整的生命周期。</p>
+<p>Web Components 可以将组件化的概念直接应用到浏览器可以识别的 html 标签上，就比如我们开发 html 页面常用的 标签；它可以将一个单一模块所内聚的逻辑、UI 层聚合到一个标签，并且相互进行天然的隔离，而且它提供一些生命周期的钩子给开发者调用。Web Components 实现以上的种种特性，是因为三个核心的技术，它们分别是：</p>
+<h3 id="custom-elements自定义元素">Custom elements：自定义元素</h3>
+<p>通过 <code>CustomElementRegistry</code> 来自定义可以直接渲染的 html 元素，并提供了组件的生命周期 <code>connectedCallback</code>、<code>disconnectCallback</code>、<code>attributeChangedCallback</code>  等提供给开发者聚合逻辑时使用。</p>
+<h3 id="shadowdom隐式-dom">Shadow DOM ：隐式 DOM</h3>
+<p>「影子 DOM」 或 「隐式 DOM」，顾名思义，他具有隐藏属性，具体的意思就是说，在使用 Shadow DOM 的时候，组件标签内的 CSS 和 HTML 会完全的隐式存在于元素内部，在具体页面中，标签内部的 HTML 结构会存在于#shdaow-root，而不会在真实的 dom 树中出现。</p>
+<h3 id="html-template-html-模板">HTML template： HTML 模板</h3>
+<p>它的特性是用 <code>template</code> 标签包裹的元素不会立即渲染，只有在内容有效的时候，才会解析渲染，具有这个属性后，我们可以在自定义标签中按需添加我们需要的模板，并在自定义标签渲染的时候再去解析我们的模板，这样做可以在 HTML 有频繁更改更新任务，或者重写标记的时候非常有用。</p>
+<h2 id="custom-elements自定义元素-1">Custom elements（自定义元素）</h2>
+<p>首先来了解下自定义元素，其实它是作为 Web Component 的基石。那么我们来看下这个基石提供了哪些方法，提供给我们进行高楼大厦的建设。</p>
+<h3 id="自定义元素挂载方法">自定义元素挂载方法</h3>
+<p>自定义元素通过 <code>CustomElementRegistry</code> 来自定义可以直接渲染的 html 元素，挂载在 <code>window.customElements.define</code> 来供开发者调用，demo 如下：</p>
+<pre class="astro-code" style="background-color:#282A36;overflow-x:auto;white-space:pre-wrap;word-wrap:break-word"><code><span class="line"><span style="color:#6272A4">// 假如我已经构建好一个 Web Components 组件 &lt;hello-world&gt;并导出</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#FF79C6">class</span><span style="color:#F8F8F2"> </span><span style="color:#8BE9FD">HelloWorld</span><span style="color:#F8F8F2"> </span><span style="color:#FF79C6">extends</span><span style="color:#F8F8F2"> </span><span style="color:#8BE9FD;font-style:italic">HTMLElement</span><span style="color:#F8F8F2"> {</span></span>
+<span class="line"><span style="color:#F8F8F2">    </span><span style="color:#FF79C6">constructor</span><span style="color:#F8F8F2">() {</span></span>
+<span class="line"><span style="color:#F8F8F2">        </span><span style="color:#BD93F9;font-style:italic">super</span><span style="color:#F8F8F2">();</span></span>
+<span class="line"><span style="color:#F8F8F2">        </span><span style="color:#BD93F9;font-style:italic">this</span><span style="color:#F8F8F2">.</span><span style="color:#50FA7B">attachShadow</span><span style="color:#F8F8F2">({ mode</span><span style="color:#FF79C6">:</span><span style="color:#F8F8F2"> </span><span style="color:#E9F284">&#39;</span><span style="color:#F1FA8C">open</span><span style="color:#E9F284">&#39;</span><span style="color:#F8F8F2"> });</span></span>
+<span class="line"><span style="color:#F8F8F2">        </span><span style="color:#BD93F9;font-style:italic">this</span><span style="color:#F8F8F2">.shadowRoot.innerHTML </span><span style="color:#FF79C6">=</span><span style="color:#F8F8F2"> </span><span style="color:#F1FA8C">`</span></span>
+<span class="line"><span style="color:#F1FA8C">            &lt;style&gt;</span></span>
+<span class="line"><span style="color:#F1FA8C">                :host {</span></span>
+<span class="line"><span style="color:#F1FA8C">                    display: block;</span></span>
+<span class="line"><span style="color:#F1FA8C">                    padding: 10px;</span></span>
+<span class="line"><span style="color:#F1FA8C">                    background-color: #eee;</span></span>
+<span class="line"><span style="color:#F1FA8C">                }</span></span>
+<span class="line"><span style="color:#F1FA8C">            &lt;/style&gt;</span></span>
+<span class="line"><span style="color:#F1FA8C">            &lt;h1&gt;Hello World!&lt;/h1&gt;</span></span>
+<span class="line"><span style="color:#F1FA8C">        `</span><span style="color:#F8F8F2">;</span></span>
+<span class="line"><span style="color:#F8F8F2">    }</span></span>
+<span class="line"><span style="color:#F8F8F2">}</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6272A4">// 挂载</span></span>
+<span class="line"><span style="color:#F8F8F2">window.customElements.</span><span style="color:#50FA7B">define</span><span style="color:#F8F8F2">(</span><span style="color:#E9F284">&#39;</span><span style="color:#F1FA8C">hello-world</span><span style="color:#E9F284">&#39;</span><span style="color:#F8F8F2">, HelloWorld)</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6272A4">// 然后就可以在 html 中使用</span></span>
+<span class="line"><span style="color:#F8F8F2">&lt;</span><span style="color:#8BE9FD;font-style:italic">hello-world</span><span style="color:#F8F8F2">&gt;&lt;/</span><span style="color:#8BE9FD;font-style:italic">hello-world</span><span style="color:#F8F8F2">&gt;</span></span></code></pre>
+<aside><p>⚠️ 自定义元素必须用’-‘连接符连接，来作为特定的区分，如果没有检测到自定义元素，则浏览器会作为空div处理。</p></aside>
+<h3 id="自定义元素的类">自定义元素的类</h3>
+<p>由上面的例子 <code>class HelloWorld extends* *HTMLElement { xxx }</code> 发现，自定义元素的构造都是基于 <code>HTMLElement</code> ，所以它继承了 HTML 元素特性，当然，也可以继承 <code>HTMLElement</code> 的派生类，如： <code>HTMLButtonElement</code> 等，来作为现有标签的扩展。</p>
+<h3 id="自定义元素的生命周期">自定义元素的生命周期</h3>
+<p>类似于现有 MV*框架的生命周期，自定义元素的基类里面也包含了完整的生命周期 <code>hook</code> 来提供给开发者实现一些业务逻辑的应用：</p>
+<pre class="astro-code" style="background-color:#282A36;overflow-x:auto;white-space:pre-wrap;word-wrap:break-word"><code><span class="line"><span style="color:#FF79C6">class</span><span style="color:#F8F8F2"> </span><span style="color:#8BE9FD">HelloWorld</span><span style="color:#F8F8F2"> </span><span style="color:#FF79C6">extends</span><span style="color:#F8F8F2"> </span><span style="color:#8BE9FD;font-style:italic">HTMLElement</span><span style="color:#F8F8F2"> {</span></span>
+<span class="line"><span style="color:#F8F8F2">  </span><span style="color:#FF79C6">constructor</span><span style="color:#F8F8F2">() {</span></span>
+<span class="line"><span style="color:#F8F8F2">    </span><span style="color:#6272A4">// 1 构建组件的时候的逻辑 hook</span></span>
+<span class="line"><span style="color:#F8F8F2">    </span><span style="color:#BD93F9;font-style:italic">super</span><span style="color:#F8F8F2">()</span></span>
+<span class="line"><span style="color:#F8F8F2">  }</span></span>
+<span class="line"><span style="color:#F8F8F2">  </span><span style="color:#6272A4">// 2 当自定义元素首次被渲染到文档时候调用</span></span>
+<span class="line"><span style="color:#F8F8F2">  </span><span style="color:#50FA7B">connectedCallback</span><span style="color:#F8F8F2">() {}</span></span>
+<span class="line"><span style="color:#F8F8F2">  </span><span style="color:#6272A4">// 3 当自定义元素在文档中被移除调用</span></span>
+<span class="line"><span style="color:#F8F8F2">  </span><span style="color:#50FA7B">disconnectedCallback</span><span style="color:#F8F8F2">() {}</span></span>
+<span class="line"><span style="color:#F8F8F2">  </span><span style="color:#6272A4">// 4 当自定义组件被移动到新的文档时调用</span></span>
+<span class="line"><span style="color:#F8F8F2">  </span><span style="color:#50FA7B">adoptedCallback</span><span style="color:#F8F8F2">() {}</span></span>
+<span class="line"><span style="color:#F8F8F2">  </span><span style="color:#6272A4">// 5 当自定义元素的属性更改时调用</span></span>
+<span class="line"><span style="color:#F8F8F2">  </span><span style="color:#50FA7B">attributeChangedCallback</span><span style="color:#F8F8F2">() {}</span></span>
+<span class="line"><span style="color:#F8F8F2">}</span></span></code></pre>
+<h3 id="添加自定义方法和属性">添加自定义方法和属性</h3>
+<p>由于自定义元素由一个类来构造，所以添加自定义属性和方法就如同平常开发类的方法一致。</p>
+<pre class="astro-code" style="background-color:#282A36;overflow-x:auto;white-space:pre-wrap;word-wrap:break-word"><code><span class="line"><span style="color:#FF79C6">class</span><span style="color:#F8F8F2"> </span><span style="color:#8BE9FD">HelloWorld</span><span style="color:#F8F8F2"> </span><span style="color:#FF79C6">extends</span><span style="color:#F8F8F2"> </span><span style="color:#8BE9FD;font-style:italic">HTMLElement</span><span style="color:#F8F8F2"> {</span></span>
+<span class="line"><span style="color:#F8F8F2">  </span><span style="color:#FF79C6">constructor</span><span style="color:#F8F8F2">() {</span></span>
+<span class="line"><span style="color:#F8F8F2">    </span><span style="color:#BD93F9;font-style:italic">super</span><span style="color:#F8F8F2">()</span></span>
+<span class="line"><span style="color:#F8F8F2">  }</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F8F8F2">  tag </span><span style="color:#FF79C6">=</span><span style="color:#F8F8F2"> </span><span style="color:#E9F284">&#39;</span><span style="color:#F1FA8C">hello-world</span><span style="color:#E9F284">&#39;</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F8F8F2">  </span><span style="color:#50FA7B">say</span><span style="color:#F8F8F2">(</span><span style="color:#FFB86C;font-style:italic">something</span><span style="color:#FF79C6">:</span><span style="color:#F8F8F2"> </span><span style="color:#8BE9FD;font-style:italic">string</span><span style="color:#F8F8F2">) {</span></span>
+<span class="line"><span style="color:#F8F8F2">    console.</span><span style="color:#50FA7B">log</span><span style="color:#F8F8F2">(</span><span style="color:#F1FA8C">`hello world, I want to say </span><span style="color:#FF79C6">${</span><span style="color:#BD93F9;font-style:italic">this</span><span style="color:#F8F8F2">.tag</span><span style="color:#FF79C6">}</span><span style="color:#F1FA8C"> </span><span style="color:#FF79C6">${</span><span style="color:#F8F8F2">something</span><span style="color:#FF79C6">}</span><span style="color:#F1FA8C">`</span><span style="color:#F8F8F2">)</span></span>
+<span class="line"><span style="color:#F8F8F2">  }</span></span>
+<span class="line"><span style="color:#F8F8F2">}</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6272A4">// 调用方法如下</span></span>
+<span class="line"><span style="color:#FF79C6">const</span><span style="color:#F8F8F2"> hw </span><span style="color:#FF79C6">=</span><span style="color:#F8F8F2"> document.</span><span style="color:#50FA7B">querySelector</span><span style="color:#F8F8F2">(</span><span style="color:#E9F284">&#39;</span><span style="color:#F1FA8C">hello-world</span><span style="color:#E9F284">&#39;</span><span style="color:#F8F8F2">)</span></span>
+<span class="line"><span style="color:#F8F8F2">hw.</span><span style="color:#50FA7B">say</span><span style="color:#F8F8F2">(</span><span style="color:#E9F284">&#39;</span><span style="color:#F1FA8C">good</span><span style="color:#E9F284">&#39;</span><span style="color:#F8F8F2">)</span></span></code></pre>
+<p><img src="/Untitled.png" alt="控制台打印效果"/></p>
+<h2 id="shadow-dom">Shadow DOM</h2>
+<p>有了自定义元素作为基石，我们想要更加顺畅的进行组件化封装，必定少不了对于 DOM 树的操作。那么好的，Shadow DOM（影子 DOM）就应运而生了。</p>
+<p>顾名思义，影子 DOM 就是用来隔离自定义元素不受到外界样式或者一些副作用的影响，或者内部的一些特性不会影响外部。使自定义元素保持一个相对独立的状态。</p>
+<p>在我们日常开发 html 页面的时候也会接触到一些使用 Shadow DOM 的标签，比如：audio 和 video 等；在具体 dom 树中它会一一个标签存在，会隐藏内部的结构，但是其中的控件，比如：进度条、声音控制等，都会以一个 Shadow DOM 存在于标签内部，如果想要查看具体的 DOM 结构，则可以尝试在 chrome 的控制台 -&gt; Preferences -&gt; Show user agent Shadow DOM， 就可以查看到内部的结构构成。</p>
+<p>如果组件使用 Shadow host，常规 document 中会存在一个 Shadow host 节点用来挂载 Shadow DOM，Shadow DOM 内部也会存在一个 DOM 树：Shadow Tree，根节点为 Shadow root，外部可以用伪类:host 来访问，Shadow boundary 其实就是 Shadow DOM 的边界。具体架构图如下：</p>
+<p><img src="/Untitled1.png" alt="Untitled"/></p>
+<p>Shadow DOM 开启方式为：</p>
+<pre class="astro-code" style="background-color:#282A36;overflow-x:auto;white-space:pre-wrap;word-wrap:break-word"><code><span class="line"><span style="color:#BD93F9;font-style:italic">this</span><span style="color:#F8F8F2">.</span><span style="color:#50FA7B">attachShadow</span><span style="color:#F8F8F2">({ mode</span><span style="color:#FF79C6">:</span><span style="color:#F8F8F2"> </span><span style="color:#E9F284">&#39;</span><span style="color:#F1FA8C">open</span><span style="color:#E9F284">&#39;</span><span style="color:#F8F8F2"> })</span></span></code></pre>
+<h2 id="html-templateshtml-模板">HTML templates（HTML 模板）</h2>
+<p><code>template</code> 模板可以说是大家比较熟悉的一个标签了，在 Vue 项目中的单页面组件中我们经常会用到，但是它也是 Web Components API 提供的一个标签，它的特性就是包裹在 <code>template</code> 中的 HTML 片段不会在页面加载的时候解析渲染，但是可以被 js 访问到，进行一些插入显示等操作。所以它作为自定义组件的核心内容，用来承载 HTML 模板，是不可或缺的一部分。</p>
+<h2 id="浏览器支持情况">浏览器支持情况</h2>
+<p><img src="/Untitled2.png" alt="Untitled"/></p>
+        </article>
+      </div>
+      <footer class="astro-ROSMR3ZC">
+  &copy; 2022 langliu. All rights reserved.
+</footer>
+
+    </main>
+  </body></html>
