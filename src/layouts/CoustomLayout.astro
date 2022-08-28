@@ -2,6 +2,7 @@
 import Layout from '@layouts/Layout.astro'
 import BaseHead from '@components/BaseHead.astro'
 import Sider from '@layouts/Sider.astro'
+import Footer from '@components/Footer.astro'
 import { SITE_DESCRIPTION, SITE_TITLE } from '../config'
 ---
 
@@ -13,7 +14,10 @@ import { SITE_DESCRIPTION, SITE_TITLE } from '../config'
   <Layout title='Welcome to Astro.'>
     <Sider avatar='eye.jpg' />
     <main>
-      <slot />
+      <div class='content'>
+        <slot />
+      </div>
+      <Footer />
     </main>
   </Layout>
 
@@ -27,11 +31,21 @@ import { SITE_DESCRIPTION, SITE_TITLE } from '../config'
     }
 
     main {
-      margin: 0;
-      padding: 1em;
+      box-sizing: border-box;
+      padding: 1rem 1rem 0 1rem;
       flex: 1;
       margin-left: 250px;
       min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .content {
+      flex: 1;
+      border-radius: 0.5rem;
+      background-color: #383539;
+      padding: 1rem;
+      box-shadow: rgb(0 0 0 / 10%) 0px 0px 6px -1px, rgb(0 0 0 / 6%) 0px 0px 4px -1px;
     }
 
     .text-gradient {
@@ -77,6 +91,7 @@ import { SITE_DESCRIPTION, SITE_TITLE } from '../config'
       gap: 1rem;
       padding: 0;
     }
-    
   </style>
+
+
 </html>

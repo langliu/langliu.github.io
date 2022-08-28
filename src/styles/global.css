@@ -51,6 +51,7 @@ img {
 code {
   padding: 2px 5px;
   background-color: #ff79c6;
+  border-radius: 4px;
 }
 pre {
   padding: 1rem;

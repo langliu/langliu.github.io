@@ -1,9 +1,4 @@
 ---
-import BaseHead from '../components/BaseHead.astro'
-import Header from '../components/Header.astro'
-import Footer from '../components/Footer.astro'
-import { SITE_TITLE, SITE_DESCRIPTION } from '../config'
-
 // Use Astro.glob() to fetch all posts, and then sort them by date.
 const posts = (await Astro.glob('../pages/posts/*.{md,mdx}')).sort(
   (a, b) => new Date(b.frontmatter.pubDate).valueOf() - new Date(a.frontmatter.pubDate).valueOf()
@@ -34,7 +29,6 @@ console.warn(posts, JSON.stringify(posts))
       }
     </ul>
   </div>
-  <Footer />
 </div>
 
 <style>
@@ -52,13 +46,9 @@ console.warn(posts, JSON.stringify(posts))
     inset: 0px;
     overflow: hidden auto;
     z-index: 10;
-    padding: 1rem;
-    background-color: var(--theme-ui-colors-contentBg, #383539);
     transition: all 200ms ease-in-out 0s;
-    box-shadow: rgb(0 0 0 / 10%) 0px 0px 6px -1px, rgb(0 0 0 / 6%) 0px 0px 4px -1px;
     border-radius: 0px;
     min-height: 50vh;
-    border-radius: 0.25rem;
   }
   ul {
     list-style-type: none;
@@ -68,7 +58,6 @@ console.warn(posts, JSON.stringify(posts))
   ul li {
     color: var(--theme-ui-colors-primary, white);
     box-sizing: border-box;
-    margin: 0px -0.5rem;
     min-width: 0px;
     padding: 0.5rem;
     border-radius: 0.25rem;
