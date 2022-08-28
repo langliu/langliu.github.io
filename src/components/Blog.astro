@@ -1,4 +1,5 @@
 ---
+import Tag from './Tag.astro'
 // Use Astro.glob() to fetch all posts, and then sort them by date.
 const posts = (await Astro.glob('../pages/posts/*.{md,mdx}')).sort(
   (a, b) => new Date(b.frontmatter.pubDate).valueOf() - new Date(a.frontmatter.pubDate).valueOf()
@@ -16,13 +17,18 @@ console.warn(posts, JSON.stringify(posts))
               <span class='title'>
                 {post.frontmatter.emoji} {post.frontmatter.title}
               </span>
-              <time datetime={post.frontmatter.pubDate}>
-                {new Date(post.frontmatter.pubDate).toLocaleDateString('zh-CN', {
-                  year: 'numeric',
-                  month: 'short',
-                  day: 'numeric',
-                })}
-              </time>
+              <span>
+                {post.frontmatter.tags?.map((tag: string) => (
+                  <Tag>{tag}</Tag>
+                ))}
+                <time datetime={post.frontmatter.pubDate}>
+                  {new Date(post.frontmatter.pubDate).toLocaleDateString('zh-CN', {
+                    year: 'numeric',
+                    month: 'short',
+                    day: 'numeric',
+                  })}
+                </time>
+              </span>
             </a>
           </li>
         ))

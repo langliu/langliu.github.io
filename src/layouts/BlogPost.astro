@@ -104,6 +104,11 @@ const {
         margin-bottom: 0.5rem;
         margin-top: 0;
       }
+
+      .hero {
+        height: 450px;
+        object-fit: cover;
+      }
     </style>
   </head>
   <body>
@@ -127,7 +132,7 @@ const {
             {tags?.map((tag) => <Tag>{tag}</Tag>)}
           </div>
           <hr />
-          {heroImage && <img width='100%' height={360} src={heroImage} alt='' />}
+          {heroImage && <img class='hero' width='100%' height={360} src={heroImage} alt='' />}
           {
             updatedDate && (
               <div>
