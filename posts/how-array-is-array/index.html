@@ -1,9 +1,9 @@
-<!DOCTYPE html><html lang="zh-CN" class="astro-7PKASOKR">
+<!DOCTYPE html><html lang="zh-CN" class="astro-K3ITPGBP">
   <head>
     <!-- Global Metadata --><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <link rel="shortcut icon" href="/favicon.ico">
-<meta name="generator" content="Astro v1.0.7">
+<meta name="generator" content="Astro v1.1.1">
 
 <!-- Primary Meta Tags -->
 <title>在 JavaScript 中如何判断一个数组是数组？</title>
@@ -12,52 +12,51 @@
 
 <!-- Open Graph / Facebook -->
 <meta property="og:type" content="website">
-<meta property="og:url" content="https://langiu.github.io/posts/how-array-is-array">
+<meta property="og:url" content="https://langiu.github.io/posts/how-array-is-array/">
 <meta property="og:title" content="在 JavaScript 中如何判断一个数组是数组？">
 <meta property="og:description" content="近日被问到一个问题：在 JavaScript 中如何判断一个数组是数组？。在听到这个问题的时候我就在想有那些方式，在我们常用的类型判断中可以通过 `typeof` 或 `instanceof` 来进行类型判断。">
 <meta property="og:image" content="https://langiu.github.io/placeholder-social.jpg">
 
 <!-- Twitter -->
 <meta property="twitter:card" content="summary_large_image">
-<meta property="twitter:url" content="https://langiu.github.io/posts/how-array-is-array">
+<meta property="twitter:url" content="https://langiu.github.io/posts/how-array-is-array/">
 <meta property="twitter:title" content="在 JavaScript 中如何判断一个数组是数组？">
 <meta property="twitter:description" content="近日被问到一个问题：在 JavaScript 中如何判断一个数组是数组？。在听到这个问题的时候我就在想有那些方式，在我们常用的类型判断中可以通过 `typeof` 或 `instanceof` 来进行类型判断。">
 <meta property="twitter:image" content="https://langiu.github.io/placeholder-social.jpg">
 
     
-  <link rel="stylesheet" href="/assets/posts-how-array-is-array-index-posts-inasd-about.f05895ed.css" />
-<link rel="stylesheet" href="/assets/posts-how-array-is-array-index-posts-inasd.6b2a3225.css" />
-<link rel="stylesheet" href="/assets/index-posts-how-array-is-array-posts-inasd-about.67fde52d.css" /></head>
-  <body class="astro-7PKASOKR">
-    <aside class="sider astro-FJERM23N">
-  <div class="header astro-FJERM23N">
-    <img class="avatar astro-FJERM23N" src="../eye.jpg" alt="Avatar">
-    <p class="description astro-FJERM23N">刘浪的博客</p>
+  <link rel="stylesheet" href="/assets/about-index-posts-how-array-is-array-posts-inasd-tag.4e9b9479.css" />
+<link rel="stylesheet" href="/assets/index-posts-how-array-is-array-posts-inasd.becf4fc9.css" /></head>
+  <body class="astro-K3ITPGBP">
+    <aside class="sider astro-X3UNDLD6">
+  <div class="header astro-X3UNDLD6">
+    <img class="avatar astro-X3UNDLD6" src="../../eye.jpg" alt="Avatar">
+    <p class="description astro-X3UNDLD6">刘浪的博客</p>
   </div>
-  <div class="astro-FJERM23N">
-    <a class="nav astro-FJERM23N" href="/">首页</a>
-    <a class="nav astro-FJERM23N" href="/blog">全部笔记</a>
-    <a class="nav astro-FJERM23N" href="/blog">全部笔记</a>
-    <a class="nav astro-FJERM23N" href="/about">关于</a>
+  <div class="astro-X3UNDLD6">
+    <a class="nav astro-X3UNDLD6" href="/">首页</a>
+    <a class="nav astro-X3UNDLD6" href="/tag">标签</a>
+    <a class="nav astro-X3UNDLD6" href="/about">关于</a>
   </div>
 </aside>
 
 
-    <main class="astro-7PKASOKR">
-      <article class="astro-7PKASOKR">
-        <h1 class="title astro-7PKASOKR">在 JavaScript 中如何判断一个数组是数组？</h1>
-        <time class="astro-7PKASOKR">
-              2022年3月11日
-            </time>
-        <div class="astro-7PKASOKR">
-          <span class="tag astro-2DE5OC2S">JavaScript</span>
+    <main class="astro-K3ITPGBP">
+      <div class="content astro-K3ITPGBP">
+        <article class="astro-K3ITPGBP">
+          <h1 class="title astro-K3ITPGBP">在 JavaScript 中如何判断一个数组是数组？</h1>
+          <time class="astro-K3ITPGBP">
+                2022年3月11日
+              </time>
+          <div class="astro-K3ITPGBP">
+            <span class="tag astro-2DE5OC2S">JavaScript</span>
 
 
-        </div>
-        <hr class="astro-7PKASOKR">
-        <img width="100%" height="360" src="/sql-where.jpg" alt="" class="astro-7PKASOKR">
-        
-        <p>其中 <code>typeof</code> 返回值固定，只有以下几种情况：</p>
+          </div>
+          <hr class="astro-K3ITPGBP">
+          <img width="100%" height="360" src="/sql-where.jpg" alt="" class="astro-K3ITPGBP">
+          
+          <p>其中 <code>typeof</code> 返回值固定，只有以下几种情况：</p>
 
 
 
@@ -117,6 +116,11 @@
 <span class="line"><span style="color:#F8F8F2">s.__proto__ </span><span style="color:#FF79C6">=</span><span style="color:#F8F8F2"> </span><span style="color:#8BE9FD;font-style:italic">Object</span><span style="color:#F8F8F2">.prototype </span><span style="color:#6272A4">// 如果更改了变量的原型指向的话判断可能就不靠谱了</span></span>
 <span class="line"><span style="color:#F8F8F2">console.</span><span style="color:#50FA7B">log</span><span style="color:#F8F8F2">(s.__proto__ </span><span style="color:#FF79C6">===</span><span style="color:#F8F8F2"> </span><span style="color:#8BE9FD;font-style:italic">Array</span><span style="color:#F8F8F2">.prototype) </span><span style="color:#6272A4">// false</span></span>
 <span class="line"><span style="color:#F8F8F2">console.</span><span style="color:#50FA7B">log</span><span style="color:#F8F8F2">(</span><span style="color:#8BE9FD;font-style:italic">Object</span><span style="color:#F8F8F2">.</span><span style="color:#50FA7B">getPrototypeOf</span><span style="color:#F8F8F2">(s) </span><span style="color:#FF79C6">===</span><span style="color:#F8F8F2"> </span><span style="color:#8BE9FD;font-style:italic">Array</span><span style="color:#F8F8F2">.prototype) </span><span style="color:#6272A4">// false</span></span></code></pre>
-      </article>
+        </article>
+      </div>
+      <footer class="astro-ROSMR3ZC">
+  &copy; 2022 langliu. All rights reserved.
+</footer>
+
     </main>
   </body></html>
