@@ -4,15 +4,23 @@ specifiers:
   '@astrojs/mdx': ^0.10.2
   '@astrojs/rss': ^1.0.0
   '@astrojs/sitemap': ^1.0.0
+  '@fontsource/jetbrains-mono': ^4.5.10
+  '@types/color-hash': ^1.0.2
   astro: ^1.1.1
+  color-hash: ^2.0.1
   prettier: ^2.7.1
   prettier-plugin-astro: ^0.5.3
   typescript: ^4.8.2
+
+dependencies:
+  '@fontsource/jetbrains-mono': 4.5.10
+  color-hash: 2.0.1
 
 devDependencies:
   '@astrojs/mdx': 0.10.2_rollup@2.78.1
   '@astrojs/rss': 1.0.0
   '@astrojs/sitemap': 1.0.0
+  '@types/color-hash': 1.0.2
   astro: 1.1.1
   prettier: 2.7.1
   prettier-plugin-astro: 0.5.3
@@ -411,6 +419,10 @@ packages:
     dev: true
     optional: true
 
+  /@fontsource/jetbrains-mono/4.5.10:
+    resolution: {integrity: sha512-dylbkBmAWL0fkjDpDoDbQCwTQ/W3DzLtVXmwGyAyttfKliPGSP2WpAmmMFYp9NpqFMF7CLprFyzppe8u39Orkw==}
+    dev: false
+
   /@jridgewell/gen-mapping/0.1.1:
     resolution: {integrity: sha512-sQXCasFk+U8lWYEe66WxRDOE9PjVz4vSM51fTu3Hw+ClTpUSQb718772vH3pyS5pShp6lvQM7SxgIDXXXmOX7w==}
     engines: {node: '>=6.0.0'}
@@ -556,6 +568,10 @@ packages:
     resolution: {integrity: sha512-veQTnWP+1D/xbxVrPC3zHnCZRjSrKfhbMUlEA43iMZLu7EsnTtkJklIuwrCPbOi8YkvDQAiW05VQQFvvz9oieQ==}
     dependencies:
       '@types/estree': 1.0.0
+    dev: true
+
+  /@types/color-hash/1.0.2:
+    resolution: {integrity: sha512-QJCVXSVRse+mMvzWQ8vH6AcKxtqCgHPHf5abAdGn86DEeQdUpSJnKAeCa1+hZuohaUF3l4RhigC9akRx82Bwig==}
     dev: true
 
   /@types/debug/4.1.7:
@@ -935,6 +951,10 @@ packages:
     dependencies:
       color-name: 1.1.4
     dev: true
+
+  /color-hash/2.0.1:
+    resolution: {integrity: sha512-/wIYAQ3xL9ruURLmDbxAsXEsivaOfwWDUVy+zbWJZL3bnNQIDNSmmqbkNzeTOQvDdiz11Kb010UlJN7hUXLg/w==}
+    dev: false
 
   /color-name/1.1.3:
     resolution: {integrity: sha512-72fSenhMw2HZMTVHeCA9KCmpEIbzWiQsjN+BHcBbS9vr1mtt+vJjPdksIBNUmKAW8TFUDPJK5SUU3QhE9NEXDw==}

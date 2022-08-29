@@ -4,7 +4,6 @@ import Tag from './Tag.astro'
 const posts = (await Astro.glob('../pages/posts/*.{md,mdx}')).sort(
   (a, b) => new Date(b.frontmatter.pubDate).valueOf() - new Date(a.frontmatter.pubDate).valueOf()
 )
-console.warn(posts, JSON.stringify(posts))
 ---
 
 <div class='warpper'>
@@ -19,7 +18,7 @@ console.warn(posts, JSON.stringify(posts))
               </span>
               <span>
                 {post.frontmatter.tags?.map((tag: string) => (
-                  <Tag>{tag}</Tag>
+                  <Tag text={tag} />
                 ))}
                 <time datetime={post.frontmatter.pubDate}>
                   {new Date(post.frontmatter.pubDate).toLocaleDateString('zh-CN', {
@@ -94,7 +93,6 @@ console.warn(posts, JSON.stringify(posts))
     margin: 0px 1rem 0px 0px;
     font-weight: 700;
     color: var(--theme-ui-colors-textStrong, hsl(210, 38%, 98%));
-    padding-left: 2rem;
     padding-top: 0.25rem;
     padding-bottom: 0.25rem;
     min-width: 260px;

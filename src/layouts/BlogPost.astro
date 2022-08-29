@@ -1,4 +1,6 @@
 ---
+import '@fontsource/jetbrains-mono'
+
 import BaseHead from '@components/BaseHead.astro'
 import Sider from '@layouts/Sider.astro'
 import Tag from '@components/Tag.astro'
@@ -40,6 +42,14 @@ const {
         min-height: 100vh;
         display: flex;
         flex-direction: column;
+      }
+
+      :global(pre) {
+        font-family: 'JetBrains Mono', monospace;
+      }
+
+      :global(code) {
+        font-family: 'JetBrains Mono', monospace;
       }
 
       .content {
@@ -129,7 +139,7 @@ const {
             )
           }
           <div>
-            {tags?.map((tag) => <Tag>{tag}</Tag>)}
+            {tags?.map((tag) => <Tag text={tag} />)}
           </div>
           <hr />
           {heroImage && <img class='hero' width='100%' height={360} src={heroImage} alt='' />}
