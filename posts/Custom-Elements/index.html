@@ -1,0 +1,141 @@
+<!DOCTYPE html><html lang="zh-CN" class="astro-QRSVL2RC">
+  <head>
+    <!-- Global Metadata --><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<link rel="shortcut icon" href="/favicon.ico">
+<meta name="generator" content="Astro v1.1.1">
+
+<!-- Primary Meta Tags -->
+<title>Custom Elements</title>
+<meta name="title" content="Custom Elements">
+<meta name="description" content="近日被问到一个问题：在 JavaScript 中如何判断一个数组是数组？。在听到这个问题的时候我就在想有那些方式，在我们常用的类型判断中可以通过 `typeof` 或 `instanceof` 来进行类型判断。">
+
+<!-- Open Graph / Facebook -->
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://langiu.github.io/posts/Custom-Elements/">
+<meta property="og:title" content="Custom Elements">
+<meta property="og:description" content="近日被问到一个问题：在 JavaScript 中如何判断一个数组是数组？。在听到这个问题的时候我就在想有那些方式，在我们常用的类型判断中可以通过 `typeof` 或 `instanceof` 来进行类型判断。">
+<meta property="og:image" content="https://langiu.github.io/placeholder-social.jpg">
+
+<!-- Twitter -->
+<meta property="twitter:card" content="summary_large_image">
+<meta property="twitter:url" content="https://langiu.github.io/posts/Custom-Elements/">
+<meta property="twitter:title" content="Custom Elements">
+<meta property="twitter:description" content="近日被问到一个问题：在 JavaScript 中如何判断一个数组是数组？。在听到这个问题的时候我就在想有那些方式，在我们常用的类型判断中可以通过 `typeof` 或 `instanceof` 来进行类型判断。">
+<meta property="twitter:image" content="https://langiu.github.io/placeholder-social.jpg">
+
+    
+  <link rel="stylesheet" href="/assets/0b10844f.e41b233b.css" />
+<link rel="stylesheet" href="/assets/448500f8.a3893d63.css" />
+<link rel="stylesheet" href="/assets/da697435.bd00b7bf.css" /></head>
+  <body class="astro-QRSVL2RC">
+    <aside class="sider astro-X3UNDLD6">
+  <div class="header astro-X3UNDLD6">
+    <img class="avatar astro-X3UNDLD6" src="../../eye.jpg" alt="Avatar">
+    <p class="description astro-X3UNDLD6">刘浪的博客</p>
+  </div>
+  <div class="astro-X3UNDLD6">
+    <a class="nav astro-X3UNDLD6" href="/">首页</a>
+    <a class="nav astro-X3UNDLD6" href="/tag">标签</a>
+    <a class="nav astro-X3UNDLD6" href="/about">关于</a>
+  </div>
+</aside>
+
+
+    <main class="astro-QRSVL2RC">
+      <div class="content astro-QRSVL2RC">
+        <article class="astro-QRSVL2RC">
+          <h1 class="title astro-QRSVL2RC">Custom Elements</h1>
+          <time class="astro-QRSVL2RC">
+                2022年8月29日
+              </time>
+          <div class="astro-QRSVL2RC">
+            <span class="tag astro-PXC3RWVL" style="--backgroundColor: #ccc;">Web Components</span>
+
+<span class="tag astro-PXC3RWVL" style="--backgroundColor: #ccc;">JavaScript</span>
+
+
+          </div>
+          <hr class="astro-QRSVL2RC">
+          
+          
+          <p>在 Custom Elements 中，我们可以根据是否继承基本 HTML 元素，可以将自定义元素分为两类：</p>
+<ul>
+<li><em>Autonomous custom elements</em> 自主定制元素</li>
+<li><em>Customized built-in elements</em> 自定义内置元素</li>
+</ul>
+<h2 id="自主定制元素">自主定制元素</h2>
+<p>自主定制元素，是独立的元素，它不继承其他内建的 HTML 元素。</p>
+<p>你可以直接把它们写成 HTML 标签的形式，来在页面上使用。例如 <code>&lt;my-card&gt;</code>，或者是 <code>document.createElement(&quot;my-card&quot;)</code> 这样。</p>
+<p>像我们在<a href="https://www.notion.so/Web-Components-feb3e140c8964426a19540c3a0dc7167">入门</a>中实现的就是自主定制元素：</p>
+<pre class="astro-code" style="background-color:#282A36;overflow-x:auto;white-space:pre-wrap;word-wrap:break-word"><code><span class="line"><span style="color:#FF79C6">class</span><span style="color:#F8F8F2"> </span><span style="color:#8BE9FD">HelloWorld</span><span style="color:#F8F8F2"> </span><span style="color:#FF79C6">extends</span><span style="color:#F8F8F2"> </span><span style="color:#8BE9FD;font-style:italic">HTMLElement</span><span style="color:#F8F8F2"> {</span></span>
+<span class="line"><span style="color:#F8F8F2">  </span><span style="color:#FF79C6">constructor</span><span style="color:#F8F8F2">() {</span></span>
+<span class="line"><span style="color:#F8F8F2">    </span><span style="color:#BD93F9;font-style:italic">super</span><span style="color:#F8F8F2">()</span></span>
+<span class="line"><span style="color:#F8F8F2">    </span><span style="color:#BD93F9;font-style:italic">this</span><span style="color:#F8F8F2">.</span><span style="color:#50FA7B">attachShadow</span><span style="color:#F8F8F2">({ mode</span><span style="color:#FF79C6">:</span><span style="color:#F8F8F2"> </span><span style="color:#E9F284">&#39;</span><span style="color:#F1FA8C">open</span><span style="color:#E9F284">&#39;</span><span style="color:#F8F8F2"> })</span></span>
+<span class="line"><span style="color:#F8F8F2">    </span><span style="color:#BD93F9;font-style:italic">this</span><span style="color:#F8F8F2">.shadowRoot.innerHTML </span><span style="color:#FF79C6">==</span></span>
+<span class="line"><span style="color:#F8F8F2">      </span><span style="color:#F1FA8C">`</span></span>
+<span class="line"><span style="color:#F1FA8C">      &lt;style&gt;</span></span>
+<span class="line"><span style="color:#F1FA8C">        :host {</span></span>
+<span class="line"><span style="color:#F1FA8C">          display: block;</span></span>
+<span class="line"><span style="color:#F1FA8C">          padding: 10px;</span></span>
+<span class="line"><span style="color:#F1FA8C">          background-color: #eee;</span></span>
+<span class="line"><span style="color:#F1FA8C">        }</span></span>
+<span class="line"><span style="color:#F1FA8C">      &lt;/style&gt;</span></span>
+<span class="line"><span style="color:#F1FA8C">      &lt;h1&gt;Hello World!&lt;/h1&gt;</span></span>
+<span class="line"><span style="color:#F1FA8C">    `</span></span>
+<span class="line"><span style="color:#F8F8F2">  }</span></span>
+<span class="line"><span style="color:#F8F8F2">}</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6272A4">// 挂载</span></span>
+<span class="line"><span style="color:#F8F8F2">window.customElements.</span><span style="color:#50FA7B">define</span><span style="color:#F8F8F2">(</span><span style="color:#E9F284">&#39;</span><span style="color:#F1FA8C">hello-world</span><span style="color:#E9F284">&#39;</span><span style="color:#F8F8F2">, HelloWorld)</span></span></code></pre>
+<blockquote>
+<p>💡 继承自 HTMLElement 的样式 display 置为 inline，如果不重新设置 display 的值，那么样式效果会显示不出来。</p>
+</blockquote>
+<h2 id="自定义内置元素">自定义内置元素</h2>
+<p>继承自基本的 HTML 元素。在创建时，你必须指定所需扩展的元素，使用时，需要先写出基本的元素标签，并通过 <code>is</code> 属性指定 custom element 的名称。例如 <code>&lt;p is=&quot;my-card&quot;&gt;</code> , 或者 <code>document.createElement(&quot;p&quot;, { is: &quot;my-card&quot; })</code>。</p>
+<pre class="astro-code" style="background-color:#282A36;overflow-x:auto;white-space:pre-wrap;word-wrap:break-word"><code><span class="line"><span style="color:#6272A4">// index.js</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#FF79C6">class</span><span style="color:#F8F8F2"> </span><span style="color:#8BE9FD">MyCard</span><span style="color:#F8F8F2"> </span><span style="color:#FF79C6">extends</span><span style="color:#F8F8F2"> </span><span style="color:#8BE9FD;font-style:italic">HTMLDivElement</span><span style="color:#F8F8F2"> {</span></span>
+<span class="line"><span style="color:#F8F8F2">    </span><span style="color:#FF79C6">constructor</span><span style="color:#F8F8F2">() {</span></span>
+<span class="line"><span style="color:#F8F8F2">        </span><span style="color:#BD93F9;font-style:italic">super</span><span style="color:#F8F8F2">();</span></span>
+<span class="line"><span style="color:#F8F8F2">        </span><span style="color:#FF79C6">let</span><span style="color:#F8F8F2"> shadow </span><span style="color:#FF79C6">=</span><span style="color:#F8F8F2"> </span><span style="color:#BD93F9;font-style:italic">this</span><span style="color:#F8F8F2">.</span><span style="color:#50FA7B">attachShadow</span><span style="color:#F8F8F2">({ mode</span><span style="color:#FF79C6">:</span><span style="color:#F8F8F2"> </span><span style="color:#E9F284">&quot;</span><span style="color:#F1FA8C">open</span><span style="color:#E9F284">&quot;</span><span style="color:#F8F8F2"> });</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F8F8F2">        </span><span style="color:#FF79C6">let</span><span style="color:#F8F8F2"> containerEle </span><span style="color:#FF79C6">=</span><span style="color:#F8F8F2"> document.</span><span style="color:#50FA7B">createElement</span><span style="color:#F8F8F2">(</span><span style="color:#E9F284">&quot;</span><span style="color:#F1FA8C">div</span><span style="color:#E9F284">&quot;</span><span style="color:#F8F8F2">);</span></span>
+<span class="line"><span style="color:#F8F8F2">        containerEle.style.display </span><span style="color:#FF79C6">=</span><span style="color:#F8F8F2"> </span><span style="color:#E9F284">&quot;</span><span style="color:#F1FA8C">flex</span><span style="color:#E9F284">&quot;</span><span style="color:#F8F8F2">;</span></span>
+<span class="line"><span style="color:#F8F8F2">        containerEle.style.flexDirection </span><span style="color:#FF79C6">=</span><span style="color:#F8F8F2"> </span><span style="color:#E9F284">&quot;</span><span style="color:#F1FA8C">column</span><span style="color:#E9F284">&quot;</span></span>
+<span class="line"><span style="color:#F8F8F2">        containerEle.style.margin </span><span style="color:#FF79C6">=</span><span style="color:#F8F8F2"> </span><span style="color:#E9F284">&quot;</span><span style="color:#F1FA8C">100px</span><span style="color:#E9F284">&quot;</span><span style="color:#F8F8F2">;</span></span>
+<span class="line"><span style="color:#F8F8F2">        containerEle.style.border </span><span style="color:#FF79C6">=</span><span style="color:#F8F8F2"> </span><span style="color:#E9F284">&quot;</span><span style="color:#F1FA8C">1px solid #aaa</span><span style="color:#E9F284">&quot;</span><span style="color:#F8F8F2">;</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F8F8F2">        </span><span style="color:#FF79C6">const</span><span style="color:#F8F8F2"> headerEle </span><span style="color:#FF79C6">=</span><span style="color:#F8F8F2"> document.</span><span style="color:#50FA7B">createElement</span><span style="color:#F8F8F2">(</span><span style="color:#E9F284">&quot;</span><span style="color:#F1FA8C">div</span><span style="color:#E9F284">&quot;</span><span style="color:#F8F8F2">);</span></span>
+<span class="line"><span style="color:#F8F8F2">        headerEle.innerText </span><span style="color:#FF79C6">=</span><span style="color:#F8F8F2"> </span><span style="color:#E9F284">&quot;</span><span style="color:#F1FA8C">名片</span><span style="color:#E9F284">&quot;</span><span style="color:#F8F8F2">;</span></span>
+<span class="line"><span style="color:#F8F8F2">        headerEle.style.height </span><span style="color:#FF79C6">=</span><span style="color:#F8F8F2"> </span><span style="color:#E9F284">&quot;</span><span style="color:#F1FA8C">20px</span><span style="color:#E9F284">&quot;</span><span style="color:#F8F8F2">;</span></span>
+<span class="line"><span style="color:#F8F8F2">        headerEle.style.padding </span><span style="color:#FF79C6">=</span><span style="color:#F8F8F2"> </span><span style="color:#E9F284">&quot;</span><span style="color:#F1FA8C">10px</span><span style="color:#E9F284">&quot;</span><span style="color:#F8F8F2">;</span></span>
+<span class="line"><span style="color:#F8F8F2">        headerEle.style.borderBottom </span><span style="color:#FF79C6">=</span><span style="color:#F8F8F2"> </span><span style="color:#E9F284">&quot;</span><span style="color:#F1FA8C">1px solid blue</span><span style="color:#E9F284">&quot;</span><span style="color:#F8F8F2">;</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F8F8F2">        </span><span style="color:#FF79C6">const</span><span style="color:#F8F8F2"> bodyEle </span><span style="color:#FF79C6">=</span><span style="color:#F8F8F2"> document.</span><span style="color:#50FA7B">createElement</span><span style="color:#F8F8F2">(</span><span style="color:#E9F284">&quot;</span><span style="color:#F1FA8C">div</span><span style="color:#E9F284">&quot;</span><span style="color:#F8F8F2">);</span></span>
+<span class="line"><span style="color:#F8F8F2">        bodyEle.innerText </span><span style="color:#FF79C6">=</span><span style="color:#F8F8F2"> </span><span style="color:#E9F284">&quot;</span><span style="color:#F1FA8C">姓名：编程三昧</span><span style="color:#E9F284">&quot;</span><span style="color:#F8F8F2">;</span></span>
+<span class="line"><span style="color:#F8F8F2">        bodyEle.style.padding </span><span style="color:#FF79C6">=</span><span style="color:#F8F8F2"> </span><span style="color:#E9F284">&quot;</span><span style="color:#F1FA8C">10px</span><span style="color:#E9F284">&quot;</span><span style="color:#F8F8F2">;</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F8F8F2">        containerEle.</span><span style="color:#50FA7B">appendChild</span><span style="color:#F8F8F2">(headerEle);</span></span>
+<span class="line"><span style="color:#F8F8F2">        containerEle.</span><span style="color:#50FA7B">appendChild</span><span style="color:#F8F8F2">(bodyEle);</span></span>
+<span class="line"><span style="color:#F8F8F2">        shadow.</span><span style="color:#50FA7B">appendChild</span><span style="color:#F8F8F2">(containerEle);</span></span>
+<span class="line"><span style="color:#F8F8F2">    }</span></span>
+<span class="line"><span style="color:#F8F8F2">}</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F8F8F2">customElements.</span><span style="color:#50FA7B">define</span><span style="color:#F8F8F2">(</span><span style="color:#E9F284">&quot;</span><span style="color:#F1FA8C">my-card</span><span style="color:#E9F284">&quot;</span><span style="color:#F8F8F2">, MyCard, {extends</span><span style="color:#FF79C6">:</span><span style="color:#F8F8F2"> </span><span style="color:#E9F284">&quot;</span><span style="color:#F1FA8C">div</span><span style="color:#E9F284">&quot;</span><span style="color:#F8F8F2">});</span></span></code></pre>
+<h2 id="总结">总结</h2>
+<ul>
+<li><strong>自主定制元素</strong>的构造函数只能继承 HTMLElement，且调用 <code>customElements.define()</code> 方法时不需要第三个参数；</li>
+<li>HTML 中直接使用<strong>自主定制元素</strong>定义的标签名称即可；</li>
+<li><strong>自主定制元素</strong>样式的 display 值默认为 inline，如有需要，可重新设置；</li>
+<li><strong>自定义内置元素</strong>的构造函数一般只能继承可用的基本 HTML 标签类，且调用 <code>customElements.define()</code> 方法时必须要传入第三个参数，第三个参数一般为： <code>{extends: &quot;标签名&quot;}</code>；</li>
+<li>HTML 中直接使用<strong>自定义内置元素</strong>时，需要通过组件构造函数继承类的基本标签名 + <code>is=&quot;自定义标签名&quot;</code>。</li>
+</ul>
+        </article>
+      </div>
+      <footer class="astro-ROSMR3ZC">
+  &copy; 2022 langliu. All rights reserved.
+</footer>
+
+    </main>
+  </body></html>
