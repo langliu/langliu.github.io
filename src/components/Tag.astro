@@ -1,12 +1,12 @@
 ---
-import ColorHash from 'color-hash'
+// import ColorHash from 'color-hash'
 export interface Props {
   text?: string
 }
 
 const { text } = Astro.props as Props
-const colorHash = new ColorHash()
-const backgroundColor = colorHash.hex(text)
+// const colorHash = new ColorHash()
+const backgroundColor = '#ccc'
 ---
 
 <span class='tag'>{text}</span>

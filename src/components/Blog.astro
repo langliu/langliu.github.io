@@ -17,7 +17,7 @@ const posts = (await Astro.glob('../pages/posts/*.{md,mdx}')).sort(
                 {post.frontmatter.emoji} {post.frontmatter.title}
               </span>
               <span>
-                {post.frontmatter.tags?.map((tag: string) => (
+                {post.frontmatter?.tags?.map((tag: string) => (
                   <Tag text={tag} />
                 ))}
                 <time datetime={post.frontmatter.pubDate}>
