@@ -1,12 +1,22 @@
 ---
-// import ColorHash from 'color-hash'
 export interface Props {
-  text?: string
+  text: string
+}
+
+function textColor(text: string) {
+  let str = 0
+  Array.from(text).forEach((item) => {
+    const code = item.charCodeAt(0)
+    str += code
+  })
+  const color = parseInt(str.toString(), 16)
+  console.log(color)
+
+  return `#${Array.from(color.toString()).slice(0, 6).join('')}`
 }
 
 const { text } = Astro.props as Props
-// const colorHash = new ColorHash()
-const backgroundColor = '#ccc'
+const backgroundColor = textColor(text)
 ---
 
 <span class='tag'>{text}</span>
