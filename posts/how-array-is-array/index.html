@@ -1,9 +1,9 @@
-<!DOCTYPE html><html lang="zh-CN" class="astro-QRSVL2RC">
+<!DOCTYPE html><html lang="zh-CN" class="astro-T6W5MSP6">
   <head>
     <!-- Global Metadata --><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <link rel="shortcut icon" href="/favicon.ico">
-<meta name="generator" content="Astro v1.1.1">
+<meta name="generator" content="Astro v1.1.3">
 
 <!-- Primary Meta Tags -->
 <title>在 JavaScript 中如何判断一个数组是数组？</title>
@@ -25,39 +25,40 @@
 <meta property="twitter:image" content="https://langiu.github.io/placeholder-social.jpg">
 
     
-  <link rel="stylesheet" href="/assets/0b10844f.a48ae5ec.css" />
-<link rel="stylesheet" href="/assets/448500f8.362538d4.css" />
-<link rel="stylesheet" href="/assets/da697435.bd00b7bf.css" /></head>
-  <body class="astro-QRSVL2RC">
-    <aside class="sider astro-X3UNDLD6">
-  <div class="header astro-X3UNDLD6">
-    <img class="avatar astro-X3UNDLD6" src="../../eye.jpg" alt="Avatar">
-    <p class="description astro-X3UNDLD6">刘浪的博客</p>
+  <link rel="stylesheet" href="/assets/e4500743.84e0f68c.css" />
+<link rel="stylesheet" href="/assets/6b91d953.2d77ac45.css" />
+<link rel="stylesheet" href="/assets/4eb31de3.7a9c934a.css" /></head>
+  <body class="astro-T6W5MSP6">
+    <aside class="sider astro-QLDQO2WK">
+  <div class="header astro-QLDQO2WK">
+    <img class="avatar astro-QLDQO2WK" src="../../eye.jpg" alt="Avatar">
+    <p class="description astro-QLDQO2WK">刘浪的博客</p>
   </div>
-  <div class="astro-X3UNDLD6">
-    <a class="nav astro-X3UNDLD6" href="/">首页</a>
-    <a class="nav astro-X3UNDLD6" href="/tag">标签</a>
-    <a class="nav astro-X3UNDLD6" href="/about">关于</a>
+  <div class="astro-QLDQO2WK">
+    <a class="nav astro-QLDQO2WK" href="/">首页</a>
+    <a class="nav astro-QLDQO2WK" href="/tags">标签</a>
+    <a class="nav astro-QLDQO2WK" href="/about">关于</a>
   </div>
 </aside>
 
 
-    <main class="astro-QRSVL2RC">
-      <div class="content astro-QRSVL2RC">
-        <article class="astro-QRSVL2RC">
-          <h1 class="title astro-QRSVL2RC">在 JavaScript 中如何判断一个数组是数组？</h1>
-          <time class="astro-QRSVL2RC">
-                2022年3月11日
-              </time>
-          <div class="astro-QRSVL2RC">
-            <span class="tag astro-I7EKRM63" style="--backgroundColor: #4117;">JavaScript</span>
+    <main class="astro-T6W5MSP6">
+      <div class="content astro-T6W5MSP6">
+        <div class="article-wrapper astro-T6W5MSP6">
+          <article class="astro-T6W5MSP6">
+            <h1 class="title astro-T6W5MSP6">在 JavaScript 中如何判断一个数组是数组？</h1>
+            <time class="astro-T6W5MSP6">
+                  2022年3月11日
+                </time>
+            <div class="astro-T6W5MSP6">
+              <span class="tag astro-VPXDGWUV" style="--backgroundColor: #4117;">JavaScript</span>
 
 
-          </div>
-          <hr class="astro-QRSVL2RC">
-          <img class="hero astro-QRSVL2RC" width="100%" height="360" src="/sql-where.jpg" alt="">
-          
-          <p>其中 <code>typeof</code> 返回值固定，只有以下几种情况：</p>
+            </div>
+            <hr class="astro-T6W5MSP6">
+            <img class="hero astro-T6W5MSP6" width="100%" height="360" src="/sql-where.jpg" alt="">
+            
+            <p>其中 <code>typeof</code> 返回值固定，只有以下几种情况：</p>
 
 
 
@@ -114,10 +115,21 @@
 <h2 id="使用-instanceof-进行判断可能会出现的问题">使用 <code>instanceof</code> 进行判断可能会出现的问题</h2>
 <p>因为 <code>instanceof</code> 是用于检测构造函数的 <code>prototype</code> 属性是否出现在某个实例对象的原型链上，在 JavaScript 中原型链是可以进行更改的，所以一旦变量的原型发生了更改的话这种判断就会失效，故而使用 <code>Array.isArray()</code> 是最稳妥的方式。</p>
 <pre class="astro-code" style="background-color:#282A36;overflow-x:auto;white-space:pre-wrap;word-wrap:break-word"><code><span class="line"><span style="color:#FF79C6">const</span><span style="color:#F8F8F2"> s </span><span style="color:#FF79C6">=</span><span style="color:#F8F8F2"> []</span></span>
-<span class="line"><span style="color:#F8F8F2">s.__proto__ </span><span style="color:#FF79C6">=</span><span style="color:#F8F8F2"> </span><span style="color:#8BE9FD;font-style:italic">Object</span><span style="color:#F8F8F2">.prototype </span><span style="color:#6272A4">// 如果更改了变量的原型指向的话判断可能就不靠谱了</span></span>
-<span class="line"><span style="color:#F8F8F2">console.</span><span style="color:#50FA7B">log</span><span style="color:#F8F8F2">(s.__proto__ </span><span style="color:#FF79C6">===</span><span style="color:#F8F8F2"> </span><span style="color:#8BE9FD;font-style:italic">Array</span><span style="color:#F8F8F2">.prototype) </span><span style="color:#6272A4">// false</span></span>
-<span class="line"><span style="color:#F8F8F2">console.</span><span style="color:#50FA7B">log</span><span style="color:#F8F8F2">(</span><span style="color:#8BE9FD;font-style:italic">Object</span><span style="color:#F8F8F2">.</span><span style="color:#50FA7B">getPrototypeOf</span><span style="color:#F8F8F2">(s) </span><span style="color:#FF79C6">===</span><span style="color:#F8F8F2"> </span><span style="color:#8BE9FD;font-style:italic">Array</span><span style="color:#F8F8F2">.prototype) </span><span style="color:#6272A4">// false</span></span></code></pre>
-        </article>
+<span class="line"><span style="color:#F8F8F2">s.__proto__ </span><span style="color:#FF79C6">=</span><span style="color:#F8F8F2"> </span><span style="color:#8BE9FD">Object</span><span style="color:#F8F8F2">.prototype </span><span style="color:#6272A4">// 如果更改了变量的原型指向的话判断可能就不靠谱了</span></span>
+<span class="line"><span style="color:#F8F8F2">console.</span><span style="color:#50FA7B">log</span><span style="color:#F8F8F2">(s.__proto__ </span><span style="color:#FF79C6">===</span><span style="color:#F8F8F2"> </span><span style="color:#8BE9FD">Array</span><span style="color:#F8F8F2">.prototype) </span><span style="color:#6272A4">// false</span></span>
+<span class="line"><span style="color:#F8F8F2">console.</span><span style="color:#50FA7B">log</span><span style="color:#F8F8F2">(Object.</span><span style="color:#50FA7B">getPrototypeOf</span><span style="color:#F8F8F2">(s) </span><span style="color:#FF79C6">===</span><span style="color:#F8F8F2"> </span><span style="color:#8BE9FD">Array</span><span style="color:#F8F8F2">.prototype) </span><span style="color:#6272A4">// false</span></span></code></pre>
+          </article>
+        </div>
+        <div class="catalogue astro-T6W5MSP6">
+          <h2 class="heading astro-T6W5MSP6">目录</h2>
+          <ul class="astro-T6W5MSP6">
+            <li class="header-link depth-2 astro-T6W5MSP6">
+                    <a href="#用-array-对象的-isarray-方法判断" class="astro-T6W5MSP6">用 Array 对象的 isArray 方法判断</a>
+                  </li><li class="header-link depth-2 astro-T6W5MSP6">
+                    <a href="#使用-instanceof-进行判断可能会出现的问题" class="astro-T6W5MSP6">使用 instanceof 进行判断可能会出现的问题</a>
+                  </li>
+          </ul>
+        </div>
       </div>
       <footer class="astro-ROSMR3ZC">
   &copy; 2022 langliu. All rights reserved.
