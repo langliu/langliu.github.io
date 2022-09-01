@@ -1,0 +1,20 @@
+---
+import Tag from '@components/Tag.astro'
+import CoustomLayout from '@layouts/CoustomLayout.astro'
+import { textColor } from '../utils/text-color'
+// Use Astro.glob() to fetch all posts, and then sort them by date.
+const posts = (await Astro.glob('../pages/posts/*.{md,mdx}')).sort(
+  (a, b) => new Date(b.frontmatter.pubDate).valueOf() - new Date(a.frontmatter.pubDate).valueOf()
+)
+let tags: string[] = []
+posts.forEach((post) => {
+  console.log(post.frontmatter.tags)
+
+  tags = [...tags, ...post.frontmatter.tags]
+})
+tags = [...new Set(tags)]
+---
+
+<CoustomLayout>
+  {tags.map((post) => <Tag text={post} />)}
+</CoustomLayout>

@@ -25,7 +25,8 @@ b {
   color: #fff;
 }
 a {
-  color: #3273dc;
+  color: pink;
+  text-decoration: none;
 }
 nav a {
   margin-right: 10px;

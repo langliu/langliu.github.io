@@ -10,7 +10,6 @@ function textColor(text: string) {
     str += code
   })
   const color = parseInt(str.toString(), 16)
-  console.log(color)
 
   return `#${Array.from(color.toString()).slice(0, 6).join('')}`
 }
@@ -36,5 +35,6 @@ const backgroundColor = textColor(text)
     flex-shrink: 0;
     display: inline-flex;
     background-color: var(--backgroundColor);
+    cursor: pointer;
   }
 </style>

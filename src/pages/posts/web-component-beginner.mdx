@@ -70,7 +70,7 @@ window.customElements.define('hello-world', HelloWorld)
 
 ### 自定义元素的类
 
-由上面的例子 `class HelloWorld extends* *HTMLElement { xxx }` 发现，自定义元素的构造都是基于 `HTMLElement` ，所以它继承了 HTML 元素特性，当然，也可以继承 `HTMLElement` 的派生类，如： `HTMLButtonElement` 等，来作为现有标签的扩展。
+由上面的例子 `class HelloWorld extends HTMLElement { xxx }` 发现，自定义元素的构造都是基于 `HTMLElement` ，所以它继承了 HTML 元素特性，当然，也可以继承 `HTMLElement` 的派生类，如： `HTMLButtonElement` 等，来作为现有标签的扩展。
 
 ### 自定义元素的生命周期
 
@@ -115,7 +115,7 @@ const hw = document.querySelector('hello-world')
 hw.say('good')
 ```
 
-![控制台打印效果](/Untitled.png)
+<img src='/Untitled.png' alt='控制台打印效果' width='100%' />
 
 ## Shadow DOM
 

@@ -4,6 +4,11 @@ import Sider from '@layouts/Sider.astro'
 import Tag from '@components/Tag.astro'
 import Footer from '@components/Footer.astro'
 
+export interface Heading {
+  depth: number
+  slug: string
+  text: string
+}
 export interface Props {
   content: {
     title: string
@@ -13,10 +18,12 @@ export interface Props {
     heroImage?: string
     tags?: string[]
   }
+  headings: Heading[]
 }
 
 const {
   content: { title, description, pubDate, updatedDate, heroImage, tags },
+  headings,
 } = Astro.props as Props
 ---
 
@@ -103,9 +110,13 @@ const {
         gap: 1rem;
         padding: 0;
       }
+      .article-wrapper {
+        flex: 1;
+      }
 
       article {
         max-width: 1200px;
+        margin: 0 auto;
       }
 
       .title {
@@ -118,39 +129,116 @@ const {
         height: 450px;
         object-fit: cover;
       }
+
+      h2.heading {
+        font-size: 1rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        margin-bottom: 0.5rem;
+        margin-top: 1.5rem;
+        padding-inline-start: 1rem;
+      }
+      /* 目录 */
+      .catalogue {
+        position: sticky;
+        top: 2rem;
+        height: min-content;
+        flex-shrink: 0;
+        font-size: 16px;
+      }
+      .catalogue > ul {
+        list-style: none;
+        padding: 0;
+      }
+      .header-link {
+        padding-inline-start: 1rem;
+        border-inline-start: 3px solid rgba(241, 240, 244, 0.1);
+        font-size: 1rem;
+        padding: 0.1rem 0 0.1rem 0;
+        transition: border-inline-start-color 100ms ease-out, background-color 200ms ease-out;
+        color: #cbcacd;
+        cursor: pointer;
+      }
+
+      .header-link > a {
+        color: #cbcacd;
+      }
+      .header-link:hover,
+      .header-link:hover > a,
+      .header-link:focus,
+      .header-link:focus-within > a {
+        border-inline-start-color: pink !important;
+        color: white;
+      }
+
+      .depth-2 {
+        padding-inline-start: 1rem;
+      }
+
+      .depth-3 {
+        padding-inline-start: 2rem;
+      }
+
+      .depth-4 {
+        padding-inline-start: 3rem;
+      }
+
+      .depth-5 {
+        padding-inline-start: 4rem;
+      }
+
+      .depth-6 {
+        padding-inline-start: 5rem;
+      }
     </style>
   </head>
   <body>
     <Sider avatar='../../eye.jpg' />
     <main>
       <div class='content'>
-        <article>
-          <h1 class='title'>{title}</h1>
-          {
-            pubDate && (
-              <time>
-                {new Date(pubDate).toLocaleDateString('zh-CN', {
-                  year: 'numeric',
-                  month: 'long',
-                  day: 'numeric',
-                })}
-              </time>
-            )
-          }
-          <div>
-            {tags?.map((tag) => <Tag text={tag} />)}
-          </div>
-          <hr />
-          {heroImage && <img class='hero' width='100%' height={360} src={heroImage} alt='' />}
-          {
-            updatedDate && (
-              <div>
-                Last updated on <time>{updatedDate}</time>
-              </div>
-            )
-          }
-          <slot />
-        </article>
+        <div class='article-wrapper'>
+          <article>
+            <h1 class='title'>{title}</h1>
+            {
+              pubDate && (
+                <time>
+                  {new Date(pubDate).toLocaleDateString('zh-CN', {
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric',
+                  })}
+                </time>
+              )
+            }
+            <div>
+              {tags?.map((tag) => <Tag text={tag} />)}
+            </div>
+            <hr />
+            {heroImage && <img class='hero' width='100%' height={360} src={heroImage} alt='' />}
+            {
+              updatedDate && (
+                <div>
+                  Last updated on <time>{updatedDate}</time>
+                </div>
+              )
+            }
+            <slot />
+          </article>
+        </div>
+        <div class='catalogue'>
+          <h2 class='heading'>目录</h2>
+          <ul>
+            {
+              headings.map((heading) => {
+                return (
+                  <li class={`header-link depth-${heading.depth}`}>
+                    <a href={`#${heading.slug}`}>{heading.text}</a>
+                  </li>
+                )
+              })
+            }
+          </ul>
+        </div>
       </div>
       <Footer />
     </main>
