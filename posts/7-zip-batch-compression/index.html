@@ -1,0 +1,106 @@
+<!DOCTYPE html><html lang="zh-CN" class="astro-T6W5MSP6">
+  <head>
+    <!-- Global Metadata --><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<link rel="shortcut icon" href="/favicon.ico">
+<meta name="generator" content="Astro v1.1.5">
+
+<!-- Primary Meta Tags -->
+<title>Windows 下使用7-Zip批量压缩文件夹</title>
+<meta name="title" content="Windows 下使用7-Zip批量压缩文件夹">
+<meta name="description" content="Windows 下使用7-Zip批量压缩文件夹">
+
+<!-- Open Graph / Facebook -->
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://langiu.github.io/posts/7-zip-batch-compression/">
+<meta property="og:title" content="Windows 下使用7-Zip批量压缩文件夹">
+<meta property="og:description" content="Windows 下使用7-Zip批量压缩文件夹">
+<meta property="og:image" content="https://langiu.github.io/placeholder-social.jpg">
+
+<!-- Twitter -->
+<meta property="twitter:card" content="summary_large_image">
+<meta property="twitter:url" content="https://langiu.github.io/posts/7-zip-batch-compression/">
+<meta property="twitter:title" content="Windows 下使用7-Zip批量压缩文件夹">
+<meta property="twitter:description" content="Windows 下使用7-Zip批量压缩文件夹">
+<meta property="twitter:image" content="https://langiu.github.io/placeholder-social.jpg">
+
+    
+  <link rel="stylesheet" href="/assets/119de530.84e0f68c.css" />
+<link rel="stylesheet" href="/assets/a6682c3e.2d77ac45.css" />
+<link rel="stylesheet" href="/assets/330e655f.7a9c934a.css" /></head>
+  <body class="astro-T6W5MSP6">
+    <aside class="sider astro-QLDQO2WK">
+  <div class="header astro-QLDQO2WK">
+    <img class="avatar astro-QLDQO2WK" src="../../eye.jpg" alt="Avatar">
+    <p class="description astro-QLDQO2WK">刘浪的博客</p>
+  </div>
+  <div class="astro-QLDQO2WK">
+    <a class="nav astro-QLDQO2WK" href="/">首页</a>
+    <a class="nav astro-QLDQO2WK" href="/tags">标签</a>
+    <a class="nav astro-QLDQO2WK" href="/about">关于</a>
+  </div>
+</aside>
+
+
+    <main class="astro-T6W5MSP6">
+      <div class="content astro-T6W5MSP6">
+        <div class="article-wrapper astro-T6W5MSP6">
+          <article class="astro-T6W5MSP6">
+            <h1 class="title astro-T6W5MSP6">Windows 下使用7-Zip批量压缩文件夹</h1>
+            <time class="astro-T6W5MSP6">
+                  2022年9月3日
+                </time>
+            <div class="astro-T6W5MSP6">
+              <span class="tag astro-VPXDGWUV" style="--backgroundColor: #1321;">Tools</span>
+
+<span class="tag astro-VPXDGWUV" style="--backgroundColor: #1031;">7-Zip</span>
+
+
+            </div>
+            <hr class="astro-T6W5MSP6">
+            <img class="hero astro-T6W5MSP6" width="100%" height="360" src="/7-zip-batch-compression.png" alt="">
+            
+            <h2 id="起因">起因</h2>
+<p>最近发现电脑的存储内存不太够了，于是决定整理电脑里的文件，整理文件的时候发现电脑中有许多按文件夹分类存储的文件，这些文件平时基本上没有用过，正好我的阿里云盘上有较大的存储空间，我就想着将这些文件通过 7-Zip 压缩一下，压缩完成后上传到阿里云盘中存起来，需要的时候再下载就好。</p>
+<h2 id="解决">解决</h2>
+<p>这么多文件夹如果自己一个个压缩效率太慢了，肯定有快捷方式可以批量压缩文件夹，于是我就在网上搜索了一下 “7-Zip 批量压缩” 发现在 Windows 系统环境下可以用批处理工具使用 7-Zip 来批量压缩文件夹 📂，找到的命令如下：</p>
+<pre class="astro-code" style="background-color:#282A36;overflow-x:auto;white-space:pre-wrap;word-wrap:break-word"><code><span class="line"><span style="color:#FF79C6">for</span><span style="color:#F8F8F2"> </span><span style="color:#FF79C6">/</span><span style="color:#F8F8F2">d </span><span style="color:#FF79C6">%%</span><span style="color:#F8F8F2">X </span><span style="color:#FF79C6">in</span><span style="color:#F8F8F2"> (</span><span style="color:#FF79C6">*</span><span style="color:#F8F8F2">) </span><span style="color:#FF79C6">do</span><span style="color:#F8F8F2"> </span><span style="color:#E9F284">&quot;</span><span style="color:#F1FA8C">C:\Program Files\7-Zip\7z.exe</span><span style="color:#E9F284">&quot;</span><span style="color:#F8F8F2"> a </span><span style="color:#E9F284">&quot;</span><span style="color:#F1FA8C">%%~dpnX.7z</span><span style="color:#E9F284">&quot;</span><span style="color:#F8F8F2"> </span><span style="color:#E9F284">&quot;</span><span style="color:#F1FA8C">%%X</span><span style="color:#E9F284">&quot;</span><span style="color:#F8F8F2"> </span><span style="color:#FF79C6">-</span><span style="color:#F8F8F2">p123456 </span><span style="color:#FF79C6">-</span><span style="color:#F8F8F2">mhe </span><span style="color:#FF79C6">-</span><span style="color:#F8F8F2">mx</span><span style="color:#FF79C6">=</span><span style="color:#BD93F9">0</span></span></code></pre>
+<h3 id="创建批处理文件">创建批处理文件</h3>
+<p>在 Windows 下创建批处理文件的方式如下：</p>
+<ol>
+<li>新建一个 <code>.txt</code> 文本文件，将批处理命令写入文本文件中</li>
+<li>将创建的文本文件重命名，将文件后缀由 <code>.txt</code> 改为 <code>.bat</code></li>
+</ol>
+<h3 id="优化">优化</h3>
+<p>在我本地进行打包的时候，我的文件夹名称中有 <code>.</code> 符号，不知道什么原因打包后的压缩文件名称只有 <code>.</code> 前面的（比如说我的文件夹名称为“lang.1289”则打包后的文件名称为“lang.7z”），缺失了一部分，这样的话打包时就有一些文件重名了。经过一番查询，得到了一个新命令：</p>
+<pre class="astro-code" style="background-color:#282A36;overflow-x:auto;white-space:pre-wrap;word-wrap:break-word"><code><span class="line"><span style="color:#FF79C6">for</span><span style="color:#F8F8F2"> </span><span style="color:#BD93F9">/d %%Z</span><span style="color:#F8F8F2"> </span><span style="color:#FF79C6">in</span><span style="color:#F8F8F2"> (</span><span style="color:#FF79C6">*</span><span style="color:#F8F8F2">) </span><span style="color:#FF79C6">do</span><span style="color:#F8F8F2">  </span><span style="color:#E9F284">&quot;</span><span style="color:#F1FA8C">c:\Program Files\7-Zip\7z.exe</span><span style="color:#E9F284">&quot;</span><span style="color:#F8F8F2"> a -bd </span><span style="color:#E9F284">&quot;</span><span style="color:#F1FA8C">%%Z.7z</span><span style="color:#E9F284">&quot;</span><span style="color:#F8F8F2"> </span><span style="color:#E9F284">&quot;</span><span style="color:#F1FA8C">%%Z</span><span style="color:#FF79C6">\&quot;</span><span style="color:#F1FA8C"> -p123456 &gt;zip.log</span></span></code></pre>
+<h2 id="参考文章">参考文章</h2>
+<ul>
+<li><a href="https://www.zhihu.com/question/31567041">7ZIP软件如何批量压缩7Z格式 并设置密码如123456 跪求？- 知乎</a></li>
+<li><a href="https://evvail.com/2020/06/23/713.html">windows下批量用7z压缩文件夹</a></li>
+</ul>
+          </article>
+        </div>
+        <div class="catalogue astro-T6W5MSP6">
+          <h2 class="heading astro-T6W5MSP6">目录</h2>
+          <ul class="astro-T6W5MSP6">
+            <li class="header-link depth-2 astro-T6W5MSP6">
+                    <a href="#起因" class="astro-T6W5MSP6">起因</a>
+                  </li><li class="header-link depth-2 astro-T6W5MSP6">
+                    <a href="#解决" class="astro-T6W5MSP6">解决</a>
+                  </li><li class="header-link depth-3 astro-T6W5MSP6">
+                    <a href="#创建批处理文件" class="astro-T6W5MSP6">创建批处理文件</a>
+                  </li><li class="header-link depth-3 astro-T6W5MSP6">
+                    <a href="#优化" class="astro-T6W5MSP6">优化</a>
+                  </li><li class="header-link depth-2 astro-T6W5MSP6">
+                    <a href="#参考文章" class="astro-T6W5MSP6">参考文章</a>
+                  </li>
+          </ul>
+        </div>
+      </div>
+      <footer class="astro-ROSMR3ZC">
+  &copy; 2022 langliu. All rights reserved.
+</footer>
+
+    </main>
+  </body></html>
