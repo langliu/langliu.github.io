@@ -1,9 +1,9 @@
-<!DOCTYPE html><html lang="zh-CN" class="astro-T6W5MSP6">
+<!DOCTYPE html><html lang="zh-CN" class="astro-LDYHAKPG">
   <head>
     <!-- Global Metadata --><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <link rel="shortcut icon" href="/favicon.ico">
-<meta name="generator" content="Astro v1.1.5">
+<meta name="generator" content="Astro v1.2.1">
 
 <!-- Primary Meta Tags -->
 <title>SQL 语句中 where=1 的作用</title>
@@ -25,38 +25,38 @@
 <meta property="twitter:image" content="https://langiu.github.io/placeholder-social.jpg">
 
     
-  <link rel="stylesheet" href="/assets/119de530.84e0f68c.css" />
-<link rel="stylesheet" href="/assets/a6682c3e.2d77ac45.css" />
-<link rel="stylesheet" href="/assets/330e655f.7a9c934a.css" /></head>
-  <body class="astro-T6W5MSP6">
-    <aside class="sider astro-QLDQO2WK">
-  <div class="header astro-QLDQO2WK">
-    <img class="avatar astro-QLDQO2WK" src="../../eye.jpg" alt="Avatar">
-    <p class="description astro-QLDQO2WK">刘浪的博客</p>
+  <link rel="stylesheet" href="/assets/d046b052.e6b69f40.css" />
+<link rel="stylesheet" href="/assets/f9422b2f.ffa95078.css" />
+<link rel="stylesheet" href="/assets/d06aade4.a8807800.css" /></head>
+  <body class="astro-LDYHAKPG">
+    <aside class="sider astro-6I5PPSTL">
+  <div class="header astro-6I5PPSTL">
+    <img class="avatar astro-6I5PPSTL" src="../../eye.jpg" alt="Avatar">
+    <p class="description astro-6I5PPSTL">刘浪的博客</p>
   </div>
-  <div class="astro-QLDQO2WK">
-    <a class="nav astro-QLDQO2WK" href="/">首页</a>
-    <a class="nav astro-QLDQO2WK" href="/tags">标签</a>
-    <a class="nav astro-QLDQO2WK" href="/about">关于</a>
+  <div class="astro-6I5PPSTL">
+    <a class="nav astro-6I5PPSTL" href="/">首页</a>
+    <a class="nav astro-6I5PPSTL" href="/tags">标签</a>
+    <a class="nav astro-6I5PPSTL" href="/about">关于</a>
   </div>
 </aside>
 
 
-    <main class="astro-T6W5MSP6">
-      <div class="content astro-T6W5MSP6">
-        <div class="article-wrapper astro-T6W5MSP6">
-          <article class="astro-T6W5MSP6">
-            <h1 class="title astro-T6W5MSP6">SQL 语句中 where=1 的作用</h1>
-            <time class="astro-T6W5MSP6">
+    <main class="astro-LDYHAKPG">
+      <div class="content astro-LDYHAKPG">
+        <div class="article-wrapper astro-LDYHAKPG">
+          <article class="astro-LDYHAKPG">
+            <h1 class="title astro-LDYHAKPG">SQL 语句中 where=1 的作用</h1>
+            <time class="astro-LDYHAKPG">
                   2022年2月28日
                 </time>
-            <div class="astro-T6W5MSP6">
-              <span class="tag astro-VPXDGWUV" style="--backgroundColor: #576;">SQL</span>
+            <div class="astro-LDYHAKPG">
+              <a class="tag astro-XBMMR3NU" href="/tags/SQL" style="--backgroundColor: #576;">SQL</a>
 
 
             </div>
-            <hr class="astro-T6W5MSP6">
-            <img class="hero astro-T6W5MSP6" width="100%" height="360" src="/sql-where.jpg" alt="">
+            <hr class="astro-LDYHAKPG">
+            <img class="hero astro-LDYHAKPG" width="100%" height="360" src="/sql-where.jpg" alt="">
             
             <h2 id="背景">背景</h2>
 <p>最近接手了一个 NodeJS 的老项目，这个项目是 2017 年开始做的，没有用到像现在我们常用的 Prisma、TypeORM 或 Sequelize 这类 ORM 框架，是使用的原生的 T-SQL 语句进行查询，在熟悉代码的时候看到查询后有 <code>WHERE 1=1</code> 这段代码，感觉很疑惑不是很清楚这段代码在实际查询中有和意义，因为 <code>WHERE 1=1</code> 是永远为 <code>true</code>，应该起不到过滤查询的作用。难道它有我所不知道的用途？</p>
@@ -74,20 +74,20 @@
 <span class="line"><span style="color:#FF79C6">if</span><span style="color:#F8F8F2"> user chooses </span><span style="color:#FF79C6">option</span><span style="color:#F8F8F2"> b </span><span style="color:#FF79C6">then</span><span style="color:#F8F8F2"> stmt </span><span style="color:#FF79C6">+=</span><span style="color:#F8F8F2"> </span><span style="color:#E9F284">&quot;</span><span style="color:#F1FA8C">and D is not null </span><span style="color:#E9F284">&quot;</span></span></code></pre>
           </article>
         </div>
-        <div class="catalogue astro-T6W5MSP6">
-          <h2 class="heading astro-T6W5MSP6">目录</h2>
-          <ul class="astro-T6W5MSP6">
-            <li class="header-link depth-2 astro-T6W5MSP6">
-                    <a href="#背景" class="astro-T6W5MSP6">背景</a>
-                  </li><li class="header-link depth-2 astro-T6W5MSP6">
-                    <a href="#where-11-是否改善了查询执行" class="astro-T6W5MSP6">WHERE 1=1 是否改善了查询执行？</a>
-                  </li><li class="header-link depth-2 astro-T6W5MSP6">
-                    <a href="#方便后续-sql-查询语句的拼接" class="astro-T6W5MSP6">方便后续 SQL 查询语句的拼接</a>
+        <div class="catalogue astro-LDYHAKPG">
+          <h2 class="heading astro-LDYHAKPG">目录</h2>
+          <ul class="astro-LDYHAKPG">
+            <li class="header-link depth-2 astro-LDYHAKPG">
+                    <a href="#背景" class="astro-LDYHAKPG">背景</a>
+                  </li><li class="header-link depth-2 astro-LDYHAKPG">
+                    <a href="#where-11-是否改善了查询执行" class="astro-LDYHAKPG">WHERE 1=1 是否改善了查询执行？</a>
+                  </li><li class="header-link depth-2 astro-LDYHAKPG">
+                    <a href="#方便后续-sql-查询语句的拼接" class="astro-LDYHAKPG">方便后续 SQL 查询语句的拼接</a>
                   </li>
           </ul>
         </div>
       </div>
-      <footer class="astro-ROSMR3ZC">
+      <footer class="astro-ZZCSQTZN">
   &copy; 2022 langliu. All rights reserved.
 </footer>
 
