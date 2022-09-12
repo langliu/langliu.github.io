@@ -21,6 +21,9 @@
       ],
       "@styles/*": [
         "src/styles/*"
+      ],
+      "@pages/*": [
+        "src/pages/*"
       ]
     },
     "forceConsistentCasingInFileNames": true,

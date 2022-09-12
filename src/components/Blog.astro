@@ -1,36 +1,45 @@
 ---
 import Tag from './Tag.astro'
+
+type Props = {
+  tag?: string
+}
+
 // Use Astro.glob() to fetch all posts, and then sort them by date.
-const posts = (await Astro.glob('../pages/posts/*.{md,mdx}')).sort(
+const posts = (await Astro.glob('../pages/posts/**/*.{md,mdx}')).sort(
   (a, b) => new Date(b.frontmatter.pubDate).valueOf() - new Date(a.frontmatter.pubDate).valueOf()
 )
+
+const { tag } = Astro.params as Props
 ---
 
 <div class='warpper'>
   <div class='articles'>
     <ul>
       {
-        posts.map((post) => (
-          <li>
-            <a href={post.url}>
-              <span class='title'>
-                {post.frontmatter.emoji} {post.frontmatter.title}
-              </span>
-              <span>
-                {post.frontmatter?.tags?.map((tag: string) => (
-                  <Tag text={tag} />
-                ))}
-                <time datetime={post.frontmatter.pubDate}>
-                  {new Date(post.frontmatter.pubDate).toLocaleDateString('zh-CN', {
-                    year: 'numeric',
-                    month: 'short',
-                    day: 'numeric',
-                  })}
-                </time>
-              </span>
-            </a>
-          </li>
-        ))
+        posts
+          .filter((post) => (tag ? post.frontmatter?.tags.includes(tag) : true))
+          .map((post) => (
+            <li>
+              <a href={post.url}>
+                <span class='title'>
+                  {post.frontmatter.emoji} {post.frontmatter.title}
+                </span>
+                <div>
+                  {post.frontmatter?.tags?.map((tag: string) => (
+                    <Tag text={tag} />
+                  ))}
+                  <time datetime={post.frontmatter.pubDate}>
+                    {new Date(post.frontmatter.pubDate).toLocaleDateString('zh-CN', {
+                      year: 'numeric',
+                      month: 'short',
+                      day: 'numeric',
+                    })}
+                  </time>
+                </div>
+              </a>
+            </li>
+          ))
       }
     </ul>
   </div>
@@ -66,7 +75,7 @@ const posts = (await Astro.glob('../pages/posts/*.{md,mdx}')).sort(
     min-width: 0px;
     padding: 0.5rem;
     border-radius: 0.25rem;
-    display: block;
+    display: flex;
     transition: all 200ms ease-in-out 0s;
     -webkit-box-pack: justify;
     justify-content: space-between;
@@ -77,7 +86,7 @@ const posts = (await Astro.glob('../pages/posts/*.{md,mdx}')).sort(
     background-color: var(--theme-ui-colors-codeBackground, hsl(285, 5%, 17%));
   }
 
-  ul li a {
+  ul li > a {
     display: flex;
     justify-content: space-between;
     align-items: center;
