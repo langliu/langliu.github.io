@@ -1,5 +1,5 @@
 ---
-import Tag from './Tag.astro'
+import BlogListItem from './BlogListItem.astro'
 
 type Props = {
   tag?: string
@@ -19,27 +19,18 @@ const { tag } = Astro.params as Props
       {
         posts
           .filter((post) => (tag ? post.frontmatter?.tags.includes(tag) : true))
-          .map((post) => (
-            <li>
-              <a href={post.url}>
-                <span class='title'>
-                  {post.frontmatter.emoji} {post.frontmatter.title}
-                </span>
-                <div>
-                  {post.frontmatter?.tags?.map((tag: string) => (
-                    <Tag text={tag} />
-                  ))}
-                  <time datetime={post.frontmatter.pubDate}>
-                    {new Date(post.frontmatter.pubDate).toLocaleDateString('zh-CN', {
-                      year: 'numeric',
-                      month: 'short',
-                      day: 'numeric',
-                    })}
-                  </time>
-                </div>
-              </a>
-            </li>
-          ))
+          .map((post) => {
+            const { emoji, title, tags, pubDate } = post.frontmatter
+            return (
+              <BlogListItem
+                url={post.url}
+                emoji={emoji}
+                title={title}
+                tags={tags}
+                pubDate={pubDate}
+              />
+            )
+          })
       }
     </ul>
   </div>
