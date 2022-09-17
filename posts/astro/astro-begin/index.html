@@ -1,0 +1,376 @@
+<!DOCTYPE html><html lang="zh-CN" class="astro-LDYHAKPG">
+  <head>
+    <!-- Global Metadata --><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<link rel="shortcut icon" href="/favicon.ico">
+<meta name="generator" content="Astro v1.2.6">
+
+<!-- Primary Meta Tags -->
+<title>基于 Astro 搭建博客系统</title>
+<meta name="title" content="基于 Astro 搭建博客系统">
+<meta name="description" content="基于 Astro 搭建博客系统">
+
+<!-- Open Graph / Facebook -->
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://langiu.github.io/posts/astro/astro-begin/">
+<meta property="og:title" content="基于 Astro 搭建博客系统">
+<meta property="og:description" content="基于 Astro 搭建博客系统">
+<meta property="og:image" content="https://langiu.github.io/placeholder-social.jpg">
+
+<!-- Twitter -->
+<meta property="twitter:card" content="summary_large_image">
+<meta property="twitter:url" content="https://langiu.github.io/posts/astro/astro-begin/">
+<meta property="twitter:title" content="基于 Astro 搭建博客系统">
+<meta property="twitter:description" content="基于 Astro 搭建博客系统">
+<meta property="twitter:image" content="https://langiu.github.io/placeholder-social.jpg">
+
+    
+  <link rel="stylesheet" href="/assets/28d7b916.e6b69f40.css" />
+<link rel="stylesheet" href="/assets/58a7e5a1.ffa95078.css" />
+<link rel="stylesheet" href="/assets/31843d04.a8807800.css" /></head>
+  <body class="astro-LDYHAKPG">
+    <aside class="sider astro-6I5PPSTL">
+  <div class="header astro-6I5PPSTL">
+    <img class="avatar astro-6I5PPSTL" src="../../eye.jpg" alt="Avatar">
+    <p class="description astro-6I5PPSTL">刘浪的博客</p>
+  </div>
+  <div class="astro-6I5PPSTL">
+    <a class="nav astro-6I5PPSTL" href="/">首页</a>
+    <a class="nav astro-6I5PPSTL" href="/tags">标签</a>
+    <a class="nav astro-6I5PPSTL" href="/about">关于</a>
+  </div>
+</aside>
+
+
+    <main class="astro-LDYHAKPG">
+      <div class="content astro-LDYHAKPG">
+        <div class="article-wrapper astro-LDYHAKPG">
+          <article class="astro-LDYHAKPG">
+            <h1 class="title astro-LDYHAKPG">基于 Astro 搭建博客系统</h1>
+            <time class="astro-LDYHAKPG">
+                  2022年9月8日
+                </time>
+            <div class="astro-LDYHAKPG">
+              <a class="tag astro-XBMMR3NU" href="/tags/JavaScript" style="--backgroundColor: #4117;">JavaScript</a>
+
+
+            </div>
+            <hr class="astro-LDYHAKPG">
+            
+            
+            <h2 id="缘起">缘起</h2>
+<p>最近在少数派看见一篇文章 <a href="https://sspai.com/post/75329">抛弃知识管理软件的尝试：把博客变为知识库</a>，作者尝试了不使用知识管理软件而使用静态博客系统来管理自己的知识库，恰巧最近看见了 <a href="https://astro.build/">Astro</a> 发布了1.0版本，想要尝试一下于是决定基于 Astro 搭建一个自己的博客系统，使用 Github Page 来做静态网页服务。</p>
+<h2 id="博客搭建">博客搭建</h2>
+<blockquote>
+<p>💡在搭建前先看一下 <a href="https://docs.astro.build/zh-cn/getting-started/">Astro 的官方文档</a>，了解一下提供了哪些功能，Astro 官方文档提供了中文版本可以很方便的查看。</p>
+</blockquote>
+<h3 id="前置准备">前置准备</h3>
+<p>使用 Astro 目前只有使用 VSCode 编辑器才有一个较为良好的开发体验，因为官方目前只提供了基于 VSCode 的插件 <a href="https://marketplace.visualstudio.com/items?itemName=astro-build.astro-vscode">Astro</a></p>
+<h3 id="项目创建">项目创建</h3>
+<pre class="astro-code" style="background-color:#282A36;overflow-x:auto;white-space:pre-wrap;word-wrap:break-word"><code><span class="line"><span style="color:#6272A4"># npm</span></span>
+<span class="line"><span style="color:#F8F8F2">npm create astro@latest</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6272A4"># yarn</span></span>
+<span class="line"><span style="color:#F8F8F2">yarn create astro</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6272A4"># pnpm</span></span>
+<span class="line"><span style="color:#F8F8F2">pnpm create astro@latest</span></span></code></pre>
+<p>执行以上命令后，Astro 会自动为你创建项目文件夹并初始化项目。</p>
+<h4 id="目录结构">目录结构</h4>
+<p>一个寻常的 Astro 项目目录可能看起来像这样：</p>
+<ul>
+<li>src/* - 你的项目源代码（组件、页面、样式等）。</li>
+<li>public/* - 你的非代码、未处理的资源（字体、图标等）。</li>
+<li>package.json - 项目列表。</li>
+<li>astro.config.mjs - Astro 配置文件（可选）。</li>
+</ul>
+<pre class="astro-code" style="background-color:#282A36;overflow-x:auto;white-space:pre-wrap;word-wrap:break-word"><code><span class="line"><span style="color:#F8F8F2">├── src/</span></span>
+<span class="line"><span style="color:#F8F8F2">│   ├── components/</span></span>
+<span class="line"><span style="color:#F8F8F2">│   │   ├── Header.astro</span></span>
+<span class="line"><span style="color:#F8F8F2">│   │   └-─ Button.jsx</span></span>
+<span class="line"><span style="color:#F8F8F2">│   ├── layouts/</span></span>
+<span class="line"><span style="color:#F8F8F2">│   │   └-─ PostLayout.astro</span></span>
+<span class="line"><span style="color:#F8F8F2">│   └── pages/</span></span>
+<span class="line"><span style="color:#F8F8F2">│   │   ├── posts/</span></span>
+<span class="line"><span style="color:#F8F8F2">│   │   │   ├── post1.md</span></span>
+<span class="line"><span style="color:#F8F8F2">│   │   │   ├── post2.md</span></span>
+<span class="line"><span style="color:#F8F8F2">│   │   │   └── post3.md</span></span>
+<span class="line"><span style="color:#F8F8F2">│   │   └── index.astro</span></span>
+<span class="line"><span style="color:#F8F8F2">│   └── styles/</span></span>
+<span class="line"><span style="color:#F8F8F2">│       └-─ global.css</span></span>
+<span class="line"><span style="color:#F8F8F2">├── public/</span></span>
+<span class="line"><span style="color:#F8F8F2">│   ├── robots.txt</span></span>
+<span class="line"><span style="color:#F8F8F2">│   ├── favicon.svg</span></span>
+<span class="line"><span style="color:#F8F8F2">│   └-─ social-image.png</span></span>
+<span class="line"><span style="color:#F8F8F2">├── astro.config.mjs</span></span>
+<span class="line"><span style="color:#F8F8F2">└── package.json</span></span></code></pre>
+<h3 id="astro-文件结构">astro 文件结构</h3>
+<p>astro 文件由两部分组成：<strong>组件 script</strong> 和<strong>组件模板</strong>，写过Vue的同学可能对这种结构比较熟悉：</p>
+<pre class="astro-code" style="background-color:#282A36;overflow-x:auto;white-space:pre-wrap;word-wrap:break-word"><code><span class="line"><span style="color:#FF79C6">---</span></span>
+<span class="line"><span style="color:#6272A4">// 组件 Script（JavaScript）</span></span>
+<span class="line"><span style="color:#FF79C6">---</span></span>
+<span class="line"><span style="color:#FF79C6">&lt;!--</span><span style="color:#F8F8F2"> Component </span><span style="color:#50FA7B">Template</span><span style="color:#F8F8F2"> (HTML </span><span style="color:#FF79C6">+</span><span style="color:#F8F8F2"> JS Expressions) </span><span style="color:#FF79C6">--&gt;</span></span></code></pre>
+<h4 id="组件-script">组件 Script</h4>
+<p>Astro 使用代码栅栏（---）来识别 Astro 组件中的组件 script。</p>
+<p>你可以使用组件 script 来编写渲染模板所需 JavaScript 代码。这可以包括：</p>
+<ul>
+<li>导入其他 Astro 组件</li>
+<li>导入其他框架组件，如 React</li>
+<li>导入数据，如 JSON 文件</li>
+<li>从 API 或数据库中获取内容</li>
+<li>创建你要在模板中引用的变量</li>
+</ul>
+<p>例如在下面的代码中，我们导入了一个 Tag 的 Astro 组件，并且读取了 <code>src/pages/posts</code> 文件夹及子文件夹下的所有 Markdown 和 MDX 文件：</p>
+<pre class="astro-code" style="background-color:#282A36;overflow-x:auto;white-space:pre-wrap;word-wrap:break-word"><code><span class="line"><span style="color:#FF79C6">---</span></span>
+<span class="line"><span style="color:#FF79C6">import</span><span style="color:#F8F8F2"> Tag </span><span style="color:#FF79C6">from</span><span style="color:#F8F8F2"> </span><span style="color:#E9F284">&#39;</span><span style="color:#F1FA8C">./Tag.astro</span><span style="color:#E9F284">&#39;</span></span>
+<span class="line"><span style="color:#6272A4">// Use Astro.glob() to fetch all posts, and then sort them by date.</span></span>
+<span class="line"><span style="color:#FF79C6">const</span><span style="color:#F8F8F2"> posts </span><span style="color:#FF79C6">=</span><span style="color:#F8F8F2"> (</span><span style="color:#FF79C6">await</span><span style="color:#F8F8F2"> Astro.</span><span style="color:#50FA7B">glob</span><span style="color:#F8F8F2">(</span><span style="color:#E9F284">&#39;</span><span style="color:#F1FA8C">../pages/posts/**/*.{md,mdx}</span><span style="color:#E9F284">&#39;</span><span style="color:#F8F8F2">)).</span><span style="color:#50FA7B">sort</span><span style="color:#F8F8F2">(</span></span>
+<span class="line"><span style="color:#F8F8F2">  (</span><span style="color:#FFB86C">a</span><span style="color:#F8F8F2">, </span><span style="color:#FFB86C">b</span><span style="color:#F8F8F2">) </span><span style="color:#FF79C6">=&gt;</span><span style="color:#F8F8F2"> </span><span style="color:#FF79C6;font-style:italic">new</span><span style="color:#F8F8F2"> </span><span style="color:#50FA7B">Date</span><span style="color:#F8F8F2">(b.frontmatter.pubDate).</span><span style="color:#50FA7B">valueOf</span><span style="color:#F8F8F2">() </span><span style="color:#FF79C6">-</span><span style="color:#F8F8F2"> </span><span style="color:#FF79C6;font-style:italic">new</span><span style="color:#F8F8F2"> </span><span style="color:#50FA7B">Date</span><span style="color:#F8F8F2">(a.frontmatter.pubDate).</span><span style="color:#50FA7B">valueOf</span><span style="color:#F8F8F2">()</span></span>
+<span class="line"><span style="color:#F8F8F2">)</span></span>
+<span class="line"><span style="color:#FF79C6">---</span></span></code></pre>
+<h4 id="组件模板">组件模板</h4>
+<p>Astro 的组件模板支持JSX表达式（没有只能有一个最外层标签元素的要求），可以通过 <code>&lt;slot /&gt;</code> 插槽支持将其他组件嵌入到当前组件模板中</p>
+<pre class="astro-code" style="background-color:#282A36;overflow-x:auto;white-space:pre-wrap;word-wrap:break-word"><code><span class="line"><span style="color:#FF79C6">---</span></span>
+<span class="line"><span style="color:#FF79C6">import</span><span style="color:#F8F8F2"> Tag </span><span style="color:#FF79C6">from</span><span style="color:#F8F8F2"> </span><span style="color:#E9F284">&#39;</span><span style="color:#F1FA8C">@components/Tag.astro</span><span style="color:#E9F284">&#39;</span></span>
+<span class="line"><span style="color:#FF79C6">type</span><span style="color:#F8F8F2"> </span><span style="color:#8BE9FD">Props</span><span style="color:#F8F8F2"> </span><span style="color:#FF79C6">=</span><span style="color:#F8F8F2"> {</span></span>
+<span class="line"><span style="color:#F8F8F2">  emoji</span><span style="color:#FF79C6">?:</span><span style="color:#F8F8F2"> </span><span style="color:#8BE9FD">string</span></span>
+<span class="line"><span style="color:#F8F8F2">  title</span><span style="color:#FF79C6">?:</span><span style="color:#F8F8F2"> </span><span style="color:#8BE9FD">string</span></span>
+<span class="line"><span style="color:#F8F8F2">  tags</span><span style="color:#FF79C6">?:</span><span style="color:#F8F8F2"> </span><span style="color:#8BE9FD">string</span><span style="color:#F8F8F2">[]</span></span>
+<span class="line"><span style="color:#F8F8F2">  pubDate</span><span style="color:#FF79C6">?:</span><span style="color:#F8F8F2"> </span><span style="color:#8BE9FD">string</span></span>
+<span class="line"><span style="color:#F8F8F2">  url</span><span style="color:#FF79C6">?:</span><span style="color:#F8F8F2"> </span><span style="color:#8BE9FD">string</span></span>
+<span class="line"><span style="color:#F8F8F2">}</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#FF79C6">const</span><span style="color:#F8F8F2"> { url, emoji, title, pubDate, tags } </span><span style="color:#FF79C6">=</span><span style="color:#F8F8F2"> Astro.props </span><span style="color:#FF79C6">as</span><span style="color:#F8F8F2"> </span><span style="color:#8BE9FD">Props</span></span>
+<span class="line"><span style="color:#FF79C6">---</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F8F8F2">&lt;</span><span style="color:#FF79C6">li</span><span style="color:#F8F8F2">&gt;</span></span>
+<span class="line"><span style="color:#F8F8F2">  &lt;</span><span style="color:#FF79C6">a</span><span style="color:#F8F8F2"> </span><span style="color:#50FA7B">href</span><span style="color:#FF79C6">={</span><span style="color:#F8F8F2">url</span><span style="color:#FF79C6">}</span><span style="color:#F8F8F2">&gt;</span></span>
+<span class="line"><span style="color:#F8F8F2">    &lt;</span><span style="color:#FF79C6">span</span><span style="color:#F8F8F2"> </span><span style="color:#50FA7B">class</span><span style="color:#FF79C6">=</span><span style="color:#E9F284">&#39;</span><span style="color:#F1FA8C">title</span><span style="color:#E9F284">&#39;</span><span style="color:#F8F8F2">&gt;</span></span>
+<span class="line"><span style="color:#F8F8F2">      </span><span style="color:#FF79C6">{</span><span style="color:#F8F8F2">emoji</span><span style="color:#FF79C6">}</span></span>
+<span class="line"><span style="color:#F8F8F2">      </span><span style="color:#FF79C6">{</span><span style="color:#F8F8F2">title</span><span style="color:#FF79C6">}</span></span>
+<span class="line"><span style="color:#F8F8F2">    &lt;/</span><span style="color:#FF79C6">span</span><span style="color:#F8F8F2">&gt;</span></span>
+<span class="line"><span style="color:#F8F8F2">    &lt;</span><span style="color:#FF79C6">div</span><span style="color:#F8F8F2">&gt;</span></span>
+<span class="line"><span style="color:#F8F8F2">      </span><span style="color:#FF79C6">{</span><span style="color:#F8F8F2">tags?.</span><span style="color:#50FA7B">map</span><span style="color:#F8F8F2">((</span><span style="color:#FFB86C">tag</span><span style="color:#FF79C6">:</span><span style="color:#F8F8F2"> </span><span style="color:#8BE9FD">string</span><span style="color:#F8F8F2">) </span><span style="color:#FF79C6">=&gt;</span><span style="color:#F8F8F2"> &lt;</span><span style="color:#8BE9FD">Tag</span><span style="color:#F8F8F2"> </span><span style="color:#50FA7B">text</span><span style="color:#FF79C6">={</span><span style="color:#F8F8F2">tag</span><span style="color:#FF79C6">}</span><span style="color:#F8F8F2"> /&gt;)</span><span style="color:#FF79C6">}</span></span>
+<span class="line"><span style="color:#F8F8F2">      &lt;</span><span style="color:#FF79C6">time</span><span style="color:#F8F8F2"> </span><span style="color:#50FA7B">datetime</span><span style="color:#FF79C6">={</span><span style="color:#F8F8F2">pubDate</span><span style="color:#FF79C6">}</span><span style="color:#F8F8F2">&gt;</span></span>
+<span class="line"><span style="color:#F8F8F2">        </span><span style="color:#FF79C6">{</span></span>
+<span class="line"><span style="color:#F8F8F2">          </span><span style="color:#FF79C6;font-style:italic">new</span><span style="color:#F8F8F2"> </span><span style="color:#50FA7B">Date</span><span style="color:#F8F8F2">(pubDate </span><span style="color:#FF79C6">??</span><span style="color:#F8F8F2"> </span><span style="color:#FF79C6;font-style:italic">new</span><span style="color:#F8F8F2"> </span><span style="color:#50FA7B">Date</span><span style="color:#F8F8F2">()).</span><span style="color:#50FA7B">toLocaleDateString</span><span style="color:#F8F8F2">(</span><span style="color:#E9F284">&#39;</span><span style="color:#F1FA8C">zh-CN</span><span style="color:#E9F284">&#39;</span><span style="color:#F8F8F2">, {</span></span>
+<span class="line"><span style="color:#F8F8F2">            year</span><span style="color:#FF79C6">:</span><span style="color:#F8F8F2"> </span><span style="color:#E9F284">&#39;</span><span style="color:#F1FA8C">numeric</span><span style="color:#E9F284">&#39;</span><span style="color:#F8F8F2">,</span></span>
+<span class="line"><span style="color:#F8F8F2">            month</span><span style="color:#FF79C6">:</span><span style="color:#F8F8F2"> </span><span style="color:#E9F284">&#39;</span><span style="color:#F1FA8C">short</span><span style="color:#E9F284">&#39;</span><span style="color:#F8F8F2">,</span></span>
+<span class="line"><span style="color:#F8F8F2">            day</span><span style="color:#FF79C6">:</span><span style="color:#F8F8F2"> </span><span style="color:#E9F284">&#39;</span><span style="color:#F1FA8C">numeric</span><span style="color:#E9F284">&#39;</span><span style="color:#F8F8F2">,</span></span>
+<span class="line"><span style="color:#F8F8F2">          })</span></span>
+<span class="line"><span style="color:#F8F8F2">        </span><span style="color:#FF79C6">}</span></span>
+<span class="line"><span style="color:#F8F8F2">      &lt;/</span><span style="color:#FF79C6">time</span><span style="color:#F8F8F2">&gt;</span></span>
+<span class="line"><span style="color:#F8F8F2">    &lt;/</span><span style="color:#FF79C6">div</span><span style="color:#F8F8F2">&gt;</span></span>
+<span class="line"><span style="color:#F8F8F2">  &lt;/</span><span style="color:#FF79C6">a</span><span style="color:#F8F8F2">&gt;</span></span>
+<span class="line"><span style="color:#F8F8F2">&lt;/</span><span style="color:#FF79C6">li</span><span style="color:#F8F8F2">&gt;</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F8F8F2">&lt;</span><span style="color:#FF79C6">style</span><span style="color:#F8F8F2">&gt;</span></span>
+<span class="line"><span style="color:#F8F8F2">  li </span><span style="color:#FF79C6">{</span></span>
+<span class="line"><span style="color:#F8F8F2">    color: </span><span style="color:#50FA7B">var</span><span style="color:#F8F8F2">(</span><span style="color:#FF79C6">--</span><span style="color:#F8F8F2">theme</span><span style="color:#FF79C6">-</span><span style="color:#F8F8F2">ui</span><span style="color:#FF79C6">-</span><span style="color:#F8F8F2">colors</span><span style="color:#FF79C6">-</span><span style="color:#F8F8F2">primary, white);</span></span>
+<span class="line"><span style="color:#F8F8F2">    box</span><span style="color:#FF79C6">-</span><span style="color:#F8F8F2">sizing: border</span><span style="color:#FF79C6">-</span><span style="color:#F8F8F2">box;</span></span>
+<span class="line"><span style="color:#F8F8F2">    min</span><span style="color:#FF79C6">-</span><span style="color:#F8F8F2">width: 0px;</span></span>
+<span class="line"><span style="color:#F8F8F2">    padding: 0.5rem;</span></span>
+<span class="line"><span style="color:#F8F8F2">    border</span><span style="color:#FF79C6">-</span><span style="color:#F8F8F2">radius: 0.25rem;</span></span>
+<span class="line"><span style="color:#F8F8F2">    display: flex;</span></span>
+<span class="line"><span style="color:#F8F8F2">    transition: all 200ms ease</span><span style="color:#FF79C6">-in-</span><span style="color:#F8F8F2">out 0s;</span></span>
+<span class="line"><span style="color:#F8F8F2">    </span><span style="color:#FF79C6">-</span><span style="color:#F8F8F2">webkit</span><span style="color:#FF79C6">-</span><span style="color:#F8F8F2">box</span><span style="color:#FF79C6">-</span><span style="color:#F8F8F2">pack: justify;</span></span>
+<span class="line"><span style="color:#F8F8F2">    justify</span><span style="color:#FF79C6">-</span><span style="color:#F8F8F2">content: space</span><span style="color:#FF79C6">-</span><span style="color:#F8F8F2">between;</span></span>
+<span class="line"><span style="color:#F8F8F2">    overflow: hidden;</span></span>
+<span class="line"><span style="color:#F8F8F2">  </span><span style="color:#FF79C6">}</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F8F8F2">  li:hover </span><span style="color:#FF79C6">{</span></span>
+<span class="line"><span style="color:#F8F8F2">    background</span><span style="color:#FF79C6">-</span><span style="color:#F8F8F2">color: </span><span style="color:#50FA7B">var</span><span style="color:#F8F8F2">(</span><span style="color:#FF79C6">--</span><span style="color:#F8F8F2">theme</span><span style="color:#FF79C6">-</span><span style="color:#F8F8F2">ui</span><span style="color:#FF79C6">-</span><span style="color:#F8F8F2">colors</span><span style="color:#FF79C6">-</span><span style="color:#F8F8F2">codeBackground, </span><span style="color:#50FA7B">hsl</span><span style="color:#F8F8F2">(</span><span style="color:#BD93F9">285</span><span style="color:#F8F8F2">, </span><span style="color:#BD93F9">5</span><span style="color:#FF79C6">%</span><span style="color:#F8F8F2">, </span><span style="color:#BD93F9">17</span><span style="color:#FF79C6">%</span><span style="color:#F8F8F2">));</span></span>
+<span class="line"><span style="color:#F8F8F2">  </span><span style="color:#FF79C6">}</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F8F8F2">  li &gt; a </span><span style="color:#FF79C6">{</span></span>
+<span class="line"><span style="color:#F8F8F2">    display: flex;</span></span>
+<span class="line"><span style="color:#F8F8F2">    justify</span><span style="color:#FF79C6">-</span><span style="color:#F8F8F2">content: space</span><span style="color:#FF79C6">-</span><span style="color:#F8F8F2">between;</span></span>
+<span class="line"><span style="color:#F8F8F2">    align</span><span style="color:#FF79C6">-</span><span style="color:#F8F8F2">items: center;</span></span>
+<span class="line"><span style="color:#F8F8F2">    text</span><span style="color:#FF79C6">-</span><span style="color:#F8F8F2">decoration: none;</span></span>
+<span class="line"><span style="color:#F8F8F2">    color: white;</span></span>
+<span class="line"><span style="color:#F8F8F2">  </span><span style="color:#FF79C6">}</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F8F8F2">  .title </span><span style="color:#FF79C6">{</span></span>
+<span class="line"><span style="color:#F8F8F2">    box</span><span style="color:#FF79C6">-</span><span style="color:#F8F8F2">sizing: border</span><span style="color:#FF79C6">-</span><span style="color:#F8F8F2">box;</span></span>
+<span class="line"><span style="color:#F8F8F2">    line</span><span style="color:#FF79C6">-</span><span style="color:#F8F8F2">height: </span><span style="color:#BD93F9">1.25</span><span style="color:#F8F8F2">;</span></span>
+<span class="line"><span style="color:#F8F8F2">    position: relative;</span></span>
+<span class="line"><span style="color:#F8F8F2">    font</span><span style="color:#FF79C6">-</span><span style="color:#F8F8F2">size: 1rem;</span></span>
+<span class="line"><span style="color:#F8F8F2">    margin: 0px 1rem 0px 0px;</span></span>
+<span class="line"><span style="color:#F8F8F2">    font</span><span style="color:#FF79C6">-</span><span style="color:#F8F8F2">weight: </span><span style="color:#BD93F9">700</span><span style="color:#F8F8F2">;</span></span>
+<span class="line"><span style="color:#F8F8F2">    color: </span><span style="color:#50FA7B">var</span><span style="color:#F8F8F2">(</span><span style="color:#FF79C6">--</span><span style="color:#F8F8F2">theme</span><span style="color:#FF79C6">-</span><span style="color:#F8F8F2">ui</span><span style="color:#FF79C6">-</span><span style="color:#F8F8F2">colors</span><span style="color:#FF79C6">-</span><span style="color:#F8F8F2">textStrong, </span><span style="color:#50FA7B">hsl</span><span style="color:#F8F8F2">(</span><span style="color:#BD93F9">210</span><span style="color:#F8F8F2">, </span><span style="color:#BD93F9">38</span><span style="color:#FF79C6">%</span><span style="color:#F8F8F2">, </span><span style="color:#BD93F9">98</span><span style="color:#FF79C6">%</span><span style="color:#F8F8F2">));</span></span>
+<span class="line"><span style="color:#F8F8F2">    padding</span><span style="color:#FF79C6">-</span><span style="color:#F8F8F2">top: 0.25rem;</span></span>
+<span class="line"><span style="color:#F8F8F2">    padding</span><span style="color:#FF79C6">-</span><span style="color:#F8F8F2">bottom: 0.25rem;</span></span>
+<span class="line"><span style="color:#F8F8F2">    min</span><span style="color:#FF79C6">-</span><span style="color:#F8F8F2">width: 260px;</span></span>
+<span class="line"><span style="color:#F8F8F2">  </span><span style="color:#FF79C6">}</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F8F8F2">  li time </span><span style="color:#FF79C6">{</span></span>
+<span class="line"><span style="color:#F8F8F2">    box</span><span style="color:#FF79C6">-</span><span style="color:#F8F8F2">sizing: border</span><span style="color:#FF79C6">-</span><span style="color:#F8F8F2">box;</span></span>
+<span class="line"><span style="color:#F8F8F2">    margin: 0px 0px 0px 0.5rem;</span></span>
+<span class="line"><span style="color:#F8F8F2">    min</span><span style="color:#FF79C6">-</span><span style="color:#F8F8F2">width: 0px;</span></span>
+<span class="line"><span style="color:#F8F8F2">    font</span><span style="color:#FF79C6">-</span><span style="color:#F8F8F2">size: 0.7rem;</span></span>
+<span class="line"><span style="color:#F8F8F2">    color: </span><span style="color:#50FA7B">var</span><span style="color:#F8F8F2">(</span><span style="color:#FF79C6">--</span><span style="color:#F8F8F2">theme</span><span style="color:#FF79C6">-</span><span style="color:#F8F8F2">ui</span><span style="color:#FF79C6">-</span><span style="color:#F8F8F2">colors</span><span style="color:#FF79C6">-</span><span style="color:#F8F8F2">text, </span><span style="color:#50FA7B">hsl</span><span style="color:#F8F8F2">(</span><span style="color:#BD93F9">210</span><span style="color:#F8F8F2">, </span><span style="color:#BD93F9">17</span><span style="color:#FF79C6">%</span><span style="color:#F8F8F2">, </span><span style="color:#BD93F9">85</span><span style="color:#FF79C6">%</span><span style="color:#F8F8F2">));</span></span>
+<span class="line"><span style="color:#F8F8F2">    white</span><span style="color:#FF79C6">-</span><span style="color:#F8F8F2">space: nowrap;</span></span>
+<span class="line"><span style="color:#F8F8F2">    overflow: hidden;</span></span>
+<span class="line"><span style="color:#F8F8F2">    text</span><span style="color:#FF79C6">-</span><span style="color:#F8F8F2">overflow: ellipsis;</span></span>
+<span class="line"><span style="color:#F8F8F2">  </span><span style="color:#FF79C6">}</span></span>
+<span class="line"><span style="color:#F8F8F2">&lt;/</span><span style="color:#FF79C6">style</span><span style="color:#F8F8F2">&gt;</span></span>
+<span class="line"></span></code></pre>
+<h3 id="第一篇文章">第一篇文章</h3>
+<p>基本框架搭好之后就可以进行文章写作了，在src的posts目录下新建一个 Markdown 文件，在 Markdown 中写作，然后运行 <code>npm run dev</code>，在浏览器打开链接 <a href="http://localhost:3000/posts/%E6%96%87%E7%AB%A0%E6%A0%87%E9%A2%98">http://localhost:3000/posts/文章标题</a> 即可对文章进行预览。</p>
+<h3 id="布局设计">布局设计</h3>
+<p>按照通常的博客，都会有一些通用的部分，我们需要在 src 目录下新建这些布局文件，最简单的布局基本分为3个部分：</p>
+<ul>
+<li>顶部或侧边的导航栏</li>
+<li>主体区域</li>
+<li>页脚（通常用于配置备案信息等）</li>
+</ul>
+<blockquote>
+<p>因为 Astro 默认是按照文件目录设置路由，所以我们在 markdown/mdx 文件中需要在文件顶部手动声明使用的布局，例如 <code>layout: &#39;@layouts/BlogPost.astro&#39;</code></p>
+</blockquote>
+<h3 id="文章列表页设计">文章列表页设计</h3>
+<p>Astro 提供了 <code>glob</code> API用于获取本地相关数据，可以使用下面的例子获取所有的 markdown/mdx 文件，获取所有文章后可以通过 <code>frontmatter</code> 字段来获取文章的相关信息。</p>
+<pre class="astro-code" style="background-color:#282A36;overflow-x:auto;white-space:pre-wrap;word-wrap:break-word"><code><span class="line"><span style="color:#FF79C6">const</span><span style="color:#F8F8F2"> posts </span><span style="color:#FF79C6">=</span><span style="color:#F8F8F2"> (</span><span style="color:#FF79C6">await</span><span style="color:#F8F8F2"> Astro.</span><span style="color:#50FA7B">glob</span><span style="color:#F8F8F2">(</span><span style="color:#E9F284">&#39;</span><span style="color:#F1FA8C">../pages/posts/**/*.{md,mdx}</span><span style="color:#E9F284">&#39;</span><span style="color:#F8F8F2">)).</span><span style="color:#50FA7B">sort</span><span style="color:#F8F8F2">(</span></span>
+<span class="line"><span style="color:#F8F8F2">  (</span><span style="color:#FFB86C">a</span><span style="color:#F8F8F2">, </span><span style="color:#FFB86C">b</span><span style="color:#F8F8F2">) </span><span style="color:#FF79C6">=&gt;</span><span style="color:#F8F8F2"> </span><span style="color:#FF79C6;font-style:italic">new</span><span style="color:#F8F8F2"> </span><span style="color:#50FA7B">Date</span><span style="color:#F8F8F2">(b.frontmatter.pubDate).</span><span style="color:#50FA7B">valueOf</span><span style="color:#F8F8F2">() </span><span style="color:#FF79C6">-</span><span style="color:#F8F8F2"> </span><span style="color:#FF79C6;font-style:italic">new</span><span style="color:#F8F8F2"> </span><span style="color:#50FA7B">Date</span><span style="color:#F8F8F2">(a.frontmatter.pubDate).</span><span style="color:#50FA7B">valueOf</span><span style="color:#F8F8F2">()</span></span>
+<span class="line"><span style="color:#F8F8F2">)</span></span></code></pre>
+<blockquote>
+<p>在 markdown/mdx 文件顶部通常会声明文章的一些简要信息，字段可以自定义，通过 <code>frontmatter</code> 字段可以拿到这些声明的字段：</p>
+<pre class="astro-code" style="background-color:#282A36;overflow-x:auto;white-space:pre-wrap;word-wrap:break-word"><code><span class="line"><span style="color:#FF79C6">---</span></span>
+<span class="line"><span style="color:#F8F8F2">layout: </span><span style="color:#E9F284">&#39;</span><span style="color:#F1FA8C">@layouts/BlogPost.astro</span><span style="color:#E9F284">&#39;</span></span>
+<span class="line"><span style="color:#F8F8F2">title: </span><span style="color:#E9F284">&#39;</span><span style="color:#F1FA8C">Windows 下使用7-Zip批量压缩文件夹</span><span style="color:#E9F284">&#39;</span></span>
+<span class="line"><span style="color:#F8F8F2">description: </span><span style="color:#E9F284">&#39;</span><span style="color:#F1FA8C">Windows 下使用7-Zip批量压缩文件夹</span><span style="color:#E9F284">&#39;</span></span>
+<span class="line"><span style="color:#F8F8F2">pubDate: </span><span style="color:#E9F284">&#39;</span><span style="color:#F1FA8C">2022-09-03</span><span style="color:#E9F284">&#39;</span></span>
+<span class="line"><span style="color:#F8F8F2">heroImage: </span><span style="color:#E9F284">&#39;</span><span style="color:#F1FA8C">/7-zip-batch-compression.png</span><span style="color:#E9F284">&#39;</span></span>
+<span class="line"><span style="color:#F8F8F2">tags:</span></span>
+<span class="line"><span style="color:#F8F8F2">  </span><span style="color:#FF79C6">-</span><span style="color:#F8F8F2"> Tools</span></span>
+<span class="line"><span style="color:#F8F8F2">  </span><span style="color:#FF79C6">-</span><span style="color:#F8F8F2"> </span><span style="color:#BD93F9">7</span><span style="color:#FF79C6">-</span><span style="color:#F8F8F2">Zip</span></span>
+<span class="line"><span style="color:#F8F8F2">emoji: 😁</span></span>
+<span class="line"><span style="color:#FF79C6">---</span></span></code></pre>
+</blockquote>
+<h3 id="文章布局页设计">文章布局页设计</h3>
+<p>路由在访问到文件的时候，如果 markdown/mdx 文件有指定布局，则会将文章的相关信息通过参数的方式传入布局组件，文章主体通过 <slot></slot> 注入到布局组件中，在设计文章布局页是，首先要知道参数是如何传入的（可以参考下面的类型定义）</p>
+<pre class="astro-code" style="background-color:#282A36;overflow-x:auto;white-space:pre-wrap;word-wrap:break-word"><code><span class="line"><span style="color:#FF79C6">export</span><span style="color:#F8F8F2"> </span><span style="color:#FF79C6">interface</span><span style="color:#F8F8F2"> </span><span style="color:#8BE9FD">Heading</span><span style="color:#F8F8F2"> {</span></span>
+<span class="line"><span style="color:#F8F8F2">  depth</span><span style="color:#FF79C6">:</span><span style="color:#F8F8F2"> </span><span style="color:#8BE9FD">number</span></span>
+<span class="line"><span style="color:#F8F8F2">  slug</span><span style="color:#FF79C6">:</span><span style="color:#F8F8F2"> </span><span style="color:#8BE9FD">string</span></span>
+<span class="line"><span style="color:#F8F8F2">  text</span><span style="color:#FF79C6">:</span><span style="color:#F8F8F2"> </span><span style="color:#8BE9FD">string</span></span>
+<span class="line"><span style="color:#F8F8F2">}</span></span>
+<span class="line"><span style="color:#FF79C6">export</span><span style="color:#F8F8F2"> </span><span style="color:#FF79C6">interface</span><span style="color:#F8F8F2"> </span><span style="color:#8BE9FD">Props</span><span style="color:#F8F8F2"> {</span></span>
+<span class="line"><span style="color:#F8F8F2">  content</span><span style="color:#FF79C6">:</span><span style="color:#F8F8F2"> {</span></span>
+<span class="line"><span style="color:#F8F8F2">    title</span><span style="color:#FF79C6">:</span><span style="color:#F8F8F2"> </span><span style="color:#8BE9FD">string</span></span>
+<span class="line"><span style="color:#F8F8F2">    description</span><span style="color:#FF79C6">:</span><span style="color:#F8F8F2"> </span><span style="color:#8BE9FD">string</span></span>
+<span class="line"><span style="color:#F8F8F2">    pubDate</span><span style="color:#FF79C6">?:</span><span style="color:#F8F8F2"> </span><span style="color:#8BE9FD">string</span></span>
+<span class="line"><span style="color:#F8F8F2">    updatedDate</span><span style="color:#FF79C6">?:</span><span style="color:#F8F8F2"> </span><span style="color:#8BE9FD">string</span></span>
+<span class="line"><span style="color:#F8F8F2">    heroImage</span><span style="color:#FF79C6">?:</span><span style="color:#F8F8F2"> </span><span style="color:#8BE9FD">string</span></span>
+<span class="line"><span style="color:#F8F8F2">    tags</span><span style="color:#FF79C6">?:</span><span style="color:#F8F8F2"> </span><span style="color:#8BE9FD">string</span><span style="color:#F8F8F2">[]</span></span>
+<span class="line"><span style="color:#F8F8F2">  }</span></span>
+<span class="line"><span style="color:#F8F8F2">  headings</span><span style="color:#FF79C6">:</span><span style="color:#F8F8F2"> </span><span style="color:#8BE9FD">Heading</span><span style="color:#F8F8F2">[]</span></span>
+<span class="line"><span style="color:#F8F8F2">}</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#FF79C6">const</span><span style="color:#F8F8F2"> {</span></span>
+<span class="line"><span style="color:#F8F8F2">  content</span><span style="color:#FF79C6">:</span><span style="color:#F8F8F2"> { title, description, pubDate, updatedDate, heroImage, tags },</span></span>
+<span class="line"><span style="color:#F8F8F2">  headings,</span></span>
+<span class="line"><span style="color:#F8F8F2">} </span><span style="color:#FF79C6">=</span><span style="color:#F8F8F2"> Astro.props </span><span style="color:#FF79C6">as</span><span style="color:#F8F8F2"> </span><span style="color:#8BE9FD">Props</span></span></code></pre>
+<blockquote>
+<p>这里定义的 <code>Heading</code> 是文章的目录层级</p>
+</blockquote>
+<h3 id="标签页设计">标签页设计</h3>
+<p>标签页设计分为两个部分：标签列表页及标签文章页。</p>
+<h4 id="标签列表页">标签列表页</h4>
+<p>标签列表页可以通过查询所有文章然后获取到所有的标签，对获取到的标签进行唯一值过滤，代码如下：</p>
+<pre class="astro-code" style="background-color:#282A36;overflow-x:auto;white-space:pre-wrap;word-wrap:break-word"><code><span class="line"><span style="color:#FF79C6">const</span><span style="color:#F8F8F2"> posts </span><span style="color:#FF79C6">=</span><span style="color:#F8F8F2"> (</span><span style="color:#FF79C6">await</span><span style="color:#F8F8F2"> Astro.</span><span style="color:#50FA7B">glob</span><span style="color:#F8F8F2">(</span><span style="color:#E9F284">&#39;</span><span style="color:#F1FA8C">../pages/posts/*.{md,mdx}</span><span style="color:#E9F284">&#39;</span><span style="color:#F8F8F2">))</span></span>
+<span class="line"><span style="color:#FF79C6">let</span><span style="color:#F8F8F2"> tags</span><span style="color:#FF79C6">:</span><span style="color:#F8F8F2"> </span><span style="color:#8BE9FD">string</span><span style="color:#F8F8F2">[] </span><span style="color:#FF79C6">=</span><span style="color:#F8F8F2"> []</span></span>
+<span class="line"><span style="color:#F8F8F2">posts.</span><span style="color:#50FA7B">forEach</span><span style="color:#F8F8F2">((</span><span style="color:#FFB86C">post</span><span style="color:#F8F8F2">) </span><span style="color:#FF79C6">=&gt;</span><span style="color:#F8F8F2"> {</span></span>
+<span class="line"><span style="color:#F8F8F2">  tags </span><span style="color:#FF79C6">=</span><span style="color:#F8F8F2"> [</span><span style="color:#FF79C6">...</span><span style="color:#F8F8F2">tags, </span><span style="color:#FF79C6">...</span><span style="color:#F8F8F2">post.frontmatter.tags]</span></span>
+<span class="line"><span style="color:#F8F8F2">})</span></span>
+<span class="line"><span style="color:#F8F8F2">tags </span><span style="color:#FF79C6">=</span><span style="color:#F8F8F2"> [</span><span style="color:#FF79C6">...</span><span style="color:#FF79C6;font-style:italic">new</span><span style="color:#F8F8F2"> </span><span style="color:#50FA7B">Set</span><span style="color:#F8F8F2">(tags)]</span></span></code></pre>
+<h4 id="标签文章页">标签文章页</h4>
+<ul>
+<li><code>pages/tags/[tag].astro</code> → (<code>/tags/hello-world</code>, <code>/tags/post-2</code>, etc.)</li>
+</ul>
+<p>点击某个标签，需要查看到所有包含这个标签的文章列表，哪么进入页面后如何知道当前是哪个标签呢？这是就需要使用到 Astro 的动态路由了，动态生成路由的 Astro 组件可以访问每个路由的 <code>Astro.params</code> 对象。这使得你可以在组件脚本和模板中使用那些生成的链接部分。代码如下：</p>
+<pre class="astro-code" style="background-color:#282A36;overflow-x:auto;white-space:pre-wrap;word-wrap:break-word"><code><span class="line"><span style="color:#FF79C6">type</span><span style="color:#F8F8F2"> </span><span style="color:#8BE9FD">Props</span><span style="color:#F8F8F2"> </span><span style="color:#FF79C6">=</span><span style="color:#F8F8F2"> {</span></span>
+<span class="line"><span style="color:#F8F8F2">  </span><span style="color:#6272A4">/** 标签名称 */</span></span>
+<span class="line"><span style="color:#F8F8F2">  tag</span><span style="color:#FF79C6">:</span><span style="color:#F8F8F2"> </span><span style="color:#8BE9FD">string</span></span>
+<span class="line"><span style="color:#F8F8F2">}</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#FF79C6">export</span><span style="color:#F8F8F2"> </span><span style="color:#FF79C6">async</span><span style="color:#F8F8F2"> </span><span style="color:#FF79C6">function</span><span style="color:#F8F8F2"> </span><span style="color:#50FA7B">getStaticPaths</span><span style="color:#F8F8F2">() {</span></span>
+<span class="line"><span style="color:#F8F8F2">  </span><span style="color:#FF79C6">let</span><span style="color:#F8F8F2"> tags</span><span style="color:#FF79C6">:</span><span style="color:#F8F8F2"> </span><span style="color:#8BE9FD">string</span><span style="color:#F8F8F2">[] </span><span style="color:#FF79C6">=</span><span style="color:#F8F8F2"> []</span></span>
+<span class="line"><span style="color:#F8F8F2">  </span><span style="color:#FF79C6">const</span><span style="color:#F8F8F2"> posts </span><span style="color:#FF79C6">=</span><span style="color:#F8F8F2"> (</span><span style="color:#FF79C6">await</span><span style="color:#F8F8F2"> Astro.</span><span style="color:#50FA7B">glob</span><span style="color:#F8F8F2">(</span><span style="color:#E9F284">&#39;</span><span style="color:#F1FA8C">../../pages/posts/**/*.{md,mdx}</span><span style="color:#E9F284">&#39;</span><span style="color:#F8F8F2">))</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F8F8F2">  posts.</span><span style="color:#50FA7B">forEach</span><span style="color:#F8F8F2">((</span><span style="color:#FFB86C">post</span><span style="color:#F8F8F2">) </span><span style="color:#FF79C6">=&gt;</span><span style="color:#F8F8F2"> {</span></span>
+<span class="line"><span style="color:#F8F8F2">    tags </span><span style="color:#FF79C6">=</span><span style="color:#F8F8F2"> [</span><span style="color:#FF79C6">...</span><span style="color:#F8F8F2">tags, </span><span style="color:#FF79C6">...</span><span style="color:#F8F8F2">post.frontmatter.tags]</span></span>
+<span class="line"><span style="color:#F8F8F2">  })</span></span>
+<span class="line"><span style="color:#F8F8F2">  tags </span><span style="color:#FF79C6">=</span><span style="color:#F8F8F2"> [</span><span style="color:#FF79C6">...</span><span style="color:#FF79C6;font-style:italic">new</span><span style="color:#F8F8F2"> </span><span style="color:#50FA7B">Set</span><span style="color:#F8F8F2">(tags)]</span></span>
+<span class="line"><span style="color:#F8F8F2">  </span><span style="color:#FF79C6">return</span><span style="color:#F8F8F2"> tags.</span><span style="color:#50FA7B">map</span><span style="color:#F8F8F2">((</span><span style="color:#FFB86C">tag</span><span style="color:#F8F8F2">) </span><span style="color:#FF79C6">=&gt;</span><span style="color:#F8F8F2"> ({ params</span><span style="color:#FF79C6">:</span><span style="color:#F8F8F2"> { tag } }))</span></span>
+<span class="line"><span style="color:#F8F8F2">}</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#FF79C6">const</span><span style="color:#F8F8F2"> { tag } </span><span style="color:#FF79C6">=</span><span style="color:#F8F8F2"> Astro.params </span><span style="color:#FF79C6">as</span><span style="color:#F8F8F2"> </span><span style="color:#8BE9FD">Props</span></span></code></pre>
+<blockquote>
+<p><code>getStaticPaths</code> 方法是必须的，提供要使用的值来生成带有 [named] 参数的路由。</p>
+</blockquote>
+<h2 id="美化">美化</h2>
+<h3 id="代码块美化">代码块美化</h3>
+<p>Astro 默认提供了 shiki 相关配置，只需要在配置文件中配置即可享有 shiki 支持的代码主题：</p>
+<pre class="astro-code" style="background-color:#282A36;overflow-x:auto;white-space:pre-wrap;word-wrap:break-word"><code><span class="line"><span style="color:#FF79C6">export</span><span style="color:#F8F8F2"> </span><span style="color:#FF79C6">default</span><span style="color:#F8F8F2"> {</span></span>
+<span class="line"><span style="color:#F8F8F2">  markdown</span><span style="color:#FF79C6">:</span><span style="color:#F8F8F2"> {</span></span>
+<span class="line"><span style="color:#F8F8F2">    shikiConfig</span><span style="color:#FF79C6">:</span><span style="color:#F8F8F2"> {</span></span>
+<span class="line"><span style="color:#F8F8F2">      </span><span style="color:#6272A4">// Choose from Shiki&#39;s built-in themes (or add your own)</span></span>
+<span class="line"><span style="color:#F8F8F2">      </span><span style="color:#6272A4">// https://github.com/shikijs/shiki/blob/main/docs/themes.md</span></span>
+<span class="line"><span style="color:#F8F8F2">      theme</span><span style="color:#FF79C6">:</span><span style="color:#F8F8F2"> </span><span style="color:#E9F284">&#39;</span><span style="color:#F1FA8C">dracula</span><span style="color:#E9F284">&#39;</span><span style="color:#F8F8F2">,</span></span>
+<span class="line"><span style="color:#F8F8F2">      </span><span style="color:#6272A4">// Add custom languages</span></span>
+<span class="line"><span style="color:#F8F8F2">      </span><span style="color:#6272A4">// Note: Shiki has countless langs built-in, including .astro!</span></span>
+<span class="line"><span style="color:#F8F8F2">      </span><span style="color:#6272A4">// https://github.com/shikijs/shiki/blob/main/docs/languages.md</span></span>
+<span class="line"><span style="color:#F8F8F2">      langs</span><span style="color:#FF79C6">:</span><span style="color:#F8F8F2"> [],</span></span>
+<span class="line"><span style="color:#F8F8F2">      </span><span style="color:#6272A4">// Enable word wrap to prevent horizontal scrolling</span></span>
+<span class="line"><span style="color:#F8F8F2">      wrap</span><span style="color:#FF79C6">:</span><span style="color:#F8F8F2"> </span><span style="color:#BD93F9">true</span><span style="color:#F8F8F2">,</span></span>
+<span class="line"><span style="color:#F8F8F2">    },</span></span>
+<span class="line"><span style="color:#F8F8F2">  },</span></span>
+<span class="line"><span style="color:#F8F8F2">};</span></span></code></pre>
+          </article>
+        </div>
+        <div class="catalogue astro-LDYHAKPG">
+          <h2 class="heading astro-LDYHAKPG">目录</h2>
+          <ul class="astro-LDYHAKPG">
+            <li class="header-link depth-2 astro-LDYHAKPG">
+                    <a href="#缘起" class="astro-LDYHAKPG">缘起</a>
+                  </li><li class="header-link depth-2 astro-LDYHAKPG">
+                    <a href="#博客搭建" class="astro-LDYHAKPG">博客搭建</a>
+                  </li><li class="header-link depth-3 astro-LDYHAKPG">
+                    <a href="#前置准备" class="astro-LDYHAKPG">前置准备</a>
+                  </li><li class="header-link depth-3 astro-LDYHAKPG">
+                    <a href="#项目创建" class="astro-LDYHAKPG">项目创建</a>
+                  </li><li class="header-link depth-4 astro-LDYHAKPG">
+                    <a href="#目录结构" class="astro-LDYHAKPG">目录结构</a>
+                  </li><li class="header-link depth-3 astro-LDYHAKPG">
+                    <a href="#astro-文件结构" class="astro-LDYHAKPG">astro 文件结构</a>
+                  </li><li class="header-link depth-4 astro-LDYHAKPG">
+                    <a href="#组件-script" class="astro-LDYHAKPG">组件 Script</a>
+                  </li><li class="header-link depth-4 astro-LDYHAKPG">
+                    <a href="#组件模板" class="astro-LDYHAKPG">组件模板</a>
+                  </li><li class="header-link depth-3 astro-LDYHAKPG">
+                    <a href="#第一篇文章" class="astro-LDYHAKPG">第一篇文章</a>
+                  </li><li class="header-link depth-3 astro-LDYHAKPG">
+                    <a href="#布局设计" class="astro-LDYHAKPG">布局设计</a>
+                  </li><li class="header-link depth-3 astro-LDYHAKPG">
+                    <a href="#文章列表页设计" class="astro-LDYHAKPG">文章列表页设计</a>
+                  </li><li class="header-link depth-3 astro-LDYHAKPG">
+                    <a href="#文章布局页设计" class="astro-LDYHAKPG">文章布局页设计</a>
+                  </li><li class="header-link depth-3 astro-LDYHAKPG">
+                    <a href="#标签页设计" class="astro-LDYHAKPG">标签页设计</a>
+                  </li><li class="header-link depth-4 astro-LDYHAKPG">
+                    <a href="#标签列表页" class="astro-LDYHAKPG">标签列表页</a>
+                  </li><li class="header-link depth-4 astro-LDYHAKPG">
+                    <a href="#标签文章页" class="astro-LDYHAKPG">标签文章页</a>
+                  </li><li class="header-link depth-2 astro-LDYHAKPG">
+                    <a href="#美化" class="astro-LDYHAKPG">美化</a>
+                  </li><li class="header-link depth-3 astro-LDYHAKPG">
+                    <a href="#代码块美化" class="astro-LDYHAKPG">代码块美化</a>
+                  </li>
+          </ul>
+        </div>
+      </div>
+      <footer class="astro-ZZCSQTZN">
+  &copy; 2022 langliu. All rights reserved.
+</footer>
+
+    </main>
+  </body></html>
