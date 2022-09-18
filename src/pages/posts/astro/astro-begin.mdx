@@ -333,3 +333,71 @@ export default {
   },
 };
 ```
+
+### 字体美化
+
+在代码块中我们可能想使用一些字体来让显示效果达到和开发时本地配置相近，比如说使用连字符和等宽字体，这时我们可以通过 [Fontsource](https://fontsource.org/) 来加载网络字体，在字体面板找到想要的字体，比如我这里使用的是 [Jetbrains Mono](https://fontsource.org/fonts/jetbrains-mono) 字体:
+
+#### 安装依赖
+
+```shell
+npm install @fontsource/jetbrains-mono
+```
+
+#### 引入
+
+```js
+import "@fontsource/jetbrains-mono"
+```
+
+> 目前引入字体的时候遇见了一个问题，通过 js 的方式引入后，在打包时会报错，具体什么原因没有搞清楚，但是换为通过 CSS `@import` 引入则没有问题 `@import '@fontsource/jetbrains-mono';`
+
+#### 使用字体
+
+```css
+:global(code) {
+  font-family: 'JetBrains Mono', monospace;
+}
+```
+
+## 部署
+
+Astro 官方文档中提供了多个平台的[部署方式](https://docs.astro.build/zh-cn/guides/deploy/)，比如如果想要部署到Github Page 官方也提供了专门的Action用于部署：
+
+```yaml
+name: Github Pages Astro CI
+
+on:
+  # Trigger the workflow every time you push to the `main` branch
+  # Using a different branch name? Replace `main` with your branch’s name
+  push:
+    branches: [ main ]
+  # Allows you to run this workflow manually from the Actions tab on GitHub.
+  workflow_dispatch:
+  
+# Allow this job to clone the repo and create a page deployment
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout your repository using git
+        uses: actions/checkout@v2          
+      - name: Install, build, and upload your site
+        uses: withastro/action@v0
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v1
+```
