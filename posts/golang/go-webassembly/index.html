@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="zh-CN" class="astro-LDYHAKPG">
+  <head>
+    <!-- Global Metadata --><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<link rel="shortcut icon" href="/favicon.ico">
+<meta name="generator" content="Astro v1.6.8">
+
+<!-- Primary Meta Tags -->
+<title>Go WebAssembly 入门</title>
+<meta name="title" content="Go WebAssembly 入门">
+<meta name="description" content="Go WebAssembly 入门">
+
+<!-- Open Graph / Facebook -->
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://langiu.github.io/posts/golang/go-webassembly/">
+<meta property="og:title" content="Go WebAssembly 入门">
+<meta property="og:description" content="Go WebAssembly 入门">
+<meta property="og:image" content="https://langiu.github.io/placeholder-social.jpg">
+
+<!-- Twitter -->
+<meta property="twitter:card" content="summary_large_image">
+<meta property="twitter:url" content="https://langiu.github.io/posts/golang/go-webassembly/">
+<meta property="twitter:title" content="Go WebAssembly 入门">
+<meta property="twitter:description" content="Go WebAssembly 入门">
+<meta property="twitter:image" content="https://langiu.github.io/placeholder-social.jpg">
+
+    
+  <link rel="stylesheet" href="/assets/index.e6b69f40.css" />
+<link rel="stylesheet" href="/assets/go-webassembly.ffa95078.css" />
+<link rel="stylesheet" href="/assets/go-webassembly.23a83179.css" /></head>
+  <body class="astro-LDYHAKPG">
+    <aside class="sider astro-6I5PPSTL">
+  <div class="header astro-6I5PPSTL">
+    <img class="avatar astro-6I5PPSTL" src="../../eye.jpg" alt="Avatar">
+    <p class="description astro-6I5PPSTL">刘浪的博客</p>
+  </div>
+  <div class="astro-6I5PPSTL">
+    <a class="nav astro-6I5PPSTL" href="/">首页</a>
+    <a class="nav astro-6I5PPSTL" href="/tags">标签</a>
+    <a class="nav astro-6I5PPSTL" href="/about">关于</a>
+  </div>
+</aside>
+
+
+    <main class="astro-LDYHAKPG">
+      <div class="content astro-LDYHAKPG">
+        <div class="article-wrapper astro-LDYHAKPG">
+          <article class="astro-LDYHAKPG">
+            <h1 class="title astro-LDYHAKPG">Go WebAssembly 入门</h1>
+            <time class="astro-LDYHAKPG">
+                  2022年11月3日
+                </time>
+            <div class="astro-LDYHAKPG">
+              <a class="tag astro-XBMMR3NU" href="/tags/Go" style="--backgroundColor: #386;">Go</a>
+
+<a class="tag astro-XBMMR3NU" href="/tags/WebAssembly" style="--backgroundColor: #4376;">WebAssembly</a>
+
+
+            </div>
+            <hr class="astro-LDYHAKPG">
+            
+            
+            <h2 id="vscode-配置">VSCode 配置</h2>
+<p>在 VSCode 中引入 “syscall/js” 时会<a href="https://github.com/microsoft/vscode-go/issues/1874">提示错误</a>，需要通过设置环境变量的方式解决：</p>
+<pre is:raw="" class="astro-code" style="background-color: #282A36; overflow-x: auto; white-space: pre-wrap; word-wrap: break-word;"><code><span class="line"><span style="color: #F8F8F2">{</span></span>
+<span class="line"><span style="color: #F8F8F2">  </span><span style="color: #8BE9FE">"</span><span style="color: #8BE9FD">go.toolsEnvVars</span><span style="color: #8BE9FE">"</span><span style="color: #FF79C6">:</span><span style="color: #F8F8F2"> {</span></span>
+<span class="line"><span style="color: #F8F8F2">    </span><span style="color: #8BE9FE">"</span><span style="color: #8BE9FD">GOOS</span><span style="color: #8BE9FE">"</span><span style="color: #FF79C6">:</span><span style="color: #F8F8F2"> </span><span style="color: #E9F284">"</span><span style="color: #F1FA8C">js</span><span style="color: #E9F284">"</span><span style="color: #F8F8F2">,</span></span>
+<span class="line"><span style="color: #F8F8F2">    </span><span style="color: #8BE9FE">"</span><span style="color: #8BE9FD">GOARCH</span><span style="color: #8BE9FE">"</span><span style="color: #FF79C6">:</span><span style="color: #F8F8F2"> </span><span style="color: #E9F284">"</span><span style="color: #F1FA8C">wasm</span><span style="color: #E9F284">"</span></span>
+<span class="line"><span style="color: #F8F8F2">  }</span></span>
+<span class="line"><span style="color: #F8F8F2">}</span></span></code></pre>
+<h2 id="示例">示例</h2>
+<pre is:raw="" class="astro-code" style="background-color: #282A36; overflow-x: auto; white-space: pre-wrap; word-wrap: break-word;"><code><span class="line"><span style="color: #FF79C6">package</span><span style="color: #F8F8F2"> main</span></span>
+<span class="line"></span>
+<span class="line"><span style="color: #FF79C6">import</span><span style="color: #F8F8F2"> (</span></span>
+<span class="line"><span style="color: #F8F8F2">    </span><span style="color: #E9F284">"</span><span style="color: #F1FA8C">syscall/js</span><span style="color: #E9F284">"</span></span>
+<span class="line"><span style="color: #F8F8F2">)</span></span>
+<span class="line"></span>
+<span class="line"><span style="color: #FF79C6">func</span><span style="color: #F8F8F2"> </span><span style="color: #50FA7B">main</span><span style="color: #F8F8F2">() {</span></span>
+<span class="line"><span style="color: #F8F8F2">    </span><span style="color: #6272A4">// 获取全局的 alert 对象</span></span>
+<span class="line"><span style="color: #F8F8F2">    alert </span><span style="color: #FF79C6">:=</span><span style="color: #F8F8F2"> js.</span><span style="color: #8BE9FD">Global</span><span style="color: #F8F8F2">().</span><span style="color: #8BE9FD">Get</span><span style="color: #F8F8F2">(</span><span style="color: #E9F284">"</span><span style="color: #F1FA8C">alert</span><span style="color: #E9F284">"</span><span style="color: #F8F8F2">)</span></span>
+<span class="line"><span style="color: #F8F8F2">    </span><span style="color: #6272A4">// 等价于在 js 中调用 `window.alert("Hello World")`</span></span>
+<span class="line"><span style="color: #F8F8F2">    alert.</span><span style="color: #8BE9FD">Invoke</span><span style="color: #F8F8F2">(</span><span style="color: #E9F284">"</span><span style="color: #F1FA8C">Hello World</span><span style="color: #E9F284">"</span><span style="color: #F8F8F2">)</span></span>
+<span class="line"><span style="color: #F8F8F2">}</span></span></code></pre>
+<p>把 <code>main.go</code> build 成WebAssembly(简写为wasm)二进制文件：</p>
+<pre is:raw="" class="astro-code" style="background-color: #282A36; overflow-x: auto; white-space: pre-wrap; word-wrap: break-word;"><code><span class="line"><span style="color: #F8F8F2">GOOS=js GOARCH=wasm go build -o main.wasm main.go</span></span></code></pre>
+<p>把 JavaScript 依赖拷贝到当前路径：</p>
+<pre is:raw="" class="astro-code" style="background-color: #282A36; overflow-x: auto; white-space: pre-wrap; word-wrap: break-word;"><code><span class="line"><span style="color: #F8F8F2">cp </span><span style="color: #E9F284">"$(</span><span style="color: #F1FA8C">go env GOROOT</span><span style="color: #E9F284">)</span><span style="color: #F1FA8C">/misc/wasm/wasm_exec.js</span><span style="color: #E9F284">"</span><span style="color: #F8F8F2"> </span><span style="color: #8BE9FD">.</span></span></code></pre>
+<p>创建一个 <code>index.html</code> 文件，并引入 <code>wasm_exec.js</code> 文件，调用刚才build的 <code>main.wasm</code>  ：</p>
+<pre is:raw="" class="astro-code" style="background-color: #282A36; overflow-x: auto; white-space: pre-wrap; word-wrap: break-word;"><code><span class="line"><span style="color: #F8F8F2">&#x3C;!</span><span style="color: #FF79C6">DOCTYPE</span><span style="color: #F8F8F2"> </span><span style="color: #50FA7B">html</span><span style="color: #F8F8F2">></span></span>
+<span class="line"><span style="color: #F8F8F2">&#x3C;</span><span style="color: #FF79C6">html</span><span style="color: #F8F8F2"> </span><span style="color: #50FA7B">lang</span><span style="color: #FF79C6">=</span><span style="color: #E9F284">"</span><span style="color: #F1FA8C">zh-CN</span><span style="color: #E9F284">"</span><span style="color: #F8F8F2">></span></span>
+<span class="line"></span>
+<span class="line"><span style="color: #F8F8F2">&#x3C;</span><span style="color: #FF79C6">head</span><span style="color: #F8F8F2">></span></span>
+<span class="line"><span style="color: #F8F8F2">    &#x3C;</span><span style="color: #FF79C6">meta</span><span style="color: #F8F8F2"> </span><span style="color: #50FA7B">charset</span><span style="color: #FF79C6">=</span><span style="color: #E9F284">"</span><span style="color: #F1FA8C">UTF-8</span><span style="color: #E9F284">"</span><span style="color: #F8F8F2">></span></span>
+<span class="line"><span style="color: #F8F8F2">    &#x3C;</span><span style="color: #FF79C6">meta</span><span style="color: #F8F8F2"> </span><span style="color: #50FA7B">http-equiv</span><span style="color: #FF79C6">=</span><span style="color: #E9F284">"</span><span style="color: #F1FA8C">X-UA-Compatible</span><span style="color: #E9F284">"</span><span style="color: #F8F8F2"> </span><span style="color: #50FA7B">content</span><span style="color: #FF79C6">=</span><span style="color: #E9F284">"</span><span style="color: #F1FA8C">IE=edge</span><span style="color: #E9F284">"</span><span style="color: #F8F8F2">></span></span>
+<span class="line"><span style="color: #F8F8F2">    &#x3C;</span><span style="color: #FF79C6">meta</span><span style="color: #F8F8F2"> </span><span style="color: #50FA7B">name</span><span style="color: #FF79C6">=</span><span style="color: #E9F284">"</span><span style="color: #F1FA8C">viewport</span><span style="color: #E9F284">"</span><span style="color: #F8F8F2"> </span><span style="color: #50FA7B">content</span><span style="color: #FF79C6">=</span><span style="color: #E9F284">"</span><span style="color: #F1FA8C">width=device-width, initial-scale=1.0</span><span style="color: #E9F284">"</span><span style="color: #F8F8F2">></span></span>
+<span class="line"><span style="color: #F8F8F2">    &#x3C;</span><span style="color: #FF79C6">title</span><span style="color: #F8F8F2">>Go WebAssembly&#x3C;/</span><span style="color: #FF79C6">title</span><span style="color: #F8F8F2">></span></span>
+<span class="line"><span style="color: #F8F8F2">&#x3C;/</span><span style="color: #FF79C6">head</span><span style="color: #F8F8F2">></span></span>
+<span class="line"></span>
+<span class="line"><span style="color: #F8F8F2">&#x3C;</span><span style="color: #FF79C6">body</span><span style="color: #F8F8F2">></span></span>
+<span class="line"><span style="color: #F8F8F2">    &#x3C;</span><span style="color: #FF79C6">script</span><span style="color: #F8F8F2"> </span><span style="color: #50FA7B">src</span><span style="color: #FF79C6">=</span><span style="color: #E9F284">"</span><span style="color: #F1FA8C">wasm_exec.js</span><span style="color: #E9F284">"</span><span style="color: #F8F8F2">>&#x3C;/</span><span style="color: #FF79C6">script</span><span style="color: #F8F8F2">></span></span>
+<span class="line"><span style="color: #F8F8F2">    &#x3C;</span><span style="color: #FF79C6">script</span><span style="color: #F8F8F2">></span></span>
+<span class="line"><span style="color: #F8F8F2">        </span><span style="color: #FF79C6">const</span><span style="color: #F8F8F2"> go </span><span style="color: #FF79C6">=</span><span style="color: #F8F8F2"> </span><span style="color: #FF79C6; font-style: italic">new</span><span style="color: #F8F8F2"> </span><span style="color: #50FA7B">Go</span><span style="color: #F8F8F2">();</span></span>
+<span class="line"><span style="color: #F8F8F2">        WebAssembly.</span><span style="color: #50FA7B">instantiateStreaming</span><span style="color: #F8F8F2">(</span><span style="color: #50FA7B">fetch</span><span style="color: #F8F8F2">(</span><span style="color: #E9F284">"</span><span style="color: #F1FA8C">main.wasm</span><span style="color: #E9F284">"</span><span style="color: #F8F8F2">), go.importObject).</span><span style="color: #50FA7B">then</span><span style="color: #F8F8F2">((</span><span style="color: #FFB86C">result</span><span style="color: #F8F8F2">) </span><span style="color: #FF79C6">=></span><span style="color: #F8F8F2"> {</span></span>
+<span class="line"><span style="color: #F8F8F2">            go.</span><span style="color: #50FA7B">run</span><span style="color: #F8F8F2">(result.instance);</span></span>
+<span class="line"><span style="color: #F8F8F2">        });</span></span>
+<span class="line"><span style="color: #F8F8F2">    &#x3C;/</span><span style="color: #FF79C6">script</span><span style="color: #F8F8F2">></span></span>
+<span class="line"><span style="color: #F8F8F2">&#x3C;/</span><span style="color: #FF79C6">body</span><span style="color: #F8F8F2">></span></span>
+<span class="line"></span>
+<span class="line"><span style="color: #F8F8F2">&#x3C;/</span><span style="color: #FF79C6">html</span><span style="color: #F8F8F2">></span></span></code></pre>
+<p>此时浏览器访问这个 html 文件则会出现一个 alert 弹窗，提示文字为 <em>Hello World</em></p>
+<p><img src="/go-webassembly.png" alt="Hello World"></p>
+<h2 id="函数注册">函数注册</h2>
+<p>在 Go 语言中调用 JavaScript 函数是一方面，另一方面，如果仅仅是使用 WebAssembly 替代性能要求高的模块，那么就需要注册函数，以便其他 JavaScript 代码调用。</p>
+<pre is:raw="" class="astro-code" style="background-color: #282A36; overflow-x: auto; white-space: pre-wrap; word-wrap: break-word;"><code><span class="line"><span style="color: #FF79C6">package</span><span style="color: #F8F8F2"> main</span></span>
+<span class="line"><span style="color: #F8F8F2">  </span></span>
+<span class="line"><span style="color: #FF79C6">import</span><span style="color: #F8F8F2"> </span><span style="color: #E9F284">"</span><span style="color: #F1FA8C">syscall/js</span><span style="color: #E9F284">"</span></span>
+<span class="line"></span>
+<span class="line"><span style="color: #FF79C6">func</span><span style="color: #F8F8F2"> </span><span style="color: #50FA7B">fib</span><span style="color: #F8F8F2">(i </span><span style="color: #8BE9FD">int</span><span style="color: #F8F8F2">) </span><span style="color: #8BE9FD">int</span><span style="color: #F8F8F2"> {</span></span>
+<span class="line"><span style="color: #F8F8F2">	</span><span style="color: #FF79C6">if</span><span style="color: #F8F8F2"> i </span><span style="color: #FF79C6">==</span><span style="color: #F8F8F2"> </span><span style="color: #BD93F9">0</span><span style="color: #F8F8F2"> </span><span style="color: #FF79C6">||</span><span style="color: #F8F8F2"> i </span><span style="color: #FF79C6">==</span><span style="color: #F8F8F2"> </span><span style="color: #BD93F9">1</span><span style="color: #F8F8F2"> {</span></span>
+<span class="line"><span style="color: #F8F8F2">		</span><span style="color: #FF79C6">return</span><span style="color: #F8F8F2"> </span><span style="color: #BD93F9">1</span></span>
+<span class="line"><span style="color: #F8F8F2">	}</span></span>
+<span class="line"><span style="color: #F8F8F2">	</span><span style="color: #FF79C6">return</span><span style="color: #F8F8F2"> </span><span style="color: #8BE9FD">fib</span><span style="color: #F8F8F2">(i</span><span style="color: #FF79C6">-</span><span style="color: #BD93F9">1</span><span style="color: #F8F8F2">) </span><span style="color: #FF79C6">+</span><span style="color: #F8F8F2"> </span><span style="color: #8BE9FD">fib</span><span style="color: #F8F8F2">(i</span><span style="color: #FF79C6">-</span><span style="color: #BD93F9">2</span><span style="color: #F8F8F2">)</span></span>
+<span class="line"><span style="color: #F8F8F2">}</span></span>
+<span class="line"><span style="color: #F8F8F2">  </span></span>
+<span class="line"><span style="color: #FF79C6">func</span><span style="color: #F8F8F2"> </span><span style="color: #50FA7B">fibFunc</span><span style="color: #F8F8F2">(this js.Value, args []js.Value) </span><span style="color: #FF79C6">interface</span><span style="color: #F8F8F2">{} {</span></span>
+<span class="line"><span style="color: #F8F8F2">	</span><span style="color: #FF79C6">return</span><span style="color: #F8F8F2"> js.</span><span style="color: #8BE9FD">ValueOf</span><span style="color: #F8F8F2">(</span><span style="color: #8BE9FD">fib</span><span style="color: #F8F8F2">(args[</span><span style="color: #BD93F9">0</span><span style="color: #F8F8F2">].</span><span style="color: #8BE9FD">Int</span><span style="color: #F8F8F2">()))</span></span>
+<span class="line"><span style="color: #F8F8F2">}</span></span>
+<span class="line"><span style="color: #F8F8F2">  </span></span>
+<span class="line"><span style="color: #FF79C6">func</span><span style="color: #F8F8F2"> </span><span style="color: #50FA7B">main</span><span style="color: #F8F8F2">() {</span></span>
+<span class="line"><span style="color: #F8F8F2">	done </span><span style="color: #FF79C6">:=</span><span style="color: #F8F8F2"> </span><span style="color: #8BE9FD">make</span><span style="color: #F8F8F2">(</span><span style="color: #FF79C6">chan</span><span style="color: #F8F8F2"> </span><span style="color: #8BE9FD">int</span><span style="color: #F8F8F2">, </span><span style="color: #BD93F9">0</span><span style="color: #F8F8F2">)</span></span>
+<span class="line"><span style="color: #F8F8F2">	js.</span><span style="color: #8BE9FD">Global</span><span style="color: #F8F8F2">().</span><span style="color: #8BE9FD">Set</span><span style="color: #F8F8F2">(</span><span style="color: #E9F284">"</span><span style="color: #F1FA8C">fibFunc</span><span style="color: #E9F284">"</span><span style="color: #F8F8F2">, js.</span><span style="color: #8BE9FD">FuncOf</span><span style="color: #F8F8F2">(fibFunc))</span></span>
+<span class="line"><span style="color: #F8F8F2">	</span><span style="color: #FF79C6">&#x3C;-</span><span style="color: #F8F8F2">done</span></span>
+<span class="line"><span style="color: #F8F8F2">}</span></span></code></pre>
+<ul>
+<li><code>fib</code> 是一个普通的 Go 函数，通过递归计算第 i 个斐波那契数，接收一个 int 入参，返回值也是 int。</li>
+<li>定义了 <code>fibFunc</code> 函数，为 <code>fib</code> 函数套了一个壳，从 <code>args[0]</code> 获取入参，计算结果用 <code>js.ValueOf</code> 包装，并返回。</li>
+<li>使用 <code>js.Global().Set()</code> 方法，将注册函数 <code>fibFunc</code> 到全局，以便在浏览器中能够调用。</li>
+</ul>
+<p>其中的一些类型转换：</p>
+<ul>
+<li><code>js.Value</code> 可以将 Js 的值转换为 Go 的值，比如 <code>args[0].Int()</code>，则是转换为 Go 语言中的整型；</li>
+<li><code>js.ValueOf</code>，则用来将 Go 的值，转换为 JS 的值；、</li>
+<li><code>js.FuncOf</code> 将函数转换为 <code>Func</code> 类型，只有 <code>Func</code> 类型的函数，才能在 JavaScript 中调用。</li>
+</ul>
+<p><code>js.Func()</code> 接受一个函数类型作为其参数，该函数的定义必须是：</p>
+<pre is:raw="" class="astro-code" style="background-color: #282A36; overflow-x: auto; white-space: pre-wrap; word-wrap: break-word;"><code><span class="line"><span style="color: #FF79C6">func</span><span style="color: #F8F8F2">(this Value, args []Value) </span><span style="color: #FF79C6">interface</span><span style="color: #F8F8F2">{}  </span></span>
+<span class="line"><span style="color: #6272A4">// this 即 JavaScript 中的 this  </span></span>
+<span class="line"><span style="color: #6272A4">// args 是在 JavaScript 中调用该函数的参数列表。  </span></span>
+<span class="line"><span style="color: #6272A4">// 返回值需用 js.ValueOf 映射成 JavaScript 的值</span></span></code></pre>
+<pre is:raw="" class="astro-code" style="background-color: #282A36; overflow-x: auto; white-space: pre-wrap; word-wrap: break-word;"><code><span class="line"><span style="color: #F8F8F2">&#x3C;!</span><span style="color: #FF79C6">DOCTYPE</span><span style="color: #F8F8F2"> </span><span style="color: #50FA7B">html</span><span style="color: #F8F8F2">></span></span>
+<span class="line"><span style="color: #F8F8F2">&#x3C;</span><span style="color: #FF79C6">html</span><span style="color: #F8F8F2"> </span><span style="color: #50FA7B">lang</span><span style="color: #FF79C6">=</span><span style="color: #E9F284">"</span><span style="color: #F1FA8C">zh-CN</span><span style="color: #E9F284">"</span><span style="color: #F8F8F2">></span></span>
+<span class="line"></span>
+<span class="line"><span style="color: #F8F8F2">&#x3C;</span><span style="color: #FF79C6">head</span><span style="color: #F8F8F2">></span></span>
+<span class="line"><span style="color: #F8F8F2">    &#x3C;</span><span style="color: #FF79C6">meta</span><span style="color: #F8F8F2"> </span><span style="color: #50FA7B">charset</span><span style="color: #FF79C6">=</span><span style="color: #E9F284">"</span><span style="color: #F1FA8C">UTF-8</span><span style="color: #E9F284">"</span><span style="color: #F8F8F2">></span></span>
+<span class="line"><span style="color: #F8F8F2">    &#x3C;</span><span style="color: #FF79C6">meta</span><span style="color: #F8F8F2"> </span><span style="color: #50FA7B">http-equiv</span><span style="color: #FF79C6">=</span><span style="color: #E9F284">"</span><span style="color: #F1FA8C">X-UA-Compatible</span><span style="color: #E9F284">"</span><span style="color: #F8F8F2"> </span><span style="color: #50FA7B">content</span><span style="color: #FF79C6">=</span><span style="color: #E9F284">"</span><span style="color: #F1FA8C">IE=edge</span><span style="color: #E9F284">"</span><span style="color: #F8F8F2">></span></span>
+<span class="line"><span style="color: #F8F8F2">    &#x3C;</span><span style="color: #FF79C6">meta</span><span style="color: #F8F8F2"> </span><span style="color: #50FA7B">name</span><span style="color: #FF79C6">=</span><span style="color: #E9F284">"</span><span style="color: #F1FA8C">viewport</span><span style="color: #E9F284">"</span><span style="color: #F8F8F2"> </span><span style="color: #50FA7B">content</span><span style="color: #FF79C6">=</span><span style="color: #E9F284">"</span><span style="color: #F1FA8C">width=device-width, initial-scale=1.0</span><span style="color: #E9F284">"</span><span style="color: #F8F8F2">></span></span>
+<span class="line"><span style="color: #F8F8F2">    &#x3C;</span><span style="color: #FF79C6">title</span><span style="color: #F8F8F2">>Go WebAssembly&#x3C;/</span><span style="color: #FF79C6">title</span><span style="color: #F8F8F2">></span></span>
+<span class="line"><span style="color: #F8F8F2">&#x3C;/</span><span style="color: #FF79C6">head</span><span style="color: #F8F8F2">></span></span>
+<span class="line"></span>
+<span class="line"><span style="color: #F8F8F2">&#x3C;</span><span style="color: #FF79C6">body</span><span style="color: #F8F8F2">></span></span>
+<span class="line"><span style="color: #F8F8F2">    &#x3C;</span><span style="color: #FF79C6">input</span><span style="color: #F8F8F2"> </span><span style="color: #50FA7B">id</span><span style="color: #FF79C6">=</span><span style="color: #E9F284">"</span><span style="color: #F1FA8C">num</span><span style="color: #E9F284">"</span><span style="color: #F8F8F2"> </span><span style="color: #50FA7B">type</span><span style="color: #FF79C6">=</span><span style="color: #E9F284">"</span><span style="color: #F1FA8C">number</span><span style="color: #E9F284">"</span><span style="color: #F8F8F2"> /></span></span>
+<span class="line"><span style="color: #F8F8F2">    &#x3C;</span><span style="color: #FF79C6">button</span><span style="color: #F8F8F2"> </span><span style="color: #50FA7B">id</span><span style="color: #FF79C6">=</span><span style="color: #E9F284">"</span><span style="color: #F1FA8C">btn</span><span style="color: #E9F284">"</span><span style="color: #F8F8F2"> </span><span style="color: #50FA7B">onclick</span><span style="color: #FF79C6">=</span><span style="color: #E9F284">"</span><span style="color: #F8F8F2">ans</span><span style="color: #F1FA8C">.</span><span style="color: #F8F8F2">innerHTML</span><span style="color: #FF79C6">=</span><span style="color: #50FA7B">fibFunc</span><span style="color: #F8F8F2">(num</span><span style="color: #F1FA8C">.</span><span style="color: #F8F8F2">value</span><span style="color: #F1FA8C"> </span><span style="color: #FF79C6">*</span><span style="color: #F1FA8C"> </span><span style="color: #BD93F9">1</span><span style="color: #F8F8F2">)</span><span style="color: #E9F284">"</span><span style="color: #F8F8F2">>Click&#x3C;/</span><span style="color: #FF79C6">button</span><span style="color: #F8F8F2">></span></span>
+<span class="line"><span style="color: #F8F8F2">    &#x3C;</span><span style="color: #FF79C6">p</span><span style="color: #F8F8F2"> </span><span style="color: #50FA7B">id</span><span style="color: #FF79C6">=</span><span style="color: #E9F284">"</span><span style="color: #F1FA8C">ans</span><span style="color: #E9F284">"</span><span style="color: #F8F8F2">>1&#x3C;/</span><span style="color: #FF79C6">p</span><span style="color: #F8F8F2">></span></span>
+<span class="line"><span style="color: #F8F8F2">    &#x3C;</span><span style="color: #FF79C6">script</span><span style="color: #F8F8F2"> </span><span style="color: #50FA7B">src</span><span style="color: #FF79C6">=</span><span style="color: #E9F284">"</span><span style="color: #F1FA8C">wasm_exec.js</span><span style="color: #E9F284">"</span><span style="color: #F8F8F2">>&#x3C;/</span><span style="color: #FF79C6">script</span><span style="color: #F8F8F2">></span></span>
+<span class="line"><span style="color: #F8F8F2">    &#x3C;</span><span style="color: #FF79C6">script</span><span style="color: #F8F8F2">></span></span>
+<span class="line"><span style="color: #F8F8F2">        </span><span style="color: #FF79C6">const</span><span style="color: #F8F8F2"> go </span><span style="color: #FF79C6">=</span><span style="color: #F8F8F2"> </span><span style="color: #FF79C6; font-style: italic">new</span><span style="color: #F8F8F2"> </span><span style="color: #50FA7B">Go</span><span style="color: #F8F8F2">();</span></span>
+<span class="line"><span style="color: #F8F8F2">        WebAssembly.</span><span style="color: #50FA7B">instantiateStreaming</span><span style="color: #F8F8F2">(</span><span style="color: #50FA7B">fetch</span><span style="color: #F8F8F2">(</span><span style="color: #E9F284">"</span><span style="color: #F1FA8C">main.wasm</span><span style="color: #E9F284">"</span><span style="color: #F8F8F2">), go.importObject).</span><span style="color: #50FA7B">then</span><span style="color: #F8F8F2">((</span><span style="color: #FFB86C">result</span><span style="color: #F8F8F2">) </span><span style="color: #FF79C6">=></span><span style="color: #F8F8F2"> {</span></span>
+<span class="line"><span style="color: #F8F8F2">            go.</span><span style="color: #50FA7B">run</span><span style="color: #F8F8F2">(result.instance);</span></span>
+<span class="line"><span style="color: #F8F8F2">        });</span></span>
+<span class="line"><span style="color: #F8F8F2">    &#x3C;/</span><span style="color: #FF79C6">script</span><span style="color: #F8F8F2">></span></span>
+<span class="line"><span style="color: #F8F8F2">&#x3C;/</span><span style="color: #FF79C6">body</span><span style="color: #F8F8F2">></span></span>
+<span class="line"><span style="color: #F8F8F2">  </span></span>
+<span class="line"><span style="color: #F8F8F2">&#x3C;/</span><span style="color: #FF79C6">html</span><span style="color: #F8F8F2">></span></span></code></pre>
+<h2 id="操作-dom">操作 DOM</h2>
+<p>在上面的例子中，仅仅是注册了全局函数 <code>fibFunc</code>，事件注册，调用，对 DOM 元素的操作都是在 HTML<br>
+中通过原生的 JavaScript 函数实现的。这些事情，能不能全部在 Go 语言中完成呢？答案可以。</p>
+<pre is:raw="" class="astro-code" style="background-color: #282A36; overflow-x: auto; white-space: pre-wrap; word-wrap: break-word;"><code><span class="line"><span style="color: #FF79C6">package</span><span style="color: #F8F8F2"> main  </span></span>
+<span class="line"><span style="color: #F8F8F2">  </span></span>
+<span class="line"><span style="color: #FF79C6">import</span><span style="color: #F8F8F2"> (  </span></span>
+<span class="line"><span style="color: #F8F8F2">	</span><span style="color: #E9F284">"</span><span style="color: #F1FA8C">strconv</span><span style="color: #E9F284">"</span><span style="color: #F8F8F2">  </span></span>
+<span class="line"><span style="color: #F8F8F2">	</span><span style="color: #E9F284">"</span><span style="color: #F1FA8C">syscall/js</span><span style="color: #E9F284">"</span><span style="color: #F8F8F2">  </span></span>
+<span class="line"><span style="color: #F8F8F2">)  </span></span>
+<span class="line"><span style="color: #F8F8F2">  </span></span>
+<span class="line"><span style="color: #FF79C6">func</span><span style="color: #F8F8F2"> </span><span style="color: #50FA7B">fib</span><span style="color: #F8F8F2">(i </span><span style="color: #8BE9FD">int</span><span style="color: #F8F8F2">) </span><span style="color: #8BE9FD">int</span><span style="color: #F8F8F2"> {  </span></span>
+<span class="line"><span style="color: #F8F8F2">	</span><span style="color: #FF79C6">if</span><span style="color: #F8F8F2"> i </span><span style="color: #FF79C6">==</span><span style="color: #F8F8F2"> </span><span style="color: #BD93F9">0</span><span style="color: #F8F8F2"> </span><span style="color: #FF79C6">||</span><span style="color: #F8F8F2"> i </span><span style="color: #FF79C6">==</span><span style="color: #F8F8F2"> </span><span style="color: #BD93F9">1</span><span style="color: #F8F8F2"> {  </span></span>
+<span class="line"><span style="color: #F8F8F2">		</span><span style="color: #FF79C6">return</span><span style="color: #F8F8F2"> </span><span style="color: #BD93F9">1</span><span style="color: #F8F8F2">  </span></span>
+<span class="line"><span style="color: #F8F8F2">	}  </span></span>
+<span class="line"><span style="color: #F8F8F2">	</span><span style="color: #FF79C6">return</span><span style="color: #F8F8F2"> </span><span style="color: #8BE9FD">fib</span><span style="color: #F8F8F2">(i</span><span style="color: #FF79C6">-</span><span style="color: #BD93F9">1</span><span style="color: #F8F8F2">) </span><span style="color: #FF79C6">+</span><span style="color: #F8F8F2"> </span><span style="color: #8BE9FD">fib</span><span style="color: #F8F8F2">(i</span><span style="color: #FF79C6">-</span><span style="color: #BD93F9">2</span><span style="color: #F8F8F2">)  </span></span>
+<span class="line"><span style="color: #F8F8F2">}  </span></span>
+<span class="line"><span style="color: #F8F8F2">  </span></span>
+<span class="line"><span style="color: #FF79C6">var</span><span style="color: #F8F8F2"> (  </span></span>
+<span class="line"><span style="color: #F8F8F2">	document </span><span style="color: #FF79C6">=</span><span style="color: #F8F8F2"> js.</span><span style="color: #8BE9FD">Global</span><span style="color: #F8F8F2">().</span><span style="color: #8BE9FD">Get</span><span style="color: #F8F8F2">(</span><span style="color: #E9F284">"</span><span style="color: #F1FA8C">document</span><span style="color: #E9F284">"</span><span style="color: #F8F8F2">)  </span></span>
+<span class="line"><span style="color: #F8F8F2">	numEle   </span><span style="color: #FF79C6">=</span><span style="color: #F8F8F2"> document.</span><span style="color: #8BE9FD">Call</span><span style="color: #F8F8F2">(</span><span style="color: #E9F284">"</span><span style="color: #F1FA8C">getElementById</span><span style="color: #E9F284">"</span><span style="color: #F8F8F2">, </span><span style="color: #E9F284">"</span><span style="color: #F1FA8C">num</span><span style="color: #E9F284">"</span><span style="color: #F8F8F2">)  </span></span>
+<span class="line"><span style="color: #F8F8F2">	ansEle   </span><span style="color: #FF79C6">=</span><span style="color: #F8F8F2"> document.</span><span style="color: #8BE9FD">Call</span><span style="color: #F8F8F2">(</span><span style="color: #E9F284">"</span><span style="color: #F1FA8C">getElementById</span><span style="color: #E9F284">"</span><span style="color: #F8F8F2">, </span><span style="color: #E9F284">"</span><span style="color: #F1FA8C">ans</span><span style="color: #E9F284">"</span><span style="color: #F8F8F2">)  </span></span>
+<span class="line"><span style="color: #F8F8F2">	btnEle   </span><span style="color: #FF79C6">=</span><span style="color: #F8F8F2"> js.</span><span style="color: #8BE9FD">Global</span><span style="color: #F8F8F2">().</span><span style="color: #8BE9FD">Get</span><span style="color: #F8F8F2">(</span><span style="color: #E9F284">"</span><span style="color: #F1FA8C">btn</span><span style="color: #E9F284">"</span><span style="color: #F8F8F2">)  </span></span>
+<span class="line"><span style="color: #F8F8F2">)  </span></span>
+<span class="line"><span style="color: #F8F8F2">  </span></span>
+<span class="line"><span style="color: #FF79C6">func</span><span style="color: #F8F8F2"> </span><span style="color: #50FA7B">fibFunc</span><span style="color: #F8F8F2">(this js.Value, args []js.Value) </span><span style="color: #FF79C6">interface</span><span style="color: #F8F8F2">{} {  </span></span>
+<span class="line"><span style="color: #F8F8F2">	v </span><span style="color: #FF79C6">:=</span><span style="color: #F8F8F2"> numEle.</span><span style="color: #8BE9FD">Get</span><span style="color: #F8F8F2">(</span><span style="color: #E9F284">"</span><span style="color: #F1FA8C">value</span><span style="color: #E9F284">"</span><span style="color: #F8F8F2">)  </span></span>
+<span class="line"><span style="color: #F8F8F2">	</span><span style="color: #FF79C6">if</span><span style="color: #F8F8F2"> num, err </span><span style="color: #FF79C6">:=</span><span style="color: #F8F8F2"> strconv.</span><span style="color: #8BE9FD">Atoi</span><span style="color: #F8F8F2">(v.</span><span style="color: #8BE9FD">String</span><span style="color: #F8F8F2">()); err </span><span style="color: #FF79C6">==</span><span style="color: #F8F8F2"> </span><span style="color: #BD93F9">nil</span><span style="color: #F8F8F2"> {  </span></span>
+<span class="line"><span style="color: #F8F8F2">		ansEle.</span><span style="color: #8BE9FD">Set</span><span style="color: #F8F8F2">(</span><span style="color: #E9F284">"</span><span style="color: #F1FA8C">innerHTML</span><span style="color: #E9F284">"</span><span style="color: #F8F8F2">, js.</span><span style="color: #8BE9FD">ValueOf</span><span style="color: #F8F8F2">(</span><span style="color: #8BE9FD">fib</span><span style="color: #F8F8F2">(num)))  </span></span>
+<span class="line"><span style="color: #F8F8F2">	}  </span></span>
+<span class="line"><span style="color: #F8F8F2">	</span><span style="color: #FF79C6">return</span><span style="color: #F8F8F2"> </span><span style="color: #BD93F9">nil</span><span style="color: #F8F8F2">  </span></span>
+<span class="line"><span style="color: #F8F8F2">}  </span></span>
+<span class="line"><span style="color: #F8F8F2">  </span></span>
+<span class="line"><span style="color: #FF79C6">func</span><span style="color: #F8F8F2"> </span><span style="color: #50FA7B">main</span><span style="color: #F8F8F2">() {  </span></span>
+<span class="line"><span style="color: #F8F8F2">	done </span><span style="color: #FF79C6">:=</span><span style="color: #F8F8F2"> </span><span style="color: #8BE9FD">make</span><span style="color: #F8F8F2">(</span><span style="color: #FF79C6">chan</span><span style="color: #F8F8F2"> </span><span style="color: #8BE9FD">int</span><span style="color: #F8F8F2">, </span><span style="color: #BD93F9">0</span><span style="color: #F8F8F2">)  </span></span>
+<span class="line"><span style="color: #F8F8F2">	btnEle.</span><span style="color: #8BE9FD">Call</span><span style="color: #F8F8F2">(</span><span style="color: #E9F284">"</span><span style="color: #F1FA8C">addEventListener</span><span style="color: #E9F284">"</span><span style="color: #F8F8F2">, </span><span style="color: #E9F284">"</span><span style="color: #F1FA8C">click</span><span style="color: #E9F284">"</span><span style="color: #F8F8F2">, js.</span><span style="color: #8BE9FD">FuncOf</span><span style="color: #F8F8F2">(fibFunc))  </span></span>
+<span class="line"><span style="color: #F8F8F2">	</span><span style="color: #FF79C6">&#x3C;-</span><span style="color: #F8F8F2">done  </span></span>
+<span class="line"><span style="color: #F8F8F2">}</span></span></code></pre>
+<ul>
+<li>通过 <code>js.Global().Get("btn")</code> 和 <code>document.Call("getElementById", "num")</code> 两种方式获取到 DOM 元素。</li>
+<li><code>btnEle</code> 调用 <code>addEventListener</code> 为 <code>btn</code> 绑定点击事件 <code>fibFunc</code>。</li>
+<li>在 <code>fibFunc</code> 中使用 <code>numEle.Get("value")</code> 获取到 <code>numEle</code> 的值（字符串），转为整型并调用 <code>fib</code> 计算出结果。</li>
+<li><code>ansEle</code> 调用 <code>Set("innerHTML", ...)</code> 渲染计算结果。</li>
+</ul>
+<h2 id="回调函数">回调函数</h2>
+<pre is:raw="" class="astro-code" style="background-color: #282A36; overflow-x: auto; white-space: pre-wrap; word-wrap: break-word;"><code><span class="line"><span style="color: #FF79C6">package</span><span style="color: #F8F8F2"> main  </span></span>
+<span class="line"><span style="color: #F8F8F2">  </span></span>
+<span class="line"><span style="color: #FF79C6">import</span><span style="color: #F8F8F2"> (  </span></span>
+<span class="line"><span style="color: #F8F8F2">    </span><span style="color: #E9F284">"</span><span style="color: #F1FA8C">syscall/js</span><span style="color: #E9F284">"</span><span style="color: #F8F8F2">  </span></span>
+<span class="line"><span style="color: #F8F8F2">    </span><span style="color: #E9F284">"</span><span style="color: #F1FA8C">time</span><span style="color: #E9F284">"</span><span style="color: #F8F8F2">  </span></span>
+<span class="line"><span style="color: #F8F8F2">)  </span></span>
+<span class="line"><span style="color: #F8F8F2">  </span></span>
+<span class="line"><span style="color: #FF79C6">func</span><span style="color: #F8F8F2"> </span><span style="color: #50FA7B">fib</span><span style="color: #F8F8F2">(i </span><span style="color: #8BE9FD">int</span><span style="color: #F8F8F2">) </span><span style="color: #8BE9FD">int</span><span style="color: #F8F8F2"> {  </span></span>
+<span class="line"><span style="color: #F8F8F2">	</span><span style="color: #FF79C6">if</span><span style="color: #F8F8F2"> i </span><span style="color: #FF79C6">==</span><span style="color: #F8F8F2"> </span><span style="color: #BD93F9">0</span><span style="color: #F8F8F2"> </span><span style="color: #FF79C6">||</span><span style="color: #F8F8F2"> i </span><span style="color: #FF79C6">==</span><span style="color: #F8F8F2"> </span><span style="color: #BD93F9">1</span><span style="color: #F8F8F2"> {  </span></span>
+<span class="line"><span style="color: #F8F8F2">		</span><span style="color: #FF79C6">return</span><span style="color: #F8F8F2"> </span><span style="color: #BD93F9">1</span><span style="color: #F8F8F2">  </span></span>
+<span class="line"><span style="color: #F8F8F2">	}  </span></span>
+<span class="line"><span style="color: #F8F8F2">	</span><span style="color: #FF79C6">return</span><span style="color: #F8F8F2"> </span><span style="color: #8BE9FD">fib</span><span style="color: #F8F8F2">(i</span><span style="color: #FF79C6">-</span><span style="color: #BD93F9">1</span><span style="color: #F8F8F2">) </span><span style="color: #FF79C6">+</span><span style="color: #F8F8F2"> </span><span style="color: #8BE9FD">fib</span><span style="color: #F8F8F2">(i</span><span style="color: #FF79C6">-</span><span style="color: #BD93F9">2</span><span style="color: #F8F8F2">)  </span></span>
+<span class="line"><span style="color: #F8F8F2">}  </span></span>
+<span class="line"><span style="color: #F8F8F2">  </span></span>
+<span class="line"><span style="color: #FF79C6">func</span><span style="color: #F8F8F2"> </span><span style="color: #50FA7B">fibFunc</span><span style="color: #F8F8F2">(this js.Value, args []js.Value) </span><span style="color: #FF79C6">interface</span><span style="color: #F8F8F2">{} {  </span></span>
+<span class="line"><span style="color: #F8F8F2">	callback </span><span style="color: #FF79C6">:=</span><span style="color: #F8F8F2"> args[</span><span style="color: #8BE9FD">len</span><span style="color: #F8F8F2">(args)</span><span style="color: #FF79C6">-</span><span style="color: #BD93F9">1</span><span style="color: #F8F8F2">]  </span></span>
+<span class="line"><span style="color: #F8F8F2">	</span><span style="color: #FF79C6">go</span><span style="color: #F8F8F2"> </span><span style="color: #FF79C6">func</span><span style="color: #F8F8F2">() {  </span></span>
+<span class="line"><span style="color: #F8F8F2">		time.</span><span style="color: #8BE9FD">Sleep</span><span style="color: #F8F8F2">(</span><span style="color: #BD93F9">3</span><span style="color: #F8F8F2"> </span><span style="color: #FF79C6">*</span><span style="color: #F8F8F2"> time.Second)  </span></span>
+<span class="line"><span style="color: #F8F8F2">		v </span><span style="color: #FF79C6">:=</span><span style="color: #F8F8F2"> </span><span style="color: #8BE9FD">fib</span><span style="color: #F8F8F2">(args[</span><span style="color: #BD93F9">0</span><span style="color: #F8F8F2">].</span><span style="color: #8BE9FD">Int</span><span style="color: #F8F8F2">())  </span></span>
+<span class="line"><span style="color: #F8F8F2">		callback.</span><span style="color: #8BE9FD">Invoke</span><span style="color: #F8F8F2">(v)  </span></span>
+<span class="line"><span style="color: #F8F8F2">	}()  </span></span>
+<span class="line"><span style="color: #F8F8F2">  </span></span>
+<span class="line"><span style="color: #F8F8F2">	js.</span><span style="color: #8BE9FD">Global</span><span style="color: #F8F8F2">().</span><span style="color: #8BE9FD">Get</span><span style="color: #F8F8F2">(</span><span style="color: #E9F284">"</span><span style="color: #F1FA8C">ans</span><span style="color: #E9F284">"</span><span style="color: #F8F8F2">).</span><span style="color: #8BE9FD">Set</span><span style="color: #F8F8F2">(</span><span style="color: #E9F284">"</span><span style="color: #F1FA8C">innerHTML</span><span style="color: #E9F284">"</span><span style="color: #F8F8F2">, </span><span style="color: #E9F284">"</span><span style="color: #F1FA8C">Waiting 3s...</span><span style="color: #E9F284">"</span><span style="color: #F8F8F2">)  </span></span>
+<span class="line"><span style="color: #F8F8F2">	</span><span style="color: #FF79C6">return</span><span style="color: #F8F8F2"> </span><span style="color: #BD93F9">nil</span><span style="color: #F8F8F2">  </span></span>
+<span class="line"><span style="color: #F8F8F2">}  </span></span>
+<span class="line"><span style="color: #F8F8F2">  </span></span>
+<span class="line"><span style="color: #FF79C6">func</span><span style="color: #F8F8F2"> </span><span style="color: #50FA7B">main</span><span style="color: #F8F8F2">() {  </span></span>
+<span class="line"><span style="color: #F8F8F2">	done </span><span style="color: #FF79C6">:=</span><span style="color: #F8F8F2"> </span><span style="color: #8BE9FD">make</span><span style="color: #F8F8F2">(</span><span style="color: #FF79C6">chan</span><span style="color: #F8F8F2"> </span><span style="color: #8BE9FD">int</span><span style="color: #F8F8F2">, </span><span style="color: #BD93F9">0</span><span style="color: #F8F8F2">)  </span></span>
+<span class="line"><span style="color: #F8F8F2">	js.</span><span style="color: #8BE9FD">Global</span><span style="color: #F8F8F2">().</span><span style="color: #8BE9FD">Set</span><span style="color: #F8F8F2">(</span><span style="color: #E9F284">"</span><span style="color: #F1FA8C">fibFunc</span><span style="color: #E9F284">"</span><span style="color: #F8F8F2">, js.</span><span style="color: #8BE9FD">FuncOf</span><span style="color: #F8F8F2">(fibFunc))  </span></span>
+<span class="line"><span style="color: #F8F8F2">	</span><span style="color: #FF79C6">&#x3C;-</span><span style="color: #F8F8F2">done  </span></span>
+<span class="line"><span style="color: #F8F8F2">}</span></span></code></pre>
+<h2 id="参考">参考</h2>
+<ul>
+<li><a href="https://github.com/golang/go/wiki/WebAssembly">Go WebAssembly</a></li>
+</ul>
+          </article>
+        </div>
+        <div class="catalogue astro-LDYHAKPG">
+          <h2 class="heading astro-LDYHAKPG">目录</h2>
+          <ul class="astro-LDYHAKPG">
+            <li class="header-link depth-2 astro-LDYHAKPG">
+                    <a href="#vscode-配置" class="astro-LDYHAKPG">VSCode 配置</a>
+                  </li><li class="header-link depth-2 astro-LDYHAKPG">
+                    <a href="#示例" class="astro-LDYHAKPG">示例</a>
+                  </li><li class="header-link depth-2 astro-LDYHAKPG">
+                    <a href="#函数注册" class="astro-LDYHAKPG">函数注册</a>
+                  </li><li class="header-link depth-2 astro-LDYHAKPG">
+                    <a href="#操作-dom" class="astro-LDYHAKPG">操作 DOM</a>
+                  </li><li class="header-link depth-2 astro-LDYHAKPG">
+                    <a href="#回调函数" class="astro-LDYHAKPG">回调函数</a>
+                  </li><li class="header-link depth-2 astro-LDYHAKPG">
+                    <a href="#参考" class="astro-LDYHAKPG">参考</a>
+                  </li>
+          </ul>
+        </div>
+      </div>
+      <footer class="astro-ZZCSQTZN">
+  &copy; 2022 langliu. All rights reserved.
+</footer>
+
+    </main>
+  </body></html>
