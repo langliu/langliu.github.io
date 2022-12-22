@@ -81,7 +81,7 @@
 <pre class="astro-code" style="background-color:#282A36;overflow-x:auto;white-space:pre-wrap;word-wrap:break-word"><code><span class="line"><span style="color:#FF79C6">import</span><span style="color:#F8F8F2"> </span><span style="color:#BD93F9">*</span><span style="color:#F8F8F2"> </span><span style="color:#FF79C6">as</span><span style="color:#F8F8F2"> _loadash </span><span style="color:#FF79C6">from</span><span style="color:#F8F8F2"> </span><span style="color:#E9F284">&#39;</span><span style="color:#F1FA8C">loadash</span><span style="color:#E9F284">&#39;</span></span></code></pre>
 <p>Node.js 会自动从 node_modules 目录中去加载对应的模块， 但是浏览器默认不会这样做，因为不知道从哪里加载全局模块。</p>
 <p>import-maps 就是为了解决浏览器中的全局模块而出现的， 目前浏览器的支持情况如下图所示， 基于 Chromium 的浏览器已经实现这个功能。</p>
-<p><img src="/public/can-i-use-import-maps.png" alt="Can I Use"/></p>
+<p><img src="/can-i-use-import-maps.png" alt="Can I Use"/></p>
 <p>对于不支持 import-maps 的浏览器， 可以使用 <a href="https://github.com/guybedford/es-module-shims">es-module-shims</a> 进行处理。</p>
 <p>import-maps 使用 Json 的形式来定义浏览器中的全局模块：</p>
 <pre class="astro-code" style="background-color:#282A36;overflow-x:auto;white-space:pre-wrap;word-wrap:break-word"><code><span class="line"><span style="color:#F8F8F2">&lt;</span><span style="color:#FF79C6">script</span><span style="color:#F8F8F2"> </span><span style="color:#50FA7B">type</span><span style="color:#FF79C6">=</span><span style="color:#E9F284">&quot;</span><span style="color:#F1FA8C">importmap</span><span style="color:#E9F284">&quot;</span><span style="color:#F8F8F2">&gt;</span></span>
