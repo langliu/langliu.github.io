@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="zh-CN" class="astro-4CR5JWYC">
+<html lang="zh-CN" class="astro-5RPOBUFI">
   <head>
     <!-- Global Metadata --><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
@@ -28,11 +28,11 @@
     
   <link rel="stylesheet" href="/assets/go-webassembly.33481c80.css" />
 <link rel="stylesheet" href="/assets/index.dca16377.css" />
-<link rel="stylesheet" href="/assets/go-webassembly.0e96b6b6.css" /></head>
-  <body class="astro-4CR5JWYC">
+<link rel="stylesheet" href="/assets/go-webassembly.90d632a3.css" /></head>
+  <body class="astro-5RPOBUFI">
     <aside class="sider astro-RBU3OZFT">
   <div class="header astro-RBU3OZFT">
-    <img class="avatar astro-RBU3OZFT" src="../../eye.jpg" alt="Avatar">
+    <img class="avatar astro-RBU3OZFT" src="https://i.328888.xyz/2022/12/23/DDJVc.jpeg" alt="Avatar">
     <p class="description astro-RBU3OZFT">刘浪的博客</p>
   </div>
   <div class="astro-RBU3OZFT">
@@ -43,21 +43,21 @@
 </aside>
 
 
-    <main class="astro-4CR5JWYC">
-      <div class="content astro-4CR5JWYC">
-        <div class="article-wrapper astro-4CR5JWYC">
-          <article class="astro-4CR5JWYC">
-            <h1 class="title astro-4CR5JWYC">SQL 语句中 where=1 的作用</h1>
-            <time class="astro-4CR5JWYC">
+    <main class="astro-5RPOBUFI">
+      <div class="content astro-5RPOBUFI">
+        <div class="article-wrapper astro-5RPOBUFI">
+          <article class="astro-5RPOBUFI">
+            <h1 class="title astro-5RPOBUFI">SQL 语句中 where=1 的作用</h1>
+            <time class="astro-5RPOBUFI">
                   2022年2月28日
                 </time>
-            <div class="astro-4CR5JWYC">
+            <div class="astro-5RPOBUFI">
               <a class="tag astro-TMW37Z34" href="/tags/SQL" style="--backgroundColor: #576;">SQL</a>
 
 
             </div>
-            <hr class="astro-4CR5JWYC">
-            <img class="hero astro-4CR5JWYC" width="100%" height="360" src="/sql-where.jpg" alt="">
+            <hr class="astro-5RPOBUFI">
+            <img class="hero astro-5RPOBUFI" width="100%" height="360" src="/sql-where.jpg" alt="">
             
             <h2 id="背景">背景</h2>
 <p>最近接手了一个 NodeJS 的老项目，这个项目是 2017 年开始做的，没有用到像现在我们常用的 Prisma、TypeORM 或 Sequelize 这类 ORM 框架，是使用的原生的 T-SQL 语句进行查询，在熟悉代码的时候看到查询后有 <code>WHERE 1=1</code> 这段代码，感觉很疑惑不是很清楚这段代码在实际查询中有和意义，因为 <code>WHERE 1=1</code> 是永远为 <code>true</code>，应该起不到过滤查询的作用。难道它有我所不知道的用途？</p>
@@ -75,15 +75,15 @@
 <span class="line"><span style="color:#FF79C6">if</span><span style="color:#F8F8F2"> user chooses </span><span style="color:#FF79C6">option</span><span style="color:#F8F8F2"> b </span><span style="color:#FF79C6">then</span><span style="color:#F8F8F2"> stmt </span><span style="color:#FF79C6">+=</span><span style="color:#F8F8F2"> </span><span style="color:#E9F284">&quot;</span><span style="color:#F1FA8C">and D is not null </span><span style="color:#E9F284">&quot;</span></span></code></pre>
           </article>
         </div>
-        <div class="catalogue astro-4CR5JWYC">
-          <h2 class="heading astro-4CR5JWYC">目录</h2>
-          <ul class="astro-4CR5JWYC">
-            <li class="header-link depth-2 astro-4CR5JWYC">
-                    <a href="#背景" class="astro-4CR5JWYC">背景</a>
-                  </li><li class="header-link depth-2 astro-4CR5JWYC">
-                    <a href="#where-11-是否改善了查询执行" class="astro-4CR5JWYC">WHERE 1=1 是否改善了查询执行？</a>
-                  </li><li class="header-link depth-2 astro-4CR5JWYC">
-                    <a href="#方便后续-sql-查询语句的拼接" class="astro-4CR5JWYC">方便后续 SQL 查询语句的拼接</a>
+        <div class="catalogue astro-5RPOBUFI">
+          <h2 class="heading astro-5RPOBUFI">目录</h2>
+          <ul class="astro-5RPOBUFI">
+            <li class="header-link depth-2 astro-5RPOBUFI">
+                    <a href="#背景" class="astro-5RPOBUFI">背景</a>
+                  </li><li class="header-link depth-2 astro-5RPOBUFI">
+                    <a href="#where-11-是否改善了查询执行" class="astro-5RPOBUFI">WHERE 1=1 是否改善了查询执行？</a>
+                  </li><li class="header-link depth-2 astro-5RPOBUFI">
+                    <a href="#方便后续-sql-查询语句的拼接" class="astro-5RPOBUFI">方便后续 SQL 查询语句的拼接</a>
                   </li>
           </ul>
         </div>
