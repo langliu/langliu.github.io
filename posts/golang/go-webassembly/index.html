@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html lang="zh-CN" class="astro-5RPOBUFI">
+<html lang="zh-CN" class="astro-BVZIHDZO">
   <head>
     <!-- Global Metadata --><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <link rel="shortcut icon" href="/favicon.ico">
-<meta name="generator" content="Astro v1.9.2">
+<meta name="generator" content="Astro v2.0.2">
 
 <!-- Primary Meta Tags -->
 <title>Go WebAssembly 入门</title>
@@ -24,41 +24,34 @@
 <meta property="twitter:title" content="Go WebAssembly 入门">
 <meta property="twitter:description" content="Go WebAssembly 入门">
 <meta property="twitter:image" content="https://langiu.github.io/placeholder-social.jpg">
-
     
-  <link rel="stylesheet" href="/assets/go-webassembly.33481c80.css" />
-<link rel="stylesheet" href="/assets/index.dca16377.css" />
-<link rel="stylesheet" href="/assets/go-webassembly.90d632a3.css" /></head>
-  <body class="astro-5RPOBUFI">
-    <aside class="sider astro-RBU3OZFT">
-  <div class="header astro-RBU3OZFT">
-    <img class="avatar astro-RBU3OZFT" src="https://i.328888.xyz/2022/12/23/DDJVc.jpeg" alt="Avatar">
-    <p class="description astro-RBU3OZFT">刘浪的博客</p>
+  <link rel="stylesheet" href="/_astro/go-webassembly.6be94a9a.css" />
+<link rel="stylesheet" href="/_astro/index.f5e101e4.css" />
+<link rel="stylesheet" href="/_astro/go-webassembly.16009382.css" /></head>
+  <body class="astro-BVZIHDZO">
+    <aside class="sider astro-AHGM6ORG">
+  <div class="header astro-AHGM6ORG">
+    <img class="avatar astro-AHGM6ORG" src="https://i.328888.xyz/2022/12/23/DDJVc.jpeg" alt="Avatar">
+    <p class="description astro-AHGM6ORG">刘浪的博客</p>
   </div>
-  <div class="astro-RBU3OZFT">
-    <a class="nav astro-RBU3OZFT" href="/">首页</a>
-    <a class="nav astro-RBU3OZFT" href="/tags">标签</a>
-    <a class="nav astro-RBU3OZFT" href="/about">关于</a>
+  <div class="astro-AHGM6ORG">
+    <a class="nav astro-AHGM6ORG" href="/">首页</a>
+    <a class="nav astro-AHGM6ORG" href="/tags">标签</a>
+    <a class="nav astro-AHGM6ORG" href="/about">关于</a>
   </div>
 </aside>
-
-
-    <main class="astro-5RPOBUFI">
-      <div class="content astro-5RPOBUFI">
-        <div class="article-wrapper astro-5RPOBUFI">
-          <article class="astro-5RPOBUFI">
-            <h1 class="title astro-5RPOBUFI">Go WebAssembly 入门</h1>
-            <time class="astro-5RPOBUFI">
+    <main class="astro-BVZIHDZO">
+      <div class="content astro-BVZIHDZO">
+        <div class="article-wrapper astro-BVZIHDZO">
+          <article class="astro-BVZIHDZO">
+            <h1 class="title astro-BVZIHDZO">Go WebAssembly 入门</h1>
+            <time class="astro-BVZIHDZO">
                   2022年11月3日
                 </time>
-            <div class="astro-5RPOBUFI">
-              <a class="tag astro-TMW37Z34" href="/tags/Go" style="--backgroundColor: #386;">Go</a>
-
-<a class="tag astro-TMW37Z34" href="/tags/WebAssembly" style="--backgroundColor: #4376;">WebAssembly</a>
-
-
+            <div class="astro-BVZIHDZO">
+              <a class="tag astro-BLWJYJPT" href="/tags/Go" style="--backgroundColor: #386;">Go</a><a class="tag astro-BLWJYJPT" href="/tags/WebAssembly" style="--backgroundColor: #4376;">WebAssembly</a>
             </div>
-            <hr class="astro-5RPOBUFI">
+            <hr class="astro-BVZIHDZO">
             
             
             <h2 id="vscode-配置">VSCode 配置</h2>
@@ -253,28 +246,27 @@
 </ul>
           </article>
         </div>
-        <div class="catalogue astro-5RPOBUFI">
-          <h2 class="heading astro-5RPOBUFI">目录</h2>
-          <ul class="astro-5RPOBUFI">
-            <li class="header-link depth-2 astro-5RPOBUFI">
-                    <a href="#vscode-配置" class="astro-5RPOBUFI">VSCode 配置</a>
-                  </li><li class="header-link depth-2 astro-5RPOBUFI">
-                    <a href="#示例" class="astro-5RPOBUFI">示例</a>
-                  </li><li class="header-link depth-2 astro-5RPOBUFI">
-                    <a href="#函数注册" class="astro-5RPOBUFI">函数注册</a>
-                  </li><li class="header-link depth-2 astro-5RPOBUFI">
-                    <a href="#操作-dom" class="astro-5RPOBUFI">操作 DOM</a>
-                  </li><li class="header-link depth-2 astro-5RPOBUFI">
-                    <a href="#回调函数" class="astro-5RPOBUFI">回调函数</a>
-                  </li><li class="header-link depth-2 astro-5RPOBUFI">
-                    <a href="#参考" class="astro-5RPOBUFI">参考</a>
+        <div class="catalogue astro-BVZIHDZO">
+          <h2 class="heading astro-BVZIHDZO">目录</h2>
+          <ul class="astro-BVZIHDZO">
+            <li class="header-link depth-2 astro-BVZIHDZO">
+                    <a href="#vscode-配置" class="astro-BVZIHDZO">VSCode 配置</a>
+                  </li><li class="header-link depth-2 astro-BVZIHDZO">
+                    <a href="#示例" class="astro-BVZIHDZO">示例</a>
+                  </li><li class="header-link depth-2 astro-BVZIHDZO">
+                    <a href="#函数注册" class="astro-BVZIHDZO">函数注册</a>
+                  </li><li class="header-link depth-2 astro-BVZIHDZO">
+                    <a href="#操作-dom" class="astro-BVZIHDZO">操作 DOM</a>
+                  </li><li class="header-link depth-2 astro-BVZIHDZO">
+                    <a href="#回调函数" class="astro-BVZIHDZO">回调函数</a>
+                  </li><li class="header-link depth-2 astro-BVZIHDZO">
+                    <a href="#参考" class="astro-BVZIHDZO">参考</a>
                   </li>
           </ul>
         </div>
       </div>
-      <footer class="astro-SIFABDQQ">
+      <footer class="astro-SZ7XMLTE">
   &copy; 2023 langliu. All rights reserved.
 </footer>
-
     </main>
   </body></html>
