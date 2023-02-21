@@ -19,14 +19,14 @@
     "astro": "astro"
   },
   "devDependencies": {
-    "@astrojs/mdx": "^0.15.1",
-    "@astrojs/rss": "^2.1.0",
-    "@astrojs/sitemap": "^1.0.0",
+    "@astrojs/mdx": "^0.17.0",
+    "@astrojs/rss": "^2.1.1",
+    "@astrojs/sitemap": "^1.0.1",
     "@types/color-hash": "^1.0.2",
-    "astro": "^2.0.2",
-    "prettier": "^2.8.3",
+    "astro": "^2.0.14",
+    "prettier": "^2.8.4",
     "prettier-plugin-astro": "^0.8.0",
-    "typescript": "^4.9.4"
+    "typescript": "^4.9.5"
   },
   "dependencies": {
     "@fontsource/jetbrains-mono": "^4.5.12"
