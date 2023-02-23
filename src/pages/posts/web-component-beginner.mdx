@@ -1,0 +1,144 @@
+---
+layout: '@layouts/BlogPost.astro'
+title: 'Web Components 入门'
+description: 'Web Components 提供了基于原生支持的、对视图层的封装能力，可以让单个组件相关的 javaScript、css、html 模板运行在以 html 标签为界限的局部环境中，不会影响到全局，组件间也不会相互影响。  再简单来说：就是提供了我们自定义标签的能力，并且提供了标签内完整的生命周期。'
+pubDate: '2022-08-28'
+heroImage: '/Untitled1.png'
+tags:
+  - Web Components
+  - JavaScript
+emoji: ✨
+---
+
+## 简介
+
+Web Components 提供了基于原生支持的、对视图层的封装能力，可以让单个组件相关的 javaScript、css、html 模板运行在以 html 标签为界限的局部环境中，不会影响到全局，组件间也不会相互影响。  再简单来说：就是提供了我们自定义标签的能力，并且提供了标签内完整的生命周期。
+
+Web Components 可以将组件化的概念直接应用到浏览器可以识别的 html 标签上，就比如我们开发 html 页面常用的 标签；它可以将一个单一模块所内聚的逻辑、UI 层聚合到一个标签，并且相互进行天然的隔离，而且它提供一些生命周期的钩子给开发者调用。Web Components 实现以上的种种特性，是因为三个核心的技术，它们分别是：
+
+### Custom elements：自定义元素
+
+通过 `CustomElementRegistry` 来自定义可以直接渲染的 html 元素，并提供了组件的生命周期 `connectedCallback`、`disconnectCallback`、`attributeChangedCallback`  等提供给开发者聚合逻辑时使用。
+
+### Shadow DOM ：隐式 DOM
+
+「影子 DOM」 或 「隐式 DOM」，顾名思义，他具有隐藏属性，具体的意思就是说，在使用 Shadow DOM 的时候，组件标签内的 CSS 和 HTML 会完全的隐式存在于元素内部，在具体页面中，标签内部的 HTML 结构会存在于#shdaow-root，而不会在真实的 dom 树中出现。
+
+### HTML template： HTML 模板
+
+它的特性是用 `template` 标签包裹的元素不会立即渲染，只有在内容有效的时候，才会解析渲染，具有这个属性后，我们可以在自定义标签中按需添加我们需要的模板，并在自定义标签渲染的时候再去解析我们的模板，这样做可以在 HTML 有频繁更改更新任务，或者重写标记的时候非常有用。
+
+## Custom elements（自定义元素）
+
+首先来了解下自定义元素，其实它是作为 Web Component 的基石。那么我们来看下这个基石提供了哪些方法，提供给我们进行高楼大厦的建设。
+
+### 自定义元素挂载方法
+
+自定义元素通过 `CustomElementRegistry` 来自定义可以直接渲染的 html 元素，挂载在 `window.customElements.define` 来供开发者调用，demo 如下：
+
+```jsx
+// 假如我已经构建好一个 Web Components 组件 <hello-world>并导出
+
+class HelloWorld extends HTMLElement {
+    constructor() {
+        super();
+        this.attachShadow({ mode: 'open' });
+        this.shadowRoot.innerHTML = `
+            <style>
+                :host {
+                    display: block;
+                    padding: 10px;
+                    background-color: #eee;
+                }
+            </style>
+            <h1>Hello World!</h1>
+        `;
+    }
+}
+
+// 挂载
+window.customElements.define('hello-world', HelloWorld)
+
+// 然后就可以在 html 中使用
+<hello-world></hello-world>
+```
+
+<aside>
+⚠️ 自定义元素必须用'-'连接符连接，来作为特定的区分，如果没有检测到自定义元素，则浏览器会作为空div处理。
+
+</aside>
+
+### 自定义元素的类
+
+由上面的例子 `class HelloWorld extends HTMLElement { xxx }` 发现，自定义元素的构造都是基于 `HTMLElement` ，所以它继承了 HTML 元素特性，当然，也可以继承 `HTMLElement` 的派生类，如： `HTMLButtonElement` 等，来作为现有标签的扩展。
+
+### 自定义元素的生命周期
+
+类似于现有 MV\*框架的生命周期，自定义元素的基类里面也包含了完整的生命周期 `hook` 来提供给开发者实现一些业务逻辑的应用：
+
+```jsx
+class HelloWorld extends HTMLElement {
+  constructor() {
+    // 1 构建组件的时候的逻辑 hook
+    super()
+  }
+  // 2 当自定义元素首次被渲染到文档时候调用
+  connectedCallback() {}
+  // 3 当自定义元素在文档中被移除调用
+  disconnectedCallback() {}
+  // 4 当自定义组件被移动到新的文档时调用
+  adoptedCallback() {}
+  // 5 当自定义元素的属性更改时调用
+  attributeChangedCallback() {}
+}
+```
+
+### 添加自定义方法和属性
+
+由于自定义元素由一个类来构造，所以添加自定义属性和方法就如同平常开发类的方法一致。
+
+```jsx
+class HelloWorld extends HTMLElement {
+  constructor() {
+    super()
+  }
+
+  tag = 'hello-world'
+
+  say(something: string) {
+    console.log(`hello world, I want to say ${this.tag} ${something}`)
+  }
+}
+
+// 调用方法如下
+const hw = document.querySelector('hello-world')
+hw.say('good')
+```
+
+<img src='/Untitled.png' alt='控制台打印效果' width='100%' />
+
+## Shadow DOM
+
+有了自定义元素作为基石，我们想要更加顺畅的进行组件化封装，必定少不了对于 DOM 树的操作。那么好的，Shadow DOM（影子 DOM）就应运而生了。
+
+顾名思义，影子 DOM 就是用来隔离自定义元素不受到外界样式或者一些副作用的影响，或者内部的一些特性不会影响外部。使自定义元素保持一个相对独立的状态。
+
+在我们日常开发 html 页面的时候也会接触到一些使用 Shadow DOM 的标签，比如：audio 和 video 等；在具体 dom 树中它会一一个标签存在，会隐藏内部的结构，但是其中的控件，比如：进度条、声音控制等，都会以一个 Shadow DOM 存在于标签内部，如果想要查看具体的 DOM 结构，则可以尝试在 chrome 的控制台 -> Preferences -> Show user agent Shadow DOM， 就可以查看到内部的结构构成。
+
+如果组件使用 Shadow host，常规 document 中会存在一个 Shadow host 节点用来挂载 Shadow DOM，Shadow DOM 内部也会存在一个 DOM 树：Shadow Tree，根节点为 Shadow root，外部可以用伪类:host 来访问，Shadow boundary 其实就是 Shadow DOM 的边界。具体架构图如下：
+
+![Untitled](/Untitled1.png)
+
+Shadow DOM 开启方式为：
+
+```jsx
+this.attachShadow({ mode: 'open' })
+```
+
+## HTML templates（HTML 模板）
+
+`template` 模板可以说是大家比较熟悉的一个标签了，在 Vue 项目中的单页面组件中我们经常会用到，但是它也是 Web Components API 提供的一个标签，它的特性就是包裹在 `template` 中的 HTML 片段不会在页面加载的时候解析渲染，但是可以被 js 访问到，进行一些插入显示等操作。所以它作为自定义组件的核心内容，用来承载 HTML 模板，是不可或缺的一部分。
+
+## 浏览器支持情况
+
+![Untitled](/Untitled2.png)

@@ -1,0 +1,248 @@
+---
+import BaseHead from '@components/BaseHead.astro'
+import Sider from '@layouts/Sider.astro'
+import Tag from '@components/Tag.astro'
+import Footer from '@components/Footer.astro'
+
+export interface Heading {
+  depth: number
+  slug: string
+  text: string
+}
+export interface Props {
+  content: {
+    title: string
+    description: string
+    pubDate?: string
+    updatedDate?: string
+    heroImage?: string
+    tags?: string[]
+  }
+  headings: Heading[]
+}
+
+const {
+  content: { title, description, pubDate, updatedDate, heroImage, tags },
+  headings,
+} = Astro.props as Props
+---
+
+<html lang='zh-CN'>
+  <head>
+    <BaseHead title={title} description={description} />
+    <style>
+      @import '@fontsource/jetbrains-mono';
+      :root {
+        --astro-gradient: linear-gradient(0deg, #4f39fa, #da62c4);
+      }
+
+      h1 {
+        margin: 2rem 0;
+      }
+
+      main {
+        box-sizing: border-box;
+        padding: 1rem 1rem 0 1rem;
+        flex: 1;
+        margin-left: 250px;
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+      }
+
+      :global(pre) {
+        font-family: 'JetBrains Mono', monospace;
+      }
+
+      :global(code) {
+        font-family: 'JetBrains Mono', monospace;
+      }
+
+      .content {
+        flex: 1;
+        border-radius: 0.5rem;
+        background-color: #383539;
+        padding: 1rem;
+        box-shadow: rgb(0 0 0 / 10%) 0px 0px 6px -1px, rgb(0 0 0 / 6%) 0px 0px 4px -1px;
+        display: flex;
+        justify-content: center;
+      }
+      .text-gradient {
+        font-weight: 900;
+        background-image: var(--astro-gradient);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-size: 100% 200%;
+        background-position-y: 100%;
+        border-radius: 0.4rem;
+        animation: pulse 4s ease-in-out infinite;
+      }
+
+      @keyframes pulse {
+        0%,
+        100% {
+          background-position-y: 0%;
+        }
+        50% {
+          background-position-y: 80%;
+        }
+      }
+
+      .instructions {
+        line-height: 1.6;
+        margin: 1rem 0;
+        background: #4f39fa;
+        padding: 1rem;
+        border-radius: 0.4rem;
+        color: var(--color-bg);
+      }
+
+      .instructions code {
+        font-size: 0.875em;
+        border: 0.1em solid var(--color-border);
+        border-radius: 4px;
+        padding: 0.15em 0.25em;
+      }
+
+      .link-card-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(24ch, 1fr));
+        gap: 1rem;
+        padding: 0;
+      }
+      .article-wrapper {
+        flex: 1;
+        max-width: 1000px;
+        margin-right: 10px;
+      }
+
+      article {
+        max-width: 1200px;
+        margin: 0 auto;
+      }
+
+      .title {
+        font-size: 1.8rem;
+        margin-bottom: 0.5rem;
+        margin-top: 0;
+      }
+
+      .hero {
+        height: 450px;
+        object-fit: cover;
+      }
+
+      h2.heading {
+        font-size: 1rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        margin-bottom: 0.5rem;
+        margin-top: 1.5rem;
+        padding-inline-start: 1rem;
+      }
+      /* 目录 */
+      .catalogue {
+        position: sticky;
+        top: 2rem;
+        height: min-content;
+        flex-shrink: 0;
+        font-size: 16px;
+      }
+      .catalogue > ul {
+        list-style: none;
+        padding: 0;
+      }
+      .header-link {
+        padding-inline-start: 1rem;
+        border-inline-start: 3px solid rgba(241, 240, 244, 0.1);
+        font-size: 1rem;
+        padding: 0.1rem 0 0.1rem 0;
+        transition: border-inline-start-color 100ms ease-out, background-color 200ms ease-out;
+        color: #cbcacd;
+        cursor: pointer;
+      }
+
+      .header-link > a {
+        color: #cbcacd;
+      }
+      .header-link:hover,
+      .header-link:hover > a,
+      .header-link:focus,
+      .header-link:focus-within > a {
+        border-inline-start-color: pink !important;
+        color: white;
+      }
+
+      .depth-2 {
+        padding-inline-start: 1rem;
+      }
+
+      .depth-3 {
+        padding-inline-start: 2rem;
+      }
+
+      .depth-4 {
+        padding-inline-start: 3rem;
+      }
+
+      .depth-5 {
+        padding-inline-start: 4rem;
+      }
+
+      .depth-6 {
+        padding-inline-start: 5rem;
+      }
+    </style>
+  </head>
+  <body>
+    <Sider avatar='https://i.328888.xyz/2022/12/23/DDJVc.jpeg' />
+    <main>
+      <div class='content'>
+        <div class='article-wrapper'>
+          <article>
+            <h1 class='title'>{title}</h1>
+            {
+              pubDate && (
+                <time>
+                  {new Date(pubDate).toLocaleDateString('zh-CN', {
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric',
+                  })}
+                </time>
+              )
+            }
+            <div>
+              {tags?.map((tag) => <Tag text={tag} />)}
+            </div>
+            <hr />
+            {heroImage && <img class='hero' width='100%' height={360} src={heroImage} alt='' />}
+            {
+              updatedDate && (
+                <div>
+                  Last updated on <time>{updatedDate}</time>
+                </div>
+              )
+            }
+            <slot />
+          </article>
+        </div>
+        <div class='catalogue'>
+          <h2 class='heading'>目录</h2>
+          <ul>
+            {
+              headings.map((heading) => {
+                return (
+                  <li class={`header-link depth-${heading.depth}`}>
+                    <a href={`#${heading.slug}`}>{heading.text}</a>
+                  </li>
+                )
+              })
+            }
+          </ul>
+        </div>
+      </div>
+      <Footer />
+    </main>
+  </body>
+</html>

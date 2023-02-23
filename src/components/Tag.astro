@@ -1,0 +1,40 @@
+---
+export interface Props {
+  text: string
+}
+
+function textColor(text: string) {
+  let str = 0
+  Array.from(text).forEach((item) => {
+    const code = item.charCodeAt(0)
+    str += code
+  })
+  const color = parseInt(str.toString(), 16)
+
+  return `#${Array.from(color.toString()).slice(0, 6).join('')}`
+}
+
+const { text } = Astro.props as Props
+const backgroundColor = textColor(text)
+---
+
+<a class='tag' href={`/tags/${text}`}>{text}</a>
+
+<style define:vars={{ backgroundColor }}>
+  .tag {
+    box-sizing: border-box;
+    margin: 0px 0.25rem 0px 0px;
+    min-width: 0px;
+    border-radius: 50px;
+    color: var(--theme-ui-colors-textStrong, hsl(210, 38%, 98%));
+    text-decoration: none;
+    padding: 2px 0.5rem;
+    font-weight: 400;
+    font-size: 0.7rem;
+    transition: all 200ms ease-in-out 0s;
+    flex-shrink: 0;
+    display: inline-flex;
+    background-color: var(--backgroundColor);
+    cursor: pointer;
+  }
+</style>

@@ -1,0 +1,84 @@
+---
+import Tag from '@components/Tag.astro'
+type Props = {
+  emoji?: string
+  title?: string
+  tags?: string[]
+  pubDate?: string
+  url?: string
+}
+
+const { url, emoji, title, pubDate, tags } = Astro.props as Props
+---
+
+<li>
+  <a href={url}>
+    <span class='title'>
+      {emoji}
+      {title}
+    </span>
+    <div>
+      {tags?.map((tag: string) => <Tag text={tag} />)}
+      <time datetime={pubDate}>
+        {
+          new Date(pubDate ?? new Date()).toLocaleDateString('zh-CN', {
+            year: 'numeric',
+            month: 'short',
+            day: 'numeric',
+          })
+        }
+      </time>
+    </div>
+  </a>
+</li>
+
+<style>
+  li {
+    color: var(--theme-ui-colors-primary, white);
+    box-sizing: border-box;
+    min-width: 0px;
+    padding: 0.5rem;
+    border-radius: 0.25rem;
+    display: flex;
+    transition: all 200ms ease-in-out 0s;
+    -webkit-box-pack: justify;
+    justify-content: space-between;
+    overflow: hidden;
+  }
+
+  li:hover {
+    background-color: var(--theme-ui-colors-codeBackground, hsl(285, 5%, 17%));
+  }
+
+  li > a {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    text-decoration: none;
+    color: white;
+  }
+
+  .title {
+    box-sizing: border-box;
+    line-height: 1.25;
+    position: relative;
+    font-size: 1rem;
+    margin: 0px 1rem 0px 0px;
+    font-weight: 700;
+    color: var(--theme-ui-colors-textStrong, hsl(210, 38%, 98%));
+    padding-top: 0.25rem;
+    padding-bottom: 0.25rem;
+    min-width: 260px;
+  }
+
+  li time {
+    box-sizing: border-box;
+    margin: 0px 0px 0px 0.5rem;
+    min-width: 0px;
+    font-size: 0.7rem;
+    color: var(--theme-ui-colors-text, hsl(210, 17%, 85%));
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+</style>
