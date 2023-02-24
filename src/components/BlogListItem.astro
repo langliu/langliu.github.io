@@ -12,7 +12,7 @@ const { url, emoji, title, pubDate, tags } = Astro.props as Props
 ---
 
 <li>
-  <a href={url}>
+  <a href={url} title={title}>
     <span class='title'>
       {emoji}
       {title}

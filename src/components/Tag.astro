@@ -18,7 +18,7 @@ const { text } = Astro.props as Props
 const backgroundColor = textColor(text)
 ---
 
-<a class='tag' href={`/tags/${text}`}>{text}</a>
+<a class='tag' href={`/tags/${text}`} title={text}>{text}</a>
 
 <style define:vars={{ backgroundColor }}>
   .tag {
