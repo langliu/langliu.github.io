@@ -1,5 +1,4 @@
 ---
-layout: '@layouts/BlogPost.astro'
 title: '基于 Astro 搭建博客系统'
 description: '基于 Astro 搭建博客系统'
 pubDate: '2022-09-08'
@@ -222,7 +221,7 @@ const posts = (await Astro.glob('../pages/posts/**/*.{md,mdx}')).sort(
 > 在 markdown/mdx 文件顶部通常会声明文章的一些简要信息，字段可以自定义，通过 `frontmatter` 字段可以拿到这些声明的字段：
 > ```js
 > ---
-> layout: '@layouts/BlogPost.astro'
+> 
 > title: 'Windows 下使用7-Zip批量压缩文件夹'
 > description: 'Windows 下使用7-Zip批量压缩文件夹'
 > pubDate: '2022-09-03'

@@ -1,5 +1,4 @@
 ---
-layout: '@layouts/BlogPost.astro'
 title: 'Go WebAssembly 入门'
 description: 'Go WebAssembly 入门'
 pubDate: '2022-11-03'
