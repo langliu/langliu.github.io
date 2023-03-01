@@ -4,17 +4,25 @@ import BaseHead from '@components/BaseHead.astro'
 import Sider from '@layouts/Sider.astro'
 import Tag from '@components/Tag.astro'
 import Footer from '@components/Footer.astro'
-
-export interface Heading {
-  depth: number
-  slug: string
-  text: string
-}
+import Header from './Header.astro'
 
 type Props = CollectionEntry<'blog'>['data']
-console.log('Astro.props', Astro.props)
 
 const { title, description, pubDate, updatedDate, heroImage, tags, headings } = Astro.props
+const links = [
+  {
+    text: '首页',
+    href: '/',
+  },
+  {
+    text: '标签',
+    href: '/tag',
+  },
+  {
+    text: '关于',
+    href: '/about',
+  },
+]
 ---
 
 <html lang='zh-CN'>
@@ -34,7 +42,8 @@ const { title, description, pubDate, updatedDate, heroImage, tags, headings } = 
         box-sizing: border-box;
         padding: 1rem 1rem 0 1rem;
         flex: 1;
-        margin-left: 250px;
+        max-width: 1200px;
+        margin: 0 auto;
         min-height: 100vh;
         display: flex;
         flex-direction: column;
@@ -185,7 +194,7 @@ const { title, description, pubDate, updatedDate, heroImage, tags, headings } = 
     </style>
   </head>
   <body>
-    <Sider avatar='https://i.328888.xyz/2022/12/23/DDJVc.jpeg' />
+    <Header links={links} isSticky showRssFeed showToggleTheme />
     <main>
       <div class='content'>
         <div class='article-wrapper'>
@@ -203,7 +212,7 @@ const { title, description, pubDate, updatedDate, heroImage, tags, headings } = 
               )
             }
             <div>
-              {tags?.map((tag) => <Tag text={tag} />)}
+              {tags?.map((tag: string) => <Tag text={tag} />)}
             </div>
             <hr />
             {heroImage && <img class='hero' width='100%' height={360} src={heroImage} alt='' />}
@@ -221,7 +230,7 @@ const { title, description, pubDate, updatedDate, heroImage, tags, headings } = 
           <h2 class='heading'>目录</h2>
           <ul>
             {
-              headings?.map((heading) => {
+              headings?.map((heading: any) => {
                 return (
                   <li class={`header-link depth-${heading.depth}`}>
                     <a href={`#${heading.slug}`}>{heading.text}</a>

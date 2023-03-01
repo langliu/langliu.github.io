@@ -32,7 +32,10 @@
     "typescript": "^4.9.5"
   },
   "dependencies": {
-    "@fontsource/jetbrains-mono": "^4.5.12"
+    "@astrojs/node": "^5.0.4",
+    "@astrojs/tailwind": "^3.0.1",
+    "@fontsource/jetbrains-mono": "^4.5.12",
+    "astro-icon": "^0.8.0"
   },
-  "packageManager": "pnpm@7.26.2"
+  "packageManager": "pnpm@7.28.0"
 }

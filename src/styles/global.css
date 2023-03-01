@@ -3,6 +3,9 @@
   https://github.com/HermanMartinus/bearblog/blob/297026a877bc2ab2b3bdfbd6b9f7961c350917dd/templates/styles/blog/default.css
   License MIT: https://github.com/HermanMartinus/bearblog/blob/master/LICENSE.md
  */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 body {
   font-family: Verdana, sans-serif;
   margin: auto;
@@ -70,4 +73,8 @@ blockquote {
   :root {
     --background-color: #2c292e;
   }
+}
+
+#header.scroll {
+  @apply shadow-md md:shadow-lg bg-white md:bg-white/90 md:backdrop-blur-sm dark:bg-slate-900 dark:md:bg-slate-900/90;
 }
