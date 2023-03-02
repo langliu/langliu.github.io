@@ -4,11 +4,11 @@ type Props = {
   emoji?: string
   title?: string
   tags?: string[]
-  pubDate?: string
+  publishDate?: string
   url?: string
 }
 
-const { url, emoji, title, pubDate, tags } = Astro.props as Props
+const { url, emoji, title, publishDate, tags } = Astro.props as Props
 ---
 
 <li>
@@ -19,9 +19,9 @@ const { url, emoji, title, pubDate, tags } = Astro.props as Props
     </span>
     <div>
       {tags?.map((tag: string) => <Tag text={tag} />)}
-      <time datetime={pubDate}>
+      <time datetime={publishDate}>
         {
-          new Date(pubDate ?? new Date()).toLocaleDateString('zh-CN', {
+          new Date(publishDate ?? new Date()).toLocaleDateString('zh-CN', {
             year: 'numeric',
             month: 'short',
             day: 'numeric',

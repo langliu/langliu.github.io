@@ -1,18 +1,23 @@
-/** @type {import('tailwindcss').Config} */
+const defaultTheme = require('tailwindcss/defaultTheme')
+const colors = require('tailwindcss/colors')
 
+/** @type {import('tailwindcss').Config} */
 module.exports = {
-  mode: 'jit',
-  darkMode: 'class',
-  purge: {
-    content: ['./public/**/*.html', './src/**/*.{astro,js,ts}'],
-    options: {
-      safelist: ['dark'],
+  content: ['./src/**/*.{astro,html,js,jsx,md,svelte,ts,tsx,vue}'],
+  theme: {
+    extend: {
+      colors: {
+        primary: 'var(--aw-color-primary)',
+        secondary: 'var(--aw-color-secondary)',
+        accent: 'var(--aw-color-accent)',
+      },
+      fontFamily: {
+        sans: ['var(--aw-font-sans)', ...defaultTheme.fontFamily.sans],
+        serif: ['var(--aw-font-serif)', ...defaultTheme.fontFamily.serif],
+        heading: ['var(--aw-font-heading)', ...defaultTheme.fontFamily.sans],
+      },
     },
   },
-  theme: {
-    // theme extensions
-  },
-  plugins: [
-    // plug-ins if any...
-  ],
+  plugins: [require('@tailwindcss/typography')],
+  darkMode: 'class',
 }

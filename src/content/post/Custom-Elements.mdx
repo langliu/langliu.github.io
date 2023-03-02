@@ -1,0 +1,92 @@
+---
+title: 'Custom Elements'
+description: '近日被问到一个问题：在 JavaScript 中如何判断一个数组是数组？。在听到这个问题的时候我就在想有那些方式，在我们常用的类型判断中可以通过 `typeof` 或 `instanceof` 来进行类型判断。'
+publishDate: '2022-08-29'
+tags:
+  - Web Components
+  - JavaScript
+emoji: 💄
+---
+
+在 Custom Elements 中，我们可以根据是否继承基本 HTML 元素，可以将自定义元素分为两类：
+
+- _Autonomous custom elements_ 自主定制元素
+- _Customized built-in elements_ 自定义内置元素
+
+## 自主定制元素
+
+自主定制元素，是独立的元素，它不继承其他内建的 HTML 元素。
+
+你可以直接把它们写成 HTML 标签的形式，来在页面上使用。例如 `<my-card>`，或者是 `document.createElement("my-card")` 这样。
+
+像我们在[入门](https://www.notion.so/Web-Components-feb3e140c8964426a19540c3a0dc7167)中实现的就是自主定制元素：
+
+```javascript
+class HelloWorld extends HTMLElement {
+  constructor() {
+    super()
+    this.attachShadow({ mode: 'open' })
+    this.shadowRoot.innerHTML ==
+      `
+      <style>
+        :host {
+          display: block;
+          padding: 10px;
+          background-color: #eee;
+        }
+      </style>
+      <h1>Hello World!</h1>
+    `
+  }
+}
+
+// 挂载
+window.customElements.define('hello-world', HelloWorld)
+```
+
+> 💡 继承自 HTMLElement 的样式 display 置为 inline，如果不重新设置 display 的值，那么样式效果会显示不出来。
+
+## 自定义内置元素
+
+继承自基本的 HTML 元素。在创建时，你必须指定所需扩展的元素，使用时，需要先写出基本的元素标签，并通过 `is` 属性指定 custom element 的名称。例如 `<p is="my-card">` , 或者 `document.createElement("p", { is: "my-card" })`。
+
+```js
+// index.js
+
+class MyCard extends HTMLDivElement {
+    constructor() {
+        super();
+        let shadow = this.attachShadow({ mode: "open" });
+
+        let containerEle = document.createElement("div");
+        containerEle.style.display = "flex";
+        containerEle.style.flexDirection = "column"
+        containerEle.style.margin = "100px";
+        containerEle.style.border = "1px solid #aaa";
+
+        const headerEle = document.createElement("div");
+        headerEle.innerText = "名片";
+        headerEle.style.height = "20px";
+        headerEle.style.padding = "10px";
+        headerEle.style.borderBottom = "1px solid blue";
+
+        const bodyEle = document.createElement("div");
+        bodyEle.innerText = "姓名：编程三昧";
+        bodyEle.style.padding = "10px";
+
+        containerEle.appendChild(headerEle);
+        containerEle.appendChild(bodyEle);
+        shadow.appendChild(containerEle);
+    }
+}
+
+customElements.define("my-card", MyCard, {extends: "div"});
+```
+
+## 总结
+
+- **自主定制元素**的构造函数只能继承 HTMLElement，且调用 `customElements.define()` 方法时不需要第三个参数；
+- HTML 中直接使用**自主定制元素**定义的标签名称即可；
+- **自主定制元素**样式的 display 值默认为 inline，如有需要，可重新设置；
+- **自定义内置元素**的构造函数一般只能继承可用的基本 HTML 标签类，且调用 `customElements.define()` 方法时必须要传入第三个参数，第三个参数一般为： `{extends: "标签名"}`；
+- HTML 中直接使用**自定义内置元素**时，需要通过组件构造函数继承类的基本标签名 + `is="自定义标签名"`。

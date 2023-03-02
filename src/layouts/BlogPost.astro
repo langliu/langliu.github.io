@@ -8,7 +8,7 @@ import Header from './Header.astro'
 
 type Props = CollectionEntry<'blog'>['data']
 
-const { title, description, pubDate, updatedDate, heroImage, tags, headings } = Astro.props
+const { title, description, publishDate, updatedDate, heroImage, tags, headings } = Astro.props
 const links = [
   {
     text: '首页',
@@ -201,9 +201,9 @@ const links = [
           <article>
             <h1 class='title'>{title}</h1>
             {
-              pubDate && (
+              publishDate && (
                 <time>
-                  {new Date(pubDate).toLocaleDateString('zh-CN', {
+                  {new Date(publishDate).toLocaleDateString('zh-CN', {
                     year: 'numeric',
                     month: 'long',
                     day: 'numeric',

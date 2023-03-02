@@ -8,7 +8,7 @@ type Props = {
 
 // Use Astro.glob() to fetch all posts, and then sort them by date.
 const posts = (await getCollection('blog')).sort((a, b) => {
-  return new Date(b.data.pubDate).valueOf() - new Date(a.data.pubDate).valueOf()
+  return new Date(b.data.publishDate).valueOf() - new Date(a.data.publishDate).valueOf()
 })
 
 const { tag } = Astro.params as Props
@@ -21,14 +21,14 @@ const { tag } = Astro.params as Props
         posts
           .filter((post) => (tag ? post.data?.tags.includes(tag) : true))
           .map((post) => {
-            const { emoji, title, tags, pubDate } = post.data
+            const { emoji, title, tags, publishDate } = post.data
             return (
               <BlogListItem
                 url={`/blog/${post.slug}/`}
                 emoji={emoji}
                 title={title}
                 tags={tags}
-                pubDate={pubDate}
+                publishDate={publishDate}
               />
             )
           })
