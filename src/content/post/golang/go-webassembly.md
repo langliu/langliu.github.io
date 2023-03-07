@@ -6,6 +6,7 @@ tags:
 - Golang
 - WebAssembly
 emoji: 😘
+image: '~/assets/images/assembly.jpg'
 ---
 
 ## VSCode 配置
