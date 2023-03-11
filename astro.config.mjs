@@ -5,7 +5,6 @@ import { defineConfig } from 'astro/config'
 
 import tailwind from '@astrojs/tailwind'
 import sitemap from '@astrojs/sitemap'
-import image from '@astrojs/image'
 import mdx from '@astrojs/mdx'
 import partytown from '@astrojs/partytown'
 import compress from 'astro-compress'
@@ -28,7 +27,9 @@ export default defineConfig({
   markdown: {
     remarkPlugins: [readingTimeRemarkPlugin],
   },
-
+  image: {
+    service: 'astro/assets/services/sharp',
+  },
   integrations: [
     tailwind({
       config: {
@@ -36,9 +37,7 @@ export default defineConfig({
       },
     }),
     sitemap(),
-    image({
-      serviceEntryPoint: '@astrojs/image/sharp',
-    }),
+
     mdx(),
 
     ...whenExternalScripts(() =>
@@ -66,5 +65,8 @@ export default defineConfig({
         '~': path.resolve(__dirname, './src'),
       },
     },
+  },
+  experimental: {
+    assets: true,
   },
 })

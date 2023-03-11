@@ -79,7 +79,7 @@ cp "$(go env GOROOT)/misc/wasm/wasm_exec.js" .
 
 此时浏览器访问这个 html 文件则会出现一个 alert 弹窗，提示文字为 *Hello World*
 
-![Hello World](/go-webassembly.png)
+![Hello World](/images/go-webassembly.png)
 
 ## 函数注册
 
