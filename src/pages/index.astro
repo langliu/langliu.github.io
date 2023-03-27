@@ -1,45 +1,56 @@
 ---
-import { SITE } from '~/config.mjs';
-import Layout from '~/layouts/PageLayout.astro';
+import { SITE } from '~/config.mjs'
+import Layout from '~/layouts/PageLayout.astro'
 
-import Hero from '~/components/widgets/Hero.astro';
-import Note from '~/components/widgets/Note.astro';
-import Features from '~/components/widgets/Features.astro';
-import Features2 from '~/components/widgets/Features2.astro';
-import Steps from '~/components/widgets/Steps.astro';
-import Content from '~/components/widgets/Content.astro';
-import LatestPosts from '~/components/blog/LatestPosts.astro';
-import FAQs from '~/components/widgets/FAQs.astro';
-import Stats from '~/components/widgets/Stats.astro';
-import CallToAction from '~/components/widgets/CallToAction.astro';
+import Hero from '~/components/widgets/Hero.astro'
+import Note from '~/components/widgets/Note.astro'
+import Features from '~/components/widgets/Features.astro'
+import Features2 from '~/components/widgets/Features2.astro'
+import Steps from '~/components/widgets/Steps.astro'
+import Content from '~/components/widgets/Content.astro'
+import LatestPosts from '~/components/blog/LatestPosts.astro'
+import FAQs from '~/components/widgets/FAQs.astro'
+import Stats from '~/components/widgets/Stats.astro'
+import CallToAction from '~/components/widgets/CallToAction.astro'
+import hero from '~/assets/images/hero.png'
+import creativity from '~/assets/images/creativity.jpg'
+import caos from '~/assets/images/caos.jpg'
+import vintage from '~/assets/images/vintage.jpg'
 
 const meta = {
   title: SITE.title,
   description: SITE.description,
   dontUseTitleTemplate: true,
-};
+}
 ---
 
 <Layout {meta}>
   <!-- Hero Widget ******************* -->
 
   <Hero
-    callToAction={{ text: 'Get template', href: 'https://github.com/onwidget/astrowind', icon: 'tabler:download' }}
+    callToAction={{
+      text: 'Get template',
+      href: 'https://github.com/onwidget/astrowind',
+      icon: 'tabler:download',
+    }}
     callToAction2={{ text: 'Learn more', href: '#features' }}
-    image={{ src: import('~/assets/images/hero.png'), alt: 'AstroWind Hero Image' }}
+    image={hero}
   >
-    <Fragment slot="title">
-      Free template for <span class="hidden lg:inline">create your website <br class="2xl:hidden"/> with</span>
-      <span class="text-accent dark:text-white highlight"> Astro 2.0</span> + Tailwind CSS
+    <Fragment slot='title'>
+      Free template for <span class='hidden lg:inline'
+        >create your website <br class='2xl:hidden' /> with</span
+      >
+      <span class='text-accent dark:text-white highlight'> Astro 2.0</span> + Tailwind CSS
     </Fragment>
 
-    <Fragment slot="subtitle">
-      <span class="hidden sm:inline">
-        <span class="font-semibold">AstroWind</span> is a free, customizable and production-ready template for Astro 2.0 +
-        Tailwind CSS.</span
+    <Fragment slot='subtitle'>
+      <span class='hidden sm:inline'>
+        <span class='font-semibold'>AstroWind</span> is a free, customizable and production-ready template
+        for Astro 2.0 + Tailwind CSS.</span
       >
-      <span class="block mb-1 sm:hidden font-bold text-blue-600">AstroWind: Production-ready.</span> Suitable for Startups,
-      Small Business, Sass Websites, Professional Portfolios, Marketing Websites, Landing Pages & Blogs.
+      <span class='block mb-1 sm:hidden font-bold text-blue-600'>AstroWind: Production-ready.</span>
+      Suitable for Startups, Small Business, Sass Websites, Professional Portfolios, Marketing Websites,
+      Landing Pages & Blogs.
     </Fragment>
   </Hero>
 
@@ -50,9 +61,9 @@ const meta = {
   <!-- Features Widget *************** -->
 
   <Features
-    highlight="Features"
-    title="What you get with AstroWind"
-    subtitle="Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque rem aperiam, eaque ipsa quae."
+    highlight='Features'
+    title='What you get with AstroWind'
+    subtitle='Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque rem aperiam, eaque ipsa quae.'
     items={[
       [
         {
@@ -100,7 +111,7 @@ const meta = {
   <!-- Content Widget **************** -->
 
   <Content
-    highlight="Inside template"
+    highlight='Inside template'
     title="And what's inside? ..."
     items={[
       {
@@ -120,14 +131,16 @@ const meta = {
       },
     ]}
     image={{
-      src: import('~/assets/images/caos.jpg'),
+      src: caos,
       alt: 'Colorful Image',
     }}
   >
-    <Fragment slot="content">
-      <h3 class="text-2xl font-bold tracking-tight dark:text-white sm:text-3xl mb-2">Ad vix debet docendi</h3>
-      Ne dicta praesent ocurreret has, diam theophrastus at pro. Eos etiam regione ut, persius eripuit quo id. Sit te euismod
-      tacimates.
+    <Fragment slot='content'>
+      <h3 class='text-2xl font-bold tracking-tight dark:text-white sm:text-3xl mb-2'>
+        Ad vix debet docendi
+      </h3>
+      Ne dicta praesent ocurreret has, diam theophrastus at pro. Eos etiam regione ut, persius eripuit
+      quo id. Sit te euismod tacimates.
     </Fragment>
   </Content>
 
@@ -157,7 +170,7 @@ const meta = {
       },
     ]}
     image={{
-      src: import('~/assets/images/vintage.jpg'),
+      src: vintage,
       alt: 'Vintage Image',
     }}
   />
@@ -191,7 +204,7 @@ const meta = {
       },
     ]}
     image={{
-      src: import('~/assets/images/creativity.jpg'),
+      src: creativity,
       alt: 'Steps image',
     }}
   />

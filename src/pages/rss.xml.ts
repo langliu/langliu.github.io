@@ -15,7 +15,7 @@ export const get = async () => {
   const posts = await fetchPosts();
 
   return rss({
-    title: `${SITE.name}’s Blog`,
+    title: `${SITE.name}`,
     description: SITE.description,
     site: import.meta.env.SITE,
 

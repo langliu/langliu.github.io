@@ -1,31 +1,32 @@
 ---
-import Layout from '~/layouts/PageLayout.astro';
+import Layout from '~/layouts/PageLayout.astro'
 
-import Header from '~/components/widgets/Header.astro';
-import Hero2 from '~/components/widgets/Hero2.astro';
-import Steps2 from '~/components/widgets/Steps2.astro';
-import Content from '~/components/widgets/Content.astro';
-import CallToAction from '~/components/widgets/CallToAction.astro';
-
-import { headerData } from '~/data';
+import Header from '~/components/widgets/Header.astro'
+import Hero2 from '~/components/widgets/Hero2.astro'
+import Steps2 from '~/components/widgets/Steps2.astro'
+import Content from '~/components/widgets/Content.astro'
+import CallToAction from '~/components/widgets/CallToAction.astro'
+import hero from '~/assets/images/hero.png'
+import caos from '~/assets/images/caos.jpg'
+import { headerData } from '~/data'
 
 const meta = {
   title: 'Saas Landing Page',
-};
+}
 ---
 
 <Layout {meta}>
-  <Fragment slot="header">
+  <Fragment slot='header'>
     <Header
       {...headerData}
       actions={[
         {
-          type: "ghost",
+          type: 'ghost',
           text: 'Login',
           href: '#',
         },
         {
-          type: "primary",
+          type: 'primary',
           text: 'Sign Up',
           href: '#',
         },
@@ -37,22 +38,27 @@ const meta = {
   <!-- Hero2 Widget ******************* -->
 
   <Hero2
-    callToAction={{ text: 'Get template', href: 'https://github.com/onwidget/astrowind', icon: 'tabler:download' }}
+    callToAction={{
+      text: 'Get template',
+      href: 'https://github.com/onwidget/astrowind',
+      icon: 'tabler:download',
+    }}
     callToAction2={{ text: 'Learn more', href: '#features' }}
-    image={{ src: import('~/assets/images/hero.png'), alt: 'AstroWind Hero Image' }}
+    image={{ src: hero, alt: 'AstroWind Hero Image' }}
   >
-    <Fragment slot="title">
+    <Fragment slot='title'>
       Free template for <br />
-      <span class="text-accent dark:text-white highlight"> Astro 2.0</span> + Tailwind CSS
+      <span class='text-accent dark:text-white highlight'> Astro 2.0</span> + Tailwind CSS
     </Fragment>
 
-    <Fragment slot="subtitle">
-      <span class="hidden sm:inline">
-        <span class="font-semibold">AstroWind</span> is a free, customizable and production-ready template for Astro 2.0 +
-        Tailwind CSS.</span
+    <Fragment slot='subtitle'>
+      <span class='hidden sm:inline'>
+        <span class='font-semibold'>AstroWind</span> is a free, customizable and production-ready template
+        for Astro 2.0 + Tailwind CSS.</span
       >
-      <span class="block mb-1 sm:hidden font-bold text-blue-600">AstroWind: Production-ready.</span> Suitable for Startups,
-      Small Business, Sass Websites, Professional Portfolios, Marketing Websites, Landing Pages & Blogs.
+      <span class='block mb-1 sm:hidden font-bold text-blue-600'>AstroWind: Production-ready.</span>
+      Suitable for Startups, Small Business, Sass Websites, Professional Portfolios, Marketing Websites,
+      Landing Pages & Blogs.
     </Fragment>
   </Hero2>
 
@@ -78,14 +84,16 @@ const meta = {
       },
     ]}
     image={{
-      src: import('~/assets/images/caos.jpg'),
+      src: caos,
       alt: 'Colorful Image',
     }}
   >
-    <Fragment slot="content">
-      <h3 class="text-2xl font-bold tracking-tight dark:text-white sm:text-3xl mb-2">Ad vix debet docendi</h3>
-      Ne dicta praesent ocurreret has, diam theophrastus at pro. Eos etiam regione ut, persius eripuit quo id. Sit te euismod
-      tacimates.
+    <Fragment slot='content'>
+      <h3 class='text-2xl font-bold tracking-tight dark:text-white sm:text-3xl mb-2'>
+        Ad vix debet docendi
+      </h3>
+      Ne dicta praesent ocurreret has, diam theophrastus at pro. Eos etiam regione ut, persius eripuit
+      quo id. Sit te euismod tacimates.
     </Fragment>
   </Content>
 
@@ -110,14 +118,16 @@ const meta = {
       },
     ]}
     image={{
-      src: import('~/assets/images/caos.jpg'),
+      src: caos,
       alt: 'Colorful Image',
     }}
   >
-    <Fragment slot="content">
-      <h3 class="text-2xl font-bold tracking-tight dark:text-white sm:text-3xl mb-2">Ad vix debet docendi</h3>
-      Ne dicta praesent ocurreret has, diam theophrastus at pro. Eos etiam regione ut, persius eripuit quo id. Sit te euismod
-      tacimates.
+    <Fragment slot='content'>
+      <h3 class='text-2xl font-bold tracking-tight dark:text-white sm:text-3xl mb-2'>
+        Ad vix debet docendi
+      </h3>
+      Ne dicta praesent ocurreret has, diam theophrastus at pro. Eos etiam regione ut, persius eripuit
+      quo id. Sit te euismod tacimates.
     </Fragment>
   </Content>
 
@@ -143,22 +153,24 @@ const meta = {
       },
     ]}
     image={{
-      src: import('~/assets/images/caos.jpg'),
+      src: caos,
       alt: 'Colorful Image',
     }}
   >
-    <Fragment slot="content">
-      <h3 class="text-2xl font-bold tracking-tight dark:text-white sm:text-3xl mb-2">Ad vix debet docendi</h3>
-      Ne dicta praesent ocurreret has, diam theophrastus at pro. Eos etiam regione ut, persius eripuit quo id. Sit te euismod
-      tacimates.
+    <Fragment slot='content'>
+      <h3 class='text-2xl font-bold tracking-tight dark:text-white sm:text-3xl mb-2'>
+        Ad vix debet docendi
+      </h3>
+      Ne dicta praesent ocurreret has, diam theophrastus at pro. Eos etiam regione ut, persius eripuit
+      quo id. Sit te euismod tacimates.
     </Fragment>
   </Content>
 
   <!-- Steps2 Widget ****************** -->
 
   <Steps2
-    title="Sed ac magna sit amet risus tristique interdum, at vel velit in hac habitasse platea dictumst."
-    subtitle="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi sagittis, quam nec venenatis lobortis, mi risus tempus nulla, sed porttitor est nibh at nulla. Praesent placerat enim ut ex tincidunt vehicula. Fusce sit amet dui tellus."
+    title='Sed ac magna sit amet risus tristique interdum, at vel velit in hac habitasse platea dictumst.'
+    subtitle='Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi sagittis, quam nec venenatis lobortis, mi risus tempus nulla, sed porttitor est nibh at nulla. Praesent placerat enim ut ex tincidunt vehicula. Fusce sit amet dui tellus.'
     callToAction={{
       text: 'Get template',
       href: 'https://github.com/onwidget/astrowind',
@@ -192,13 +204,14 @@ const meta = {
       icon: 'tabler:download',
     }}
   >
-    <Fragment slot="title">
-      Astro + <br class="block sm:hidden" /><span class="sm:whitespace-nowrap"> Tailwind CSS</span>
+    <Fragment slot='title'>
+      Astro + <br class='block sm:hidden' /><span class='sm:whitespace-nowrap'> Tailwind CSS</span>
     </Fragment>
 
-    <Fragment slot="subtitle">
-      Be very surprised by these huge fake numbers you are seeing on this page. <br class="hidden md:inline" />Don't
-      waste more time! :P
+    <Fragment slot='subtitle'>
+      Be very surprised by these huge fake numbers you are seeing on this page. <br
+        class='hidden md:inline'
+      />Don't waste more time! :P
     </Fragment>
   </CallToAction>
 </Layout>

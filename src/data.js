@@ -53,7 +53,7 @@ export const headerData = {
     //   href: '#',
     // },
     {
-      text: 'Blog',
+      text: '博客',
       href: getBlogPermalink(),
     },
   ],
