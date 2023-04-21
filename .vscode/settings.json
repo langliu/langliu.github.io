@@ -4,5 +4,8 @@
     "astrojs",
     "pnpm",
     "shiki"
-  ]
+  ],
+  "npm.packageManager": "pnpm",
+  "eslint.packageManager": "pnpm",
+  "stylelint.packageManager": "pnpm"
 }
