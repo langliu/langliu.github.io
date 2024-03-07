@@ -1,7 +1,7 @@
 {
-  "name": "astro-template-portfolio",
+  "name": "langliu.github.io",
   "type": "module",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "scripts": {
     "dev": "astro dev",
     "start": "astro dev",
@@ -12,21 +12,22 @@
   },
   "dependencies": {
     "@astrojs/rss": "^4.0.5",
-    "@astrojs/sitemap": "^3.0.0",
-    "@astrojs/tailwind": "^5.0.0",
-    "astro": "^3.1.0",
+    "@astrojs/sitemap": "^3.1.1",
+    "@astrojs/tailwind": "^5.1.0",
+    "astro": "^4.4.13",
     "astro-font": "^0.0.77",
     "astro-robots-txt": "^1.0.0",
-    "astro-seo": "0.8.0",
+    "astro-seo": "^0.8.3",
     "limax": "^4.1.0",
-    "tailwindcss": "^3.3.3"
+    "tailwindcss": "^3.4.1"
   },
   "devDependencies": {
-    "@typescript-eslint/parser": "5.59.7",
-    "eslint": "8.41.0",
-    "eslint-plugin-astro": "0.27.1",
-    "prettier": "2.8.8",
-    "prettier-plugin-astro": "0.9.0",
-    "prettier-plugin-tailwindcss": "0.3.0"
+    "@typescript-eslint/parser": "^7.1.1",
+    "eslint": "8.57.0",
+    "eslint-plugin-astro": "^0.31.4",
+    "prettier": "^3.2.5",
+    "prettier-plugin-astro": "^0.13.0",
+    "prettier-plugin-tailwindcss": "^0.5.12",
+    "typescript": "^5.4.2"
   }
 }

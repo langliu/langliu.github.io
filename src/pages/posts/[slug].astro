@@ -1,5 +1,5 @@
 ---
-import { CollectionEntry, getCollection } from "astro:content";
+import { type CollectionEntry, getCollection } from "astro:content";
 import Layout from "@/layouts/Layout.astro";
 import formatDate from "@/utils/formatDate";
 
@@ -21,7 +21,7 @@ const { Content } = await post.render();
 ---
 
 <Layout title={post.data.title} description={post.data.description}>
-  <main class="post mx-auto flex w-full max-w-prose flex-col gap-4">
+  <main class="post mx-auto flex w-full max-w-3xl flex-col gap-4">
     <header role="presentation">
       <h1 class="text-md">
         {post.data.title} - {formatDate(post.data.publishedAt)}
