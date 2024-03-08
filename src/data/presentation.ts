@@ -1,36 +1,36 @@
 type Social = {
-  label: string;
-  link: string;
-};
+  label: string
+  link: string
+}
 
 type Presentation = {
-  mail: string;
-  title: string;
-  description: string;
-  socials: Social[];
-  profile?: string;
-};
+  mail: string
+  title: string
+  description: string
+  socials: Social[]
+  profile?: string
+}
 
 const presentation: Presentation = {
-  mail: "langliu1216@gmail.com",
-  title: "Hi, I’m Allen 👋",
+  mail: 'langliu1216@gmail.com',
+  title: 'Hi, I’m Allen 👋',
   // profile: "/profile.webp",
   description:
-    "Bonjour, i'm a *chinese frontend developer* with over *6 years* of web experience. I am currently working with *NextJS and Typescript*. Outside of work I complete my pokemon card collection and learning TypeScript.",
+    "Bonjour, i'm a *china frontend developer* with over *6 years* of web experience. I am currently working with *ReactJS and Typescript*. Outside of work I will go fishing in the wild and learning Svelte.",
   socials: [
     {
-      label: "X",
-      link: "https://twitter.com/itsstormzz_",
+      label: 'Github',
+      link: 'https://github.com/langliu',
     },
     {
-      label: "Bento",
-      link: "https://bento.me/m-wolff",
+      label: 'X',
+      link: 'https://twitter.com/langliu1216',
     },
     {
-      label: "Github",
-      link: "https://github.com/langliu",
+      label: 'JueJin',
+      link: 'https://juejin.cn/user/149189311334951',
     },
   ],
-};
+}
 
-export default presentation;
+export default presentation

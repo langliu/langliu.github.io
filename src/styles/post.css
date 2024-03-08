@@ -37,3 +37,12 @@
 .post pre > code {
   @apply bg-transparent;
 }
+
+.post table {
+  @apply border-collapse border;
+}
+
+.post td,
+.post th {
+  @apply border px-3 py-1 border-slate-500;
+}
