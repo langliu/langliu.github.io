@@ -1,46 +1,46 @@
 ---
-import { getCollection } from "astro:content";
-import { Image } from "astro:assets"
+import { getCollection } from 'astro:content'
+import { Image } from 'astro:assets'
 
-import Layout from "@/layouts/Layout.astro";
-import SocialLinks from "@/components/SocialLinks.astro";
-import PostCard from "@/components/PostCard.astro";
-import ProjectCard from "@/components/ProjectCard.astro";
-import Link from "@/components/shared/Link.astro";
-import convertAsteriskToStrongTag from "@/utils/convertAsteriskToStrongTag";
+import Layout from '@/layouts/Layout.astro'
+import SocialLinks from '@/components/SocialLinks.astro'
+import PostCard from '@/components/PostCard.astro'
+import ProjectCard from '@/components/ProjectCard.astro'
+import Link from '@/components/shared/Link.astro'
+import convertAsteriskToStrongTag from '@/utils/convertAsteriskToStrongTag'
 
-import presentation from "@/data/presentation";
-import projects from "@/data/projects";
+import presentation from '@/data/presentation'
+import projects from '@/data/projects'
 
-const posts = (await getCollection("posts")).sort(function (first, second) {
-  return second.data.publishedAt.getTime() - first.data.publishedAt.getTime();
-});
+const posts = (await getCollection('posts')).sort(function (first, second) {
+  return second.data.publishedAt.getTime() - first.data.publishedAt.getTime()
+})
 ---
 
 <Layout>
-  <main class="flex flex-col gap-20">
-    <article
-      class="flex flex-col gap-8 md:flex-row-reverse md:justify-end md:gap-12"
-    >
+  <main class='flex flex-col gap-20'>
+    <article class='flex flex-col gap-8 md:flex-row-reverse md:justify-end md:gap-12'>
       {
         presentation.profile && (
           <Image
             src={presentation.profile}
-            class="w-1/4 self-center rounded-full"
-            alt="Your Profile"
-            width="200"
-            height="200"
+            class='w-1/4 self-center rounded-full'
+            alt='Your Profile'
+            width='200'
+            height='200'
           />
         )
       }
 
-      <div class="flex flex-col gap-8">
-        <h1 class="text-3xl text-neutral-100">
+      <div class='flex flex-col gap-8'>
+        <h1
+          class='text-4xl font-bold text-neutral-100 text-transparent bg-clip-text bg-gradient-to-r from-orange-400 to-purple-500 w-max'
+        >
           {presentation.title}
         </h1>
 
         <h2
-          class="w-auto max-w-[60ch] leading-6"
+          class='w-auto max-w-[60ch] leading-6'
           set:html={convertAsteriskToStrongTag(presentation.description)}
         />
 
@@ -48,14 +48,14 @@ const posts = (await getCollection("posts")).sort(function (first, second) {
       </div>
     </article>
 
-    <article class="flex flex-col gap-8">
-      <header class="flex w-full flex-row justify-between gap-2">
-        <h3 class="text-lg text-neutral-100">Latest posts</h3>
-        <Link href="/posts" label="See all posts" isUnderline target="_self" />
+    <article class='flex flex-col gap-8'>
+      <header class='flex w-full flex-row justify-between gap-2'>
+        <h3 class='text-lg text-neutral-100'>最新文章</h3>
+        <Link href='/posts' label='查看所有' isUnderline target='_self' />
       </header>
       {posts.length === 0 && <p>Soon, stay connected 👀...</p>}
 
-      <section class="flex flex-col gap-4 md:flex-row md:flex-wrap">
+      <section class='flex flex-col gap-4 md:flex-row md:flex-wrap justify-between'>
         {
           posts.length !== 0 &&
             posts
@@ -72,31 +72,26 @@ const posts = (await getCollection("posts")).sort(function (first, second) {
       </section>
     </article>
 
-    <article class="flex flex-col gap-8">
-      <header class="flex w-full flex-row justify-between gap-2">
-        <h3 class="text-lg text-neutral-100">
+    <article class='flex flex-col gap-8'>
+      <header class='flex w-full flex-row justify-between gap-2'>
+        <h3 class='text-lg text-neutral-100'>
           Selected projects ({projects.length})
         </h3>
       </header>
       {projects.length === 0 && <p>Oops, I must work^^^^^</p>}
 
-      <section class="flex flex-col gap-4">
-        {
-          projects.length !== 0 &&
-            projects.map((project) => <ProjectCard {...project} />)
-        }
+      <section class='flex flex-col gap-4'>
+        {projects.length !== 0 && projects.map((project) => <ProjectCard {...project} />)}
       </section>
     </article>
 
-    <article class="flex flex-col gap-8">
-      <header class="flex w-full flex-row justify-between gap-2">
-        <h3 class="text-lg text-neutral-100">Get in touch</h3>
+    <article class='flex flex-col gap-8'>
+      <header class='flex w-full flex-row justify-between gap-2'>
+        <h3 class='text-lg text-neutral-100'>Get in touch</h3>
       </header>
       <p>
-        Email me at <Link
-          href={`mailto:${presentation.mail}`}
-          label={presentation.mail}
-        /> or follow me via my social links.
+        Email me at <Link href={`mailto:${presentation.mail}`} label={presentation.mail} /> or follow
+        me via my social links.
       </p>
 
       <SocialLinks />

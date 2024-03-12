@@ -7,5 +7,9 @@
   ],
   "npm.packageManager": "pnpm",
   "eslint.packageManager": "pnpm",
-  "stylelint.packageManager": "pnpm"
+  "stylelint.packageManager": "pnpm",
+  "editor.codeActionsOnSave": {
+    "source.fixAll": "always"
+  },
+  "editor.formatOnSave": true
 }

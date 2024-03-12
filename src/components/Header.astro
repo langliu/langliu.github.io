@@ -1,34 +1,32 @@
 ---
-import removeTrailingSlash from "@/utils/removeTrailingSlash";
-import presentation from "@/data/presentation";
+import removeTrailingSlash from '@/utils/removeTrailingSlash'
+import presentation from '@/data/presentation'
 
-const pathname = removeTrailingSlash(Astro.url.pathname);
+const pathname = removeTrailingSlash(Astro.url.pathname)
 ---
 
-<header class="z-40 flex w-full flex-col gap-2 md:flex-row md:justify-between">
-  <a href={`mailto:${presentation.mail}`} class="hover:text-neutral-100"
-    >{presentation.mail}</a
-  >
+<header class='z-40 flex w-full flex-col gap-2 md:flex-row md:justify-between'>
+  <a href={`mailto:${presentation.mail}`} class='hover:text-neutral-100'>{presentation.mail}</a>
 
-  <nav role="navigation">
-    <ul role="list" class="flex flex-row gap-2">
+  <nav role='navigation'>
+    <ul role='list' class='flex flex-row gap-2'>
       <li>
         <a
-          href="/"
+          href='/'
           class:list={{
-            ["hover:text-neutral-100"]: true,
-            ["text-neutral-100"]: pathname === "/",
-          }}>Home</a
+            ['hover:text-neutral-100']: true,
+            ['text-neutral-100']: pathname === '/',
+          }}>首页</a
         >
       </li>
       <li>/</li>
       <li>
         <a
-          href="/posts"
+          href='/posts'
           class:list={{
-            ["hover:text-neutral-100"]: true,
-            ["text-neutral-100"]: pathname === "/posts",
-          }}>Posts</a
+            ['hover:text-neutral-100']: true,
+            ['text-neutral-100']: pathname === '/posts',
+          }}>文章</a
         >
       </li>
     </ul>

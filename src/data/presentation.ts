@@ -13,7 +13,7 @@ type Presentation = {
 
 const presentation: Presentation = {
   mail: 'langliu1216@gmail.com',
-  title: 'Hi, I’m Allen 👋',
+  title: 'Hi, I’m Allen',
   // profile: "/profile.webp",
   description:
     "Bonjour, i'm a *china frontend developer* with over *6 years* of web experience. I am currently working with *ReactJS and Typescript*. Outside of work I will go fishing in the wild and learning Svelte.",
