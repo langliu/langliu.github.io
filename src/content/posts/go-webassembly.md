@@ -1,12 +1,12 @@
 ---
 title: 'Go WebAssembly 入门'
 description: 'Go WebAssembly 入门'
-publishDate: '2022-11-03'
+publishedAt: 2022-11-03
 tags:
 - Golang
 - WebAssembly
-emoji: 😘
-image: '~/assets/images/assembly.jpg'
+isPublish: true
+slug: 'go-web-assembly'
 ---
 
 ## VSCode 配置

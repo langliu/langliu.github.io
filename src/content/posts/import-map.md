@@ -1,13 +1,12 @@
 ---
 title: '在浏览器中通过 import maps 使用 ES 模块'
 description: '在浏览器中通过 import maps 使用 ES 模块'
-publishDate: '2022-12-22'
+publishedAt: 2022-12-22
 tags:
   - JavaScript
   - HTML
-emoji: 😊
-darft: true
-image: '~/assets/images/sigmund-QuusekRfTI8-unsplash.jpg'
+isPublish: true
+slug: 'import-map'
 ---
 
 ## ES 模块简介

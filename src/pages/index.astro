@@ -40,7 +40,7 @@ const posts = (await getCollection('posts')).sort(function (first, second) {
         </h1>
 
         <h2
-          class='w-auto max-w-[60ch] leading-6'
+          class='w-auto leading-6'
           set:html={convertAsteriskToStrongTag(presentation.description)}
         />
 
