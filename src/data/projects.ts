@@ -12,16 +12,16 @@ const projects: Project[] = [
     link: 'https://github.com/langliu/svelte-blog-template',
   },
   {
-    title: 'Portfolio / Lina BLIDI',
-    techs: ['ReactJS (NextJS)', 'TypeScript'],
-    link: 'https://www.linablidi.fr/',
+    title: 'svelte-devui',
+    techs: ['SvelteJS', 'TypeScript'],
+    link: 'https://github.com/langliu/svelte-devui',
   },
-  {
-    title: 'Portfolio / Template',
-    techs: ['Astro'],
-    link: '/',
-    isComingSoon: true,
-  },
+  // {
+  //   title: 'Portfolio / Template',
+  //   techs: ['Astro'],
+  //   link: '/',
+  //   isComingSoon: true,
+  // },
 ]
 
 export default projects

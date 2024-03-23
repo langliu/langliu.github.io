@@ -75,7 +75,7 @@ const posts = (await getCollection('posts')).sort(function (first, second) {
     <article class='flex flex-col gap-8'>
       <header class='flex w-full flex-row justify-between gap-2'>
         <h3 class='text-lg text-neutral-100'>
-          Selected projects ({projects.length})
+          我的项目 ({projects.length})
         </h3>
       </header>
       {projects.length === 0 && <p>Oops, I must work^^^^^</p>}
@@ -87,11 +87,10 @@ const posts = (await getCollection('posts')).sort(function (first, second) {
 
     <article class='flex flex-col gap-8'>
       <header class='flex w-full flex-row justify-between gap-2'>
-        <h3 class='text-lg text-neutral-100'>Get in touch</h3>
+        <h3 class='text-lg text-neutral-100'>联系我</h3>
       </header>
       <p>
-        Email me at <Link href={`mailto:${presentation.mail}`} label={presentation.mail} /> or follow
-        me via my social links.
+        给我发电子邮件 <Link href={`mailto:${presentation.mail}`} label={presentation.mail} /> 或者通过我的社交链接关注我。
       </p>
 
       <SocialLinks />

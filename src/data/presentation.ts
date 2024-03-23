@@ -13,10 +13,10 @@ type Presentation = {
 
 const presentation: Presentation = {
   mail: 'langliu1216@gmail.com',
-  title: 'Hi, I’m Allen',
+  title: '你好，我是刘浪',
   // profile: "/profile.webp",
   description:
-    "Bonjour, i'm a *china frontend developer* with over *6 years* of web experience. I am currently working with *ReactJS and Typescript*. Outside of work I will go fishing in the wild and learning Svelte.",
+    "我是一名来自中国的*前端开发工程师*，拥有超过 *6 年* 的 Web 经验。 我目前正在使用 *ReactJS 和 Typescript*。 工作之余，我会去野外钓鱼并学习 Svelte。",
   socials: [
     {
       label: 'Github',
