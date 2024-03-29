@@ -13,7 +13,7 @@ export default defineConfig({
     syntaxHighlight: 'shiki',
     shikiConfig: {
       theme: 'github-dark',
-      wrap: false
+      wrap: true
     }
   }
 })

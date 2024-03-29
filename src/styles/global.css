@@ -17,45 +17,56 @@ strong,
 b {
   color: #fff;
 }
+
 a {
   color: pink;
   text-decoration: none;
 }
+
 nav a {
   margin-right: 10px;
 }
+
 textarea {
   width: 100%;
   font-size: 16px;
 }
+
 input {
   font-size: 16px;
 }
+
 content {
   line-height: 1.6;
 }
+
 table {
   width: 100%;
 }
+
 img {
   max-width: 100%;
 }
+
 code {
   padding: 0 5px;
   background-color: #ff79c6;
   border-radius: 4px;
 }
+
 pre {
   padding: 1rem;
 }
+
 pre > code {
   all: unset;
 }
+
 blockquote {
   border: 1px solid #999;
   color: #fff;
-  padding: 2px 0px 2px 20px;
-  margin: 0px;
+  padding: 2px 0 2px 20px;
+  margin: 0;
   font-style: italic;
 }
 
