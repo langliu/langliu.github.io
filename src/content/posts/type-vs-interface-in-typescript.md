@@ -142,7 +142,7 @@ interface Staff extends Person {
 
 由于检测到冲突而引发错误。
 
-![conflict detected error thrown](/public/images/conflict-detected-error-thrown.avif)
+![conflict detected error thrown](/images/conflict-detected-error-thrown.avif)
 
 `type` 以不同的方式处理冲突。如果 `type` 使用相同的属性键扩展另一个类型，它将自动合并所有属性而不是抛出错误。
 

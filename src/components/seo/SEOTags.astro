@@ -9,14 +9,14 @@ type Props = HeadTags
 const { title, description, noindex, og } = Astro.props
 
 const DEFAULT_TITLE_PAGE = '研之有物 - 首页'
-const DEFAULT_DESCRIPTION_PAGE = 'A minimal portfolio template built with Astro and Tailwindcss.'
+const DEFAULT_DESCRIPTION_PAGE = '刘浪的个人博客'
 const DEFAULT_URL_SITE = SITE_URL
 
 const openGraph = {
   title: title || og?.title || DEFAULT_TITLE_PAGE,
   type: og?.type || 'website',
   image: og?.image || '/opengraph-image.jpg',
-  alt: og?.alt || 'astro portfolio template image',
+  alt: og?.alt || '刘浪的个人博客',
   url: DEFAULT_URL_SITE,
   description: og?.description || DEFAULT_DESCRIPTION_PAGE,
 }
@@ -43,7 +43,7 @@ const openGraph = {
     }}
     extend={{
       link: [
-        { rel: 'icon', href: '/favicon.svg' },
+        { rel: 'icon', href: '/favicon.ico' },
         { rel: 'sitemap', href: '/sitemap-index.xml' },
       ],
       meta: [
