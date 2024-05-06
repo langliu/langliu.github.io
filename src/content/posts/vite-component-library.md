@@ -193,3 +193,183 @@ export function helloAnything(thing: string): string {
 +   }
   }
 ```
+
+## 导入CSS
+
+CSS 文件无法轻松导入到 JavaScript 中。因此，CSS文件是单独生成的，允许库用户决定如何处理该文件。
+
+但是，如果我们假设使用该库的应用程序具有可以处理 CSS 导入的捆绑器配置，该怎么办？
+
+为此，转译的 JavaScript 包必须包含 CSS 文件的导入语句。我们将使用另一个 Vite 插件（[vite-plugin-lib-inject-css](https://github.com/emosheeep/vite-plugin-lib-inject-css)），它可以通过零配置完全满足我们的需要。
+
+```bash
+npm i vite-plugin-lib-inject-css -D
+```
+
+```ts
+// vite.config.ts
++import { libInjectCss } from 'vite-plugin-lib-inject-css'
+…
+  plugins: [
+    react(),
++   libInjectCss(),
+    dts({ include: ['lib'] })
+  ],
+…
+```
+
+构建库并查看捆绑的 JavaScript 文件的顶部 ( dist/my-component-library.js )：
+
+```js
+// dist/my-component-library.js
+import "./main.css";
+…
+```
+
+## 拆分 CSS
+
+但仍然存在第二个问题：当您从库中导入某些内容时， `main.css` 也会被导入，并且所有 CSS 样式最终都会出现在您的应用程序包中。即使您只导入按钮。
+
+`libInjectCSS` 插件为每个块生成一个单独的 CSS 文件，并在每个块的输出文件的开头包含一个 `import` 语句。
+
+因此，如果您拆分 JavaScript 代码，最终会得到单独的 CSS 文件，只有在导入相应的 JavaScript 文件时才会导入这些文件。
+
+做到这一点的一种方法是将每个文件变成一个 Rollup 入口点。而且，再好不过了，[Rollup 文档](https://cn.rollupjs.org/configuration-options/#input)中推荐了一种正确执行此操作的方法：
+
+> 📘 如果您想将一组文件转换为另一种格式，同时保留文件结构和导出签名，建议的方法是（而不是使用可能会摇动导出并发出由插件创建的虚拟文件的 `output.preserveModules` ）：将每个文件变成一个入口点。
+
+因此，让我们将其添加到您的配置中。
+
+```bash
+npm i glob -D
+```
+
+然后将你的 Vite 配置更改为：
+
+```ts
+// vite.config.ts
+-import { resolve } from 'path'
++import { extname, relative, resolve } from 'path'
++import { fileURLToPath } from 'node:url'
++import { glob } from 'glob'
+…
+    rollupOptions: {
+      external: ['react', 'react/jsx-runtime'],
++     input: Object.fromEntries(
++       glob.sync('lib/**/*.{ts,tsx}').map(file => [
++         // The name of the entry point
++         // lib/nested/foo.ts becomes nested/foo
++         relative(
++           'lib',
++           file.slice(0, file.length - extname(file).length)
++         ),
++         // The absolute path to the entry file
++         // lib/nested/foo.ts becomes /project/lib/nested/foo.ts
++         fileURLToPath(new URL(file, import.meta.url))
++       ])
++     )
+    }
+…
+```
+
+> 💡 glob 库可以帮助您指定一组文件名。在本例中，它选择以 `.ts` 或 `.tsx` 结尾的所有文件
+
+现在，您最终会在 dist 文件夹的根目录中看到一堆 JavaScript 和 CSS 文件。它有效，但看起来不是特别漂亮，不是吗？
+
+```ts
+// vite.config.ts
+    rollupOptions: {
+…
++     output: {
++       assetFileNames: 'assets/[name][extname]',
++       entryFileNames: '[name].js',
++     }
+    }
+…
+```
+
+再次转译库，所有 JavaScript 文件现在应该位于您在 lib 中创建的相同组织文件夹结构及其类型定义中。 CSS 文件位于名为 asset 的新文件夹中。
+
+## 发布包之前的最后几个步骤
+
+您的构建设置现已准备就绪，在发布软件包之前只需考虑一些事项。
+
+package.json 文件将与您的包文件一起发布。您需要确保它包含有关包裹的所有重要信息。
+
+### 主文件
+
+每个 npm 包都有一个主入口点，默认情况下此文件位于包根目录中的 `index.js` 。
+
+您的库的主要入口点现在位于 `dist/main.js` ，因此需要在您的 package.json 中设置。这同样适用于类型的入口点： `dist/main.d.ts`
+
+```json
+// package.json
+{
+  "name": "my-component-library",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
++ "main": "dist/main.js",
++ "types": "dist/main.d.ts",
+  …
+```
+
+### 定义要发布的文件
+
+您还应该定义哪些文件应该打包到您的分布式包中。
+
+```json
+// package.json
+  …
+  "main": "dist/main.js",
+  "types": "dist/main.d.ts",
++ "files": [
++   "dist"
++ ],
+  …
+```
+
+### 依赖关系
+
+现在看看您的 `dependencies` ：现在应该只有两个 `react` 和 `react-dom` 以及几个 `devDependencies` 。
+
+您也可以将这两个移动到 `devDepedencies` 。另外将它们添加为 `peerDependencies` ，以便使用应用程序知道它必须安装 React 才能使用此包。
+
+```json
+// package.json
+- "dependencies": {
++ "peerDependencies": {
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
+  },
+  "devDependencies": {
++   "react": "^18.2.0",
++   "react-dom": "^18.2.0",
+    …
+  }
+```
+
+### 副作用
+
+为了防止 CSS 文件被消费者的 tree-shaking 操作意外删除，您还应该将生成的 CSS 指定为副作用：
+
+```json
+// package.json
++ "sideEffects": [
++   "**/*.css"
++ ],
+```
+
+### 确保包已构建
+
+您可以使用特殊的生命周期脚本 `prepublishOnly` 来保证您的更改始终在包发布之前构建：
+
+```json
+// package.json
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc && vite build",
+    …
++   "prepublishOnly": "npm run build"
+  },
+```
