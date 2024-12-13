@@ -36,7 +36,9 @@
 }
 
 .post pre {
-  @apply p-4;
+  @apply py-4 px-8 rounded-md;
+  border: 1px solid hsl(210deg 10% 30%);
+  background-color: transparent !important;
 }
 
 .post pre > code {
