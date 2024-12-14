@@ -1,7 +1,7 @@
 ---
-title: "React i18next配置"
+title: "React i18next 配置"
 publishedAt: 2024-12-10
-description: "React i18next配置"
+description: "React i18next 配置"
 slug: "react-i18next"
 isPublish: true
 ---
@@ -135,22 +135,58 @@ export default function App() {
 
 #### Trans
 
-[`Trans`](https://react.i18next.com/latest/trans-component) 适用于更复杂的情况
+[`Trans`](https://react.i18next.com/latest/trans-component) 适用于更复杂的情况，比如在翻译文案中需要使用HTML标签或者React组件对文案内容进行包裹：
+
+比如有以下翻译文案：“离比赛开始还有{{value}}天”，我们是在一个列表中渲染，我们期望value的样式根据结束时间有动态的变化，比如小于3天的结束时间，我们期望value的样式为红色，大于3天的结束时间，我们期望value的样式为绿色，我们可以通过以下方式来实现：
+
+1. 对翻译文案进行调整，将value的样式通过HTML标签进行包裹：`离比赛开始还有<1>{{value}}</1>天`
+2. 使用 `Trans` 组件来包裹翻译文案，其中
+   1. `i18nKey` 是翻译文案的Key；
+   2. `ns` 是翻译文案所在的命名空间；
+   3. `values` 是自定义差值的对象；
+   4. `components` 是自定义组件的对象，其中的key是翻译文案中标签的标识（标识可以是任意字符串，需要于翻译文案中声明的标识相对应），value是自定义组件（自定义组件需要闭合）；
 
 ```tsx
-import { Trans } from "react-i18next";
+import { Trans } from 'react-i18next'
 
-export default function App() {
+export default function App () {
   return (
     <div className="App">
-      <p><Trans ns={'translation'} i18nKey={'hello world'} /></p>
-      <p><Trans ns={'user'} i18nKey={'name'} /></p>
+      <p>
+        <Trans 
+          ns={'translation'} 
+          i18nKey={'startWith'} 
+          values={{ value: 7 }}
+          components={{ 1: <span className={'green'} /> }}
+        />
+        <Trans
+          ns={'translation'}
+          i18nKey={'startWith'}
+          values={{ value: 2 }}
+          components={{ 1: <span className={'red'} /> }}
+        />
+      </p>
     </div>
-  );
+  )
 }
 ```
 
-### 从本地JSON文件中加载翻译文案
+### 插入值
+
+在翻译文案中，有很多时候我们需要在语句中间插入一些自定义的值，比如 “离比赛开始还有XX天” 这种场景，其中的我们是想要自定义输入的，那么在 i18next 中我们可以通过以下方式来实现：
+
+在翻译文案中使用 `离比赛开始还有{{value}}天` 的方式来插入值：
+
+在代码中使用下面的方式来插入值（变量的名称需要和在声明的时候保持一致）：
+
+```tsx
+// hooks 方式使用
+{t('hello world', { value: '10' })}
+// Trans 组件方式使用
+<Trans i18nKey={'hello world'} values={{ value: '10' }}>
+```
+
+## 从本地JSON文件中加载翻译文案
 
 ```typescript
 import i18n from 'i18next';
@@ -167,6 +203,7 @@ i18n
     interpolation: {
       escapeValue: false, // 允许在翻译中使用 HTML 标签
     },
+   ns: ['translation', 'ns1', 'ns2'], // 命名空间，用于区分不同的翻译文件（必须）
     backend: {
       loadPath: '/locales/{{lng}}/{{ns}}.json', // 翻译文件的路径，默认在public文件夹下
     },
@@ -175,7 +212,7 @@ i18n
 export default i18n;
 ```
 
-### 类型声明
+## 类型声明
 
 在项目根目录下新建 `i18next.d.ts`，并添加以下内容：
 
@@ -200,6 +237,63 @@ declare module 'i18next' {
   }
 }
 ```
+
+## 示例
+
+下面是一个基于本地JSON文件的完整示例：
+
+<iframe src="https://codesandbox.io/embed/nrz6dc?view=editor+%2B+preview&module=%2Fsrc%2FApp.tsx"
+style="width:100%; height: 500px; border:0; border-radius: 4px; overflow:hidden;"
+title="react-i18next-example"
+allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking"
+sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"
+></iframe>
+
+## 编辑器支持
+
+i18n 是一个比较通用的功能，目前WebStorm和VSCode都有对应的插件支持，下面是一些插件的介绍：
+
+### VSCode
+
+安装 [i18n Ally](https://marketplace.visualstudio.com/items?itemName=Lokalise.i18n-ally) 插件，然后在 `settings.json` 中添加以下配置：
+
+```json
+{
+  "i18n-ally.localesPaths": [
+    "public/locales"
+  ],
+  "i18n-ally.keystyle": "nested",
+  "i18n-ally.defaultNamespace": "translation",
+  "i18n-ally.displayLanguage": "zh",
+  "i18n-ally.editor.preferEditor": false,
+  "i18n-ally.enabledFrameworks": [
+    "i18next",
+    "react-i18next"
+  ],
+  "i18n-ally.enabledParsers": [
+    "json"
+  ],
+  "i18n-ally.namespace": true
+}
+```
+
+![i18n Ally screenshot](https://github.com/antfu/i18n-ally/raw/screenshots/review-sidebar.png?raw=true)
+
+### WebStorm
+
+安装插件[i18n Ally](https://plugins.jetbrains.com/plugin/17212-i18n-ally)
+
+![i18n Ally screenshot](https://plugins.jetbrains.com/files/17212/screenshot_e34d916c-a298-4cd3-b3b7-93abf51d06d6)
+
+> 注意：WebStorm 插件维护情况不是很好，暂不支持WebStorm 2024.3及以上版本。
+
+## 快速翻译
+
+在实际项目中，我们可能会有很多种语言，单个需求下所涉及到的翻译文案较多，这时如果还是一个单词一个单词的翻译的话，会非常浪费时间，
+这时我们可以借助一些工具来快速翻译，我最近做了一个支持翻译JSON文件的工具网站 [i18n JSON Translate](https://i18n-json-translate.langliu.xyz/)，
+支持输入JSON格式的翻译文案，选择目标语言，点击翻译按钮，即可快速翻译。
+
+![i18n JSON Translate screenshot](/images/i18n-json-translate.webp)
 
 ## 参考文章
 
