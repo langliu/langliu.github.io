@@ -1,5 +1,13 @@
 .post p {
-  @apply leading-7;
+  @apply leading-7 mb-5;
+}
+
+.post blockquote {
+  margin-bottom: 20px;
+
+  p {
+    margin-bottom: 0;
+  }
 }
 
 .post code {
@@ -7,15 +15,20 @@
 }
 
 .post h2 {
-  @apply mt-6 text-3xl text-neutral-100;
+  @apply mt-8 text-3xl text-neutral-100 mb-6;
+  color: var(--color-tertiary);
 }
 
 .post h3 {
-  @apply mt-4 text-xl text-neutral-100;
+  @apply mt-6 text-xl text-neutral-100 mb-4;
+}
+
+.post h4 {
+  @apply mt-6  mb-4;
 }
 
 .post code {
-  @apply rounded-sm bg-neutral-800 px-1 py-[2px] text-red-500;
+  @apply rounded-sm bg-neutral-800 px-1 py-[2px] text-red-500 mb-2 mt-4;
 }
 
 .post code .line:last-child:empty {
@@ -39,6 +52,7 @@
   @apply py-4 px-8 rounded-md;
   border: 1px solid hsl(210deg 10% 30%);
   background-color: transparent !important;
+  margin-bottom: 20px;
 }
 
 .post pre > code {
@@ -57,4 +71,5 @@
 .post ol {
   list-style-type: decimal;
   padding-left: 1rem;
+  margin-bottom: 20px;
 }

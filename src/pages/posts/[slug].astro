@@ -1,27 +1,28 @@
 ---
-import { type CollectionEntry, getCollection } from "astro:content";
-import Layout from "@/layouts/Layout.astro";
-import formatDate from "@/utils/formatDate";
+import { type CollectionEntry, getCollection } from 'astro:content'
+import Layout from '@/layouts/Layout.astro'
+import formatDate from '@/utils/formatDate'
 
-export async function getStaticPaths() {
-  const posts = await getCollection("posts");
+export async function getStaticPaths () {
+  const posts = await getCollection('posts')
 
   return posts.map((post) => ({
     params: { slug: post.slug },
-    props: { post },
-  }));
+    props: { post }
+  }))
 }
 
 type Props = {
-  post: CollectionEntry<"posts">;
+  post: CollectionEntry<'posts'>;
 };
 
-const { post } = Astro.props;
-const { Content } = await post.render();
+const { post } = Astro.props
+const { Content, headings } = await post.render()
+console.log(headings)
 ---
 
 <Layout title={post.data.title} description={post.data.description}>
-  <main class="post mx-auto flex w-full max-w-3xl flex-col gap-4">
+  <main class="post mx-auto flex w-full flex-col gap-4">
     <header role="presentation">
       <h1 class="text-md">
         {post.data.title} - {formatDate(post.data.publishedAt)}
@@ -29,6 +30,89 @@ const { Content } = await post.render();
       <p class="italic">{post.data.description}</p>
     </header>
 
-    <Content />
+    <div class="container">
+      <article>
+        <Content />
+      </article>
+      <div class="content-of-tables">
+        <nav class="nav">
+          <h2 class="contents">目录</h2>
+          {headings.map(heading => (
+            <a class:list={['nav-link', `depth-${heading.depth}`]} href={`#${heading.slug}`}>{heading.text}</a>
+          ))}
+        </nav>
+      </div>
+    </div>
   </main>
 </Layout>
+
+<style>
+    .container {
+        display: flex;
+        gap: 64px;
+    }
+
+    .content-of-tables {
+        grid-column: 3;
+        grid-row: 1 / 200;
+        align-self: start;
+        width: 250px;
+        margin-left: auto;
+        margin-top: .125em;
+        flex-shrink: 0;
+        line-height: inherit;
+        position: sticky;
+        top: 8rem;
+    }
+
+    .nav {
+        transition: opacity .4s, transform .7s cubic-bezier(.17, .67, .54, 1);
+        transform: translateX(0);
+    }
+
+    .contents {
+        font-size: 1rem;
+        margin-bottom: 16px;
+        font-weight: 500;
+        text-transform: uppercase;
+        letter-spacing: 2px;
+        color: hsl(210deg 25% 88%);
+        line-height: 24px;
+    }
+
+    .nav-link {
+        display: block;
+        opacity: .7;
+        text-decoration: none;
+        transition: opacity .5s;
+        font-size: 14px;
+        line-height: 1.5;
+        word-break: break-word;
+
+        &:hover {
+            opacity: 1;
+            transition: opacity 0ms;
+        }
+    }
+
+    .depth-2 {
+        margin-top: 12px;
+        font-size: 16px;
+    }
+
+    .depth-3 {
+        margin-top: 4px;
+        padding-left: 12px;
+    }
+
+    .depth-4 {
+        margin-top: 4px;
+        padding-left: 24px;
+    }
+
+    @media screen and (max-width: 1080px) {
+        .content-of-tables {
+            display: none;
+        }
+    }
+</style>
