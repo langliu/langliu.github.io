@@ -13,7 +13,7 @@ slug: 'react-children-best-practices'
 在 React 中，children 是一个非常重要的概念。它允许我们在组件中传递子元素，并且可以在组件中使用子元素。
 在本文中，我们将讨论 React 中 children 的最佳实践。
 
-## 单个子元素
+## 单个子节点
 
 在封装组件的时候，我们的组件通常需要接受一个子元素，在使用TS进行类型声明的时候我们通常会这样声明组件的类型：
 
@@ -26,7 +26,9 @@ type Props = {
 这种对子元素的类型声明是很常用的，React 对此提供了一个简单的封装，在使用时我们直接引入即可
 
 ```ts
-type PropsWithChildren<P = unknown> = P & { children?: ReactNode | undefined };
+type PropsWithChildren<P = unknown> = P & {
+  children?: ReactNode | undefined
+};
 ```
 
 **引入**
@@ -37,6 +39,40 @@ import type { PropsWithChildren } from 'react';
 type Props = PropsWithChildren<{
   title: string;
 }>;
+```
+
+这时候不管我们子元素是一个还是多个，都会被当成一个整体进行处理。
+
+## 多个子节点
+
+有时候我们需要对子元素做处理，比如在子元素外面包一层，这时就需要借助 React.Children 来处理。
+
+### [React.Children](https://zh-hans.react.dev/reference/react/Children)
+
+有这些 api：
+
+- `Children.count(children)`：获取 children 中的节点数量
+- `Children.forEach(children, fn, thisArg?)`：为每个 children 中的每个子节点执行一段代码。
+- `Children.map(children, fn, thisArg?)`：对 children 中的每个子节点进行映射或转换。
+- `Children.only(children)`：断言 children 代表一个 React 元素。
+- `Children.toArray(children)`：通过 children 创建一个数组。
+
+当我们需要多个子元素的时候，我们可以使用 React.Children.map 方法来遍历子元素。
+
+```tsx
+import { Children } from 'react';
+
+function Space({ children }) {
+  return (
+    <div className="space">
+      {Children.map(children, child =>
+        <div className="space-item">
+          {child}
+        </div>
+      )}
+    </div>
+  );
+}
 ```
 
 [//]: # (可以使用 React.Children.only 方法来确保组件只有一个子元素。)
