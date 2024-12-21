@@ -110,9 +110,44 @@ console.log(headings)
         padding-left: 24px;
     }
 
+    .active {
+        opacity: 1;
+        color: hsl(225deg 100% 75%);
+        font-weight: 500;
+    }
+
     @media screen and (max-width: 1080px) {
         .content-of-tables {
             display: none;
         }
     }
 </style>
+
+
+<script>
+  import { getHeadingInView } from '@/utils'
+
+  const tocLinks = document.querySelectorAll('.content-of-tables a')
+  const headingElements = Array.from(document.querySelectorAll('h1[id], h2[id], h3[id], h4[id], h5[id], h6[id]'))
+
+  function updateActiveHeading () {
+    const activeHeadingId = getHeadingInView(headingElements)
+
+    tocLinks.forEach(link => {
+      const href = link.getAttribute('href')?.slice(1)
+      if (href === activeHeadingId) {
+        link.classList.add('active')
+      } else {
+        link.classList.remove('active')
+      }
+    })
+  }
+
+  // Update on scroll
+  window.addEventListener('scroll', () => {
+    requestAnimationFrame(updateActiveHeading)
+  })
+
+  // Initial update
+  updateActiveHeading()
+</script>
