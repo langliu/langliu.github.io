@@ -27,16 +27,14 @@ isPublish: true
 ### 防抖的实现
 
 ```js
-function debounce(func, wait) {
-  let timeout
-  return function executedFunction() {
-    const later = () => {
-      clearTimeout(timeout)
-      func()
-    }
-    clearTimeout(timeout)
-    timeout = setTimeout(later, wait)
-  }
+function debounce(func, delay) {
+  let timer;
+  return function(...args) {
+    clearTimeout(timer);
+    timer = setTimeout(() => {
+      func.apply(this, args);
+    }, delay);
+  };
 }
 ```
 
