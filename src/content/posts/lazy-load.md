@@ -37,32 +37,37 @@ export type LazyLoadProps = {
   placeholder?: ReactNode;
   className?: string;
   style?: React.CSSProperties;
+  /**
+   * 传递查询选择器字符串或 DOM 节点。如果没有传递容器，LazyLoad 将附加到窗口对象的滚动事件。
+   */
+  getContainer?: () => HTMLElement | null;
 };
 ```
 
 ## 组件实现
 
 ```tsx
-export function LazyLoad({
+
+export function LazyLoad ({
   children,
   offset = 0,
   onLoad,
   placeholder,
   className,
   style,
+  getContainer
 }: LazyLoadProps) {
-  const containerRef = useRef<HTMLDivElement>(null);
-  const [show, setShow] = useState(false);
+  const containerRef = useRef<HTMLDivElement>(null)
+  const [show, setShow] = useState(false)
 
   useEffect(() => {
     const observer = new IntersectionObserver(
       (entries) => {
-        console.log(entries);
         for (const entry of entries) {
           if (entry.isIntersecting) {
-            setShow(true);
-            onLoad?.();
-            observer.unobserve(entry.target);
+            setShow(true)
+            onLoad?.()
+            observer.unobserve(entry.target)
           }
         }
       },
@@ -70,22 +75,63 @@ export function LazyLoad({
         rootMargin:
           typeof offset === 'number' ? `${offset}px` : offset || '0px',
         threshold: 0,
-      },
-    );
+        root: getContainer?.()
+      }
+    )
 
     if (containerRef.current) {
-      observer.observe(containerRef.current);
+      observer.observe(containerRef.current)
     }
 
     return () => {
-      observer.disconnect();
-    };
-  }, [onLoad, offset]);
+      observer.disconnect()
+    }
+  }, [onLoad, offset, getContainer])
 
   return (
     <div ref={containerRef} className={className} style={style}>
       {show ? children : placeholder}
     </div>
-  );
+  )
 }
+```
+
+## 使用
+
+```tsx
+import React from 'react'
+import ReactDOM from 'react-dom'
+import { LazyLoad } from './components/lazy-load'
+import MyComponent from './MyComponen'
+
+const App = () => {
+  return (
+    <div className="list">
+      <LazyLoad>
+        <img src="tiger.jpg" /> /*
+        Lazy loading images is supported out of box,
+        no extra config needed, set `height` for better
+        experience
+        */
+      </LazyLoad>
+      <LazyLoad>
+        /* Once this component is loaded, LazyLoad will
+        not care about it anymore, set this to `true`
+        if you're concerned about improving performance */
+        <MyComponent />
+      </LazyLoad>
+      <LazyLoad offset={100}>
+        /* This component will be loaded when it's top
+        edge is 100px from viewport. It's useful to
+        make user ignorant about lazy load effect. */
+        <MyComponent />
+      </LazyLoad>
+      <LazyLoad>
+        <MyComponent />
+      </LazyLoad>
+    </div>
+  )
+}
+
+ReactDOM.render(<App />, document.body)
 ```
