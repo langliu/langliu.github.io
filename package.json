@@ -11,22 +11,22 @@
     "astro": "astro"
   },
   "dependencies": {
-    "@astrojs/mdx": "^4.0.7",
+    "@astrojs/mdx": "^4.1.0",
     "@astrojs/rss": "^4.0.11",
     "@astrojs/sitemap": "^3.2.1",
-    "@astrojs/tailwind": "^5.1.5",
-    "astro": "^5.1.9",
-    "astro-font": "^0.1.81",
+    "@tailwindcss/vite": "^4.0.9",
+    "astro": "^5.4.1",
+    "astro-font": "^1.0.0",
     "astro-robots-txt": "^1.0.0",
     "astro-seo": "^0.8.4",
     "limax": "^4.1.0",
-    "tailwindcss": "^3.4.17"
+    "tailwindcss": "^4.0.9"
   },
   "devDependencies": {
-    "@typescript-eslint/parser": "^8.21.0",
+    "@typescript-eslint/parser": "^8.25.0",
     "eslint": "8.57.0",
     "eslint-plugin-astro": "^1.2.0",
-    "prettier": "^3.3.1",
+    "prettier": "^3.5.2",
     "prettier-plugin-astro": "^0.14.0",
     "prettier-plugin-tailwindcss": "^0.6.11",
     "typescript": "^5.7.3"

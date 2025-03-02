@@ -11,5 +11,6 @@
   "editor.codeActionsOnSave": {
     "source.fixAll": "always"
   },
-  "editor.formatOnSave": true
+  "editor.formatOnSave": true,
+  "marscode.chatLanguage": "cn"
 }
