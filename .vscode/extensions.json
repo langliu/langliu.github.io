@@ -1,4 +1,9 @@
 {
-  "recommendations": ["astro-build.astro-vscode"],
+  "recommendations": [
+    "astro-build.astro-vscode",
+    "biomejs.biome",
+    "streetsidesoftware.code-spell-checker",
+    "fill-labs.dependi"
+  ],
   "unwantedRecommendations": []
 }
