@@ -1,7 +1,5 @@
 ---
 import Header from '../components/Header.astro'
-import BlurCircle from '@/components/shared/BlurCircle.astro'
-import theme from '@/data/theme'
 import SEOTags from '@/components/seo/SEOTags.astro'
 import type { HeadTags } from '@/utils/types/HeadTags'
 
@@ -13,11 +11,10 @@ export type Props = HeadTags
 const headTags = Astro.props
 ---
 
-<!doctype html>
 <html lang='zh-CN'>
   <SEOTags {...headTags} />
   <body
-    class='mx-auto flex min-h-screen max-w-[1200px] flex-col gap-9 bg-dot bg-[#0d1117] px-4 md:px-10 py-8 text-base text-neutral-300 md:gap-20 md:py-16 leading-7'
+    class='mx-auto flex min-h-screen max-w-[1200px] flex-col gap-9 bg-dot bg-[#0d1117] px-4 md:px-10 py-4 text-base text-neutral-300 md:gap-8 md:py-8 leading-7'
   >
     <!-- Google Tag Manager (noscript) -->
     <noscript>
@@ -29,8 +26,6 @@ const headTags = Astro.props
     </noscript>
     <!-- End Google Tag Manager (noscript) -->
     <Header />
-    <!--<BlurCircle position='top' color={theme.colors.blur.top} />-->
-    <!--<BlurCircle position='bottom' color={theme.colors.blur.bottom} />-->
     <slot />
   </body>
 </html>
@@ -54,7 +49,7 @@ const headTags = Astro.props
         var(--dot-color);
       background-position: center center;
       background-size: 24px 24px;
-      //mask-image: linear-gradient(0deg, transparent 5%, var(--dot-mask-color));
+      mask-image: linear-gradient(0deg, transparent 5%, var(--dot-mask-color));
     }
   }
 </style>
