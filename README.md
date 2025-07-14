@@ -1,4 +1,5 @@
 # 👨‍🚀 Astro - Portfolio Template
+
 <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
 [![All Contributors](https://img.shields.io/badge/all_contributors-4-orange.svg?style=flat-square)](#contributors-)
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
@@ -10,7 +11,8 @@ NB: Additional color themes can also be configured on the `src/data/theme.ts` fi
 
 ## 🥷 Usage
 
-- You can modify all the information in the files in the `data` folder (presentation, social links, projects list, colors).
+- You can modify all the information in the files in the `data` folder (presentation, social links, projects list,
+  colors).
 - You can write articles in `markdown` format in the `content/posts` folder.
 
 ## 🧞 Commands
@@ -18,7 +20,7 @@ NB: Additional color themes can also be configured on the `src/data/theme.ts` fi
 All commands are run from the root of the project, from a terminal:
 
 | Command                   | Action                                           |
-| :------------------------ | :----------------------------------------------- |
+|:--------------------------|:-------------------------------------------------|
 | `npm install`             | Installs dependencies                            |
 | `npm run dev`             | Starts local dev server at `localhost:4321`      |
 | `npm run build`           | Build your production site to `./dist/`          |

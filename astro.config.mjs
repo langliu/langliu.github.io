@@ -2,7 +2,7 @@ import { defineConfig } from 'astro/config'
 import sitemap from '@astrojs/sitemap'
 import mdx from '@astrojs/mdx'
 import robotsTxt from 'astro-robots-txt'
-import { SITE_URL } from './src/data/config'
+import { SITE_URL } from './src/data/config.js'
 import tailwindcss from '@tailwindcss/vite';
 
 // https://astro.build/config
