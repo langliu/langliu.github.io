@@ -44,6 +44,7 @@
 .post ul {
   @apply list-disc;
   padding-left: 1rem;
+  margin-bottom: 1rem;
 }
 
 .post blockquote {
