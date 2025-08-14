@@ -4,6 +4,7 @@ publishedAt: 2024-03-12
 description: 'Vite 和 Webpack 都是现代前端开发中常用的构建工具，它们各自有着不同的特点和适用场景。'
 slug: 'vite-vs-webpack'
 isPublish: true
+category: 'JavaScript'
 ---
 
 ## Webpack

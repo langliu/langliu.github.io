@@ -1,9 +1,10 @@
 ---
-title: "从零开始实现lazy-load"
+title: '从零开始实现lazy-load'
 publishedAt: 2024-12-29
-description: "懒加载是一种优化网页性能的技术，它可以延迟加载非关键资源（如图片），直到用户滚动到相应位置时才进行加载，从而提高页面的初始加载速度和性能。我们将通过 JavaScript 代码来实现这一功能，并对其原理和实现步骤进行深入探讨。"
-slug: "lazy-load"
+description: '懒加载是一种优化网页性能的技术，它可以延迟加载非关键资源（如图片），直到用户滚动到相应位置时才进行加载，从而提高页面的初始加载速度和性能。我们将通过 JavaScript 代码来实现这一功能，并对其原理和实现步骤进行深入探讨。'
+slug: 'lazy-load'
 isPublish: true
+category: 'React'
 ---
 
 ## 引言
@@ -22,40 +23,39 @@ export type LazyLoadProps = {
   /**
    * 懒加载的元素
    */
-  children?: ReactNode;
+  children?: ReactNode
   /**
    * 懒加载的距离
    */
-  offset?: number | string;
+  offset?: number | string
   /**
    * 懒加载的回调
    */
-  onLoad?: () => void;
+  onLoad?: () => void
   /**
    * 占位元素
    */
-  placeholder?: ReactNode;
-  className?: string;
-  style?: React.CSSProperties;
+  placeholder?: ReactNode
+  className?: string
+  style?: React.CSSProperties
   /**
    * 传递查询选择器字符串或 DOM 节点。如果没有传递容器，LazyLoad 将附加到窗口对象的滚动事件。
    */
-  getContainer?: () => HTMLElement | null;
-};
+  getContainer?: () => HTMLElement | null
+}
 ```
 
 ## 组件实现
 
 ```tsx
-
-export function LazyLoad ({
+export function LazyLoad({
   children,
   offset = 0,
   onLoad,
   placeholder,
   className,
   style,
-  getContainer
+  getContainer,
 }: LazyLoadProps) {
   const containerRef = useRef<HTMLDivElement>(null)
   const [show, setShow] = useState(false)
@@ -72,11 +72,10 @@ export function LazyLoad ({
         }
       },
       {
-        rootMargin:
-          typeof offset === 'number' ? `${offset}px` : offset || '0px',
+        rootMargin: typeof offset === 'number' ? `${offset}px` : offset || '0px',
         threshold: 0,
-        root: getContainer?.()
-      }
+        root: getContainer?.(),
+      },
     )
 
     if (containerRef.current) {
@@ -106,23 +105,18 @@ import MyComponent from './MyComponen'
 
 const App = () => {
   return (
-    <div className="list">
+    <div className='list'>
       <LazyLoad>
-        <img src="tiger.jpg" /> /*
-        Lazy loading images is supported out of box,
-        no extra config needed, set `height` for better
-        experience
-        */
+        <img src='tiger.jpg' /> /* Lazy loading images is supported out of box, no extra config
+        needed, set `height` for better experience */
       </LazyLoad>
       <LazyLoad>
-        /* Once this component is loaded, LazyLoad will
-        not care about it anymore, set this to `true`
-        if you're concerned about improving performance */
+        /* Once this component is loaded, LazyLoad will not care about it anymore, set this to
+        `true` if you're concerned about improving performance */
         <MyComponent />
       </LazyLoad>
       <LazyLoad offset={100}>
-        /* This component will be loaded when it's top
-        edge is 100px from viewport. It's useful to
+        /* This component will be loaded when it's top edge is 100px from viewport. It's useful to
         make user ignorant about lazy load effect. */
         <MyComponent />
       </LazyLoad>

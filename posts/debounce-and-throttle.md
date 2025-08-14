@@ -4,6 +4,7 @@ publishedAt: 2024-03-09
 description: '防抖和节流介绍和应用'
 slug: 'debounce-and-throttle'
 isPublish: true
+category: 'JavaScript'
 ---
 
 防抖（Debounce）和节流（Throttle）是两种在前端开发中常用的性能优化技术，它们主要用于控制事件处理函数的执行频率，以提高页面的响应速度和性能。
@@ -28,13 +29,13 @@ isPublish: true
 
 ```js
 function debounce(func, delay) {
-  let timer;
-  return function(...args) {
-    clearTimeout(timer);
+  let timer
+  return function (...args) {
+    clearTimeout(timer)
     timer = setTimeout(() => {
-      func.apply(this, args);
-    }, delay);
-  };
+      func.apply(this, args)
+    }, delay)
+  }
 }
 ```
 

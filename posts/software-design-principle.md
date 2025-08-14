@@ -7,6 +7,7 @@ publishedAt: 2025-02-24
 description: '软件设计原则是程序员编写可维护、可扩展代码的指南针。本文将通过通俗易懂的JavaScript示例，讲解7个最实用的设计原则。'
 isPublish: true
 slug: 'software-design-principle'
+category: '其他'
 ---
 
 软件设计原则是程序员编写可维护、可扩展代码的指南针。本文将通过通俗易懂的JavaScript示例，讲解7个最实用的设计原则。
@@ -29,22 +30,38 @@ SOLID 是面向对象设计的五大核心原则，由 Robert C. Martin 提出�
 
 ```javascript
 class User {
-  constructor (name) { this.name = name }
+  constructor(name) {
+    this.name = name
+  }
 
-  saveToDB () { /* 数据库操作 */ }
+  saveToDB() {
+    /* 数据库操作 */
+  }
 
-  sendEmail () { /* 邮件发送逻辑 */ }
+  sendEmail() {
+    /* 邮件发送逻辑 */
+  }
 }
 ```
 
 遵循原则的写法：拆分不同职责
 
 ```javascript
-class User { /* 只保留核心属性 */}
+class User {
+  /* 只保留核心属性 */
+}
 
-class UserRepository {save (user) { /* 存储逻辑 */ }}
+class UserRepository {
+  save(user) {
+    /* 存储逻辑 */
+  }
+}
 
-class EmailService {send (user) { /* 发送逻辑 */ }}
+class EmailService {
+  send(user) {
+    /* 发送逻辑 */
+  }
+}
 ```
 
 ## 2. 开放封闭原则 (OCP)
@@ -55,26 +72,32 @@ class EmailService {send (user) { /* 发送逻辑 */ }}
 // 违反原则的写法
 // 基础形状类
 class Shape {
-  area () { throw new Error('必须实现area方法') }
+  area() {
+    throw new Error('必须实现area方法')
+  }
 }
 
 // 扩展时不需要修改基类
 class Circle extends Shape {
-  constructor (radius) {
-    super();
-    this.radius = radius;
+  constructor(radius) {
+    super()
+    this.radius = radius
   }
 
-  area () { return Math.PI * this.radius ** 2 }
+  area() {
+    return Math.PI * this.radius ** 2
+  }
 }
 
 class Square extends Shape {
-  constructor (side) {
-    super();
-    this.side = side;
+  constructor(side) {
+    super()
+    this.side = side
   }
 
-  area () { return this.side ** 2 }
+  area() {
+    return this.side ** 2
+  }
 }
 ```
 
@@ -86,11 +109,16 @@ class Square extends Shape {
 
 ```javascript
 class Bird {
-  fly () { return "飞行中..." }
+  fly() {
+    return '飞行中...'
+  }
 }
 
-class Penguin extends Bird { // 企鹅不会飞却继承了飞行方法
-  fly () { throw new Error("企鹅不会飞!") }
+class Penguin extends Bird {
+  // 企鹅不会飞却继承了飞行方法
+  fly() {
+    throw new Error('企鹅不会飞!')
+  }
 }
 ```
 
@@ -100,7 +128,9 @@ class Penguin extends Bird { // 企鹅不会飞却继承了飞行方法
 class Bird {}
 
 class FlyingBird extends Bird {
-  fly () { return "飞行中..." }
+  fly() {
+    return '飞行中...'
+  }
 }
 
 class Penguin extends Bird {} // 只保留通用鸟类特性
@@ -149,13 +179,17 @@ class Penguin extends Bird {} // 只保留通用鸟类特性
 
 ```javascript
 class Worker {
-  work () { /* 开发工作 */ }
+  work() {
+    /* 开发工作 */
+  }
 
-  eat () { /* 午餐休息 */ }  // 非必要方法
+  eat() {
+    /* 午餐休息 */
+  } // 非必要方法
 }
 
 class Developer extends Worker {} // 被迫实现eat方法
-class Waiter extends Worker {}    // 需要全部方法
+class Waiter extends Worker {} // 需要全部方法
 ```
 
 遵循原则的写法
@@ -184,11 +218,13 @@ class Waiter extends Workable, Eatable {} // 按需组合接口
 
 ```javascript
 class EmailService {
-  send (message) { /* 邮件发送实现 */ }
+  send(message) {
+    /* 邮件发送实现 */
+  }
 }
 
 class Notification {
-  constructor () {
+  constructor() {
     this.sender = new EmailService() // 直接依赖具体实现
   }
 }
@@ -197,17 +233,22 @@ class Notification {
 遵循原则的写法
 
 ```javascript
-
-class MessageService { // 抽象层
-  send (message) { throw new Error('必须实现send方法') }
+class MessageService {
+  // 抽象层
+  send(message) {
+    throw new Error('必须实现send方法')
+  }
 }
 
 class EmailService extends MessageService {
-  send (message) { /* 邮件实现 */ }
+  send(message) {
+    /* 邮件实现 */
+  }
 }
 
 class Notification {
-  constructor (sender) { // 依赖抽象接口
+  constructor(sender) {
+    // 依赖抽象接口
     this.sender = sender
   }
 }
@@ -222,12 +263,12 @@ class Notification {
 违反原则的写法
 
 ```javascript
-function calculateProductPrice (basePrice, discount) {
+function calculateProductPrice(basePrice, discount) {
   const finalPrice = basePrice * (1 - discount / 100)
   return finalPrice.toFixed(2)
 }
 
-function calculateServicePrice (basePrice, discount) {
+function calculateServicePrice(basePrice, discount) {
   const finalPrice = basePrice * (1 - discount / 100) // 重复计算逻辑
   return finalPrice.toFixed(2)
 }
@@ -236,25 +277,25 @@ function calculateServicePrice (basePrice, discount) {
 遵循原则的写法
 
 ```javascript
-function calculateDiscount (basePrice, discount) {
+function calculateDiscount(basePrice, discount) {
   return basePrice * (1 - discount / 100)
 }
 
-function calculateProductPrice (basePrice, discount) {
+function calculateProductPrice(basePrice, discount) {
   return calculateDiscount(basePrice, discount).toFixed(2)
 }
 
-function calculateServicePrice (basePrice, discount) {
+function calculateServicePrice(basePrice, discount) {
   return calculateDiscount(basePrice, discount).toFixed(2)
 }
 ```
 
 **核心价值：**
 
-* 🛠️ 降低维护成本：修改逻辑只需改动单一位置
-* 🧩 提升复用效率：公共逻辑可被多次调用
-* 🚨 减少人为错误：消除多副本更新不一致风险
-* 📐 增强可读性：业务逻辑集中管理更清晰
+- 🛠️ 降低维护成本：修改逻辑只需改动单一位置
+- 🧩 提升复用效率：公共逻辑可被多次调用
+- 🚨 减少人为错误：消除多副本更新不一致风险
+- 📐 增强可读性：业务逻辑集中管理更清晰
 
 **实施风险：**
 
@@ -270,12 +311,12 @@ function calculateServicePrice (basePrice, discount) {
 违反原则的写法
 
 ```javascript
-function processUserData (user) {
+function processUserData(user) {
   if (user.age >= 18 && user.age <= 65) {
     if (user.subscriptions.includes('premium')) {
       return {
         status: 'active',
-        discount: user.country === 'US' ? 0.2 : 0.1
+        discount: user.country === 'US' ? 0.2 : 0.1,
       }
     }
     // 更多嵌套条件判断...
@@ -286,32 +327,32 @@ function processUserData (user) {
 遵循原则的写法
 
 ```javascript
-function isEligible (user) {
+function isEligible(user) {
   return user.age >= 18 && user.age <= 65
 }
 
-function getBaseDiscount (user) {
+function getBaseDiscount(user) {
   return user.subscriptions.includes('premium') ? 0.1 : 0
 }
 
-function applyRegionBonus (discount, country) {
+function applyRegionBonus(discount, country) {
   return country === 'US' ? discount + 0.1 : discount
 }
 ```
 
 **核心价值：**
 
-* 🎯 提升可读性：直白的代码逻辑更易理解
-* 🛠️ 降低维护成本：简单结构减少认知负担
-* 🚨 减少隐藏缺陷：复杂条件嵌套容易产生漏洞
-* ⚡ 优化执行效率：避免不必要的计算开销
+- 🎯 提升可读性：直白的代码逻辑更易理解
+- 🛠️ 降低维护成本：简单结构减少认知负担
+- 🚨 减少隐藏缺陷：复杂条件嵌套容易产生漏洞
+- ⚡ 优化执行效率：避免不必要的计算开销
 
 **实施风险：**
 
-* ⚠️ 过度简化陷阱：忽略必要的异常处理
-* 📉 功能完整性缺失：为追求简单牺牲关键需求
-* 🔄 扩展性不足：没有预留合理的抽象空间
-* 🤹 平衡难度：在简单与完备性之间难以取舍
+- ⚠️ 过度简化陷阱：忽略必要的异常处理
+- 📉 功能完整性缺失：为追求简单牺牲关键需求
+- 🔄 扩展性不足：没有预留合理的抽象空间
+- 🤹 平衡难度：在简单与完备性之间难以取舍
 
 # YAGNI（You Ain't Gonna Need It）
 
@@ -321,7 +362,7 @@ function applyRegionBonus (discount, country) {
 
 ```javascript
 class NotificationService {
-  constructor () {
+  constructor() {
     // 提前实现多种通知方式
     this.emailService = new EmailService()
     this.smsService = new SMSService()
@@ -334,11 +375,11 @@ class NotificationService {
 
 ```javascript
 class NotificationService {
-  constructor (channel) {
+  constructor(channel) {
     this.channel = this.initChannel(channel)
   }
 
-  initChannel (type) {
+  initChannel(type) {
     switch (type) {
       case 'email':
         return new EmailService()

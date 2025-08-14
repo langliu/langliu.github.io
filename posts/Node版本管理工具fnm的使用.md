@@ -1,9 +1,10 @@
 ---
-title: "告别“版本地狱”：用 fnm 高效管理你的 Node.js 开发环境"
+title: '告别“版本地狱”：用 fnm 高效管理你的 Node.js 开发环境'
 publishedAt: 2025-07-15
-description: "fnm（Fast Node Manager）是一个基于Rust构建的快速、轻量级的Node版本管理工具，支持跨平台使用（Windows/macOS/Linux），相比nvm具有更快的执行速度。"
-slug: "node-version-manager-fnm"
+description: 'fnm（Fast Node Manager）是一个基于Rust构建的快速、轻量级的Node版本管理工具，支持跨平台使用（Windows/macOS/Linux），相比nvm具有更快的执行速度。'
+slug: 'node-version-manager-fnm'
 isPublish: true
+category: 'JavaScript'
 ---
 
 你是否经历过这样的场景：

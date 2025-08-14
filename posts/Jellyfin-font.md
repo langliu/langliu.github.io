@@ -1,9 +1,10 @@
 ---
-title: "Jellyfin 解决中文字幕乱码问题"
+title: 'Jellyfin 解决中文字幕乱码问题'
 publishedAt: 2022-09-01
-description: "Jellyfin 解决中文字幕乱码问题"
-slug: "jellyfin-chinese"
+description: 'Jellyfin 解决中文字幕乱码问题'
+slug: 'jellyfin-chinese'
 isPublish: true
+category: '其他'
 ---
 
 ## 字幕乱码

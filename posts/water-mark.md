@@ -1,9 +1,10 @@
 ---
-title: "从头开始实现一个水印组件"
+title: '从头开始实现一个水印组件'
 publishedAt: 2024-12-30
-description: "Windows 下使用7-Zip批量压缩文件夹"
-slug: "watermark"
+description: 'Windows 下使用7-Zip批量压缩文件夹'
+slug: 'watermark'
 isPublish: true
+category: 'React'
 ---
 
 水印组件的主要功能是在页面的特定区域（通常是背景）显示半透明的文字或图案，用于标识文档或页面的版权等信息。

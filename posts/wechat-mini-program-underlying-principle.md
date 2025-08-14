@@ -4,6 +4,7 @@ description: 小程序是基于双线程模型的，在这个模型中，小程�
 slug: wechat-mini-program-underlying-principle
 isPublish: true
 publishedAt: 2024-04-02
+category: 'JavaScript'
 ---
 
 ## 小程序的由来

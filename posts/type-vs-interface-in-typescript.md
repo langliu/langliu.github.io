@@ -4,6 +4,7 @@ description: '在 TypeScript 中定义类型有两种选择：类型和接口。
 slug: type-vs-interface-in-typescript
 publishedAt: 2024-03-29
 isPublish: true
+category: 'TypeScript'
 ---
 
 在 TypeScript 中定义类型有两种选择：类型和接口。关于 TypeScript 最常见的问题之一是我们应该使用接口还是类型。
