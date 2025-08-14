@@ -3,7 +3,8 @@
     "astro-build.astro-vscode",
     "biomejs.biome",
     "streetsidesoftware.code-spell-checker",
-    "fill-labs.dependi"
+    "fill-labs.dependi",
+    "github.vscode-github-actions"
   ],
   "unwantedRecommendations": []
 }
