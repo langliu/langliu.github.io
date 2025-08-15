@@ -13,7 +13,7 @@
 			"---",
 			"title: $1",
 			"publishedAt: $2",
-			"category: ${3|\"JavaScript\",\"React\",\"CSS\"|}",
+			"category: ${3|\"JavaScript\",\"React\",\"CSS\",\"Vue\",\"HTML\",\"其他\",\"HTML\",\"TypeScript\"|}",
 			"tags:",
 			"  - $4",
 			"slug: $5",
