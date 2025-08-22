@@ -55,3 +55,7 @@ All commands are run from the root of the project, from a terminal:
 <!-- prettier-ignore-end -->
 
 <!-- ALL-CONTRIBUTORS-LIST:END -->
+
+## Project Status
+
+![Alt](https://repobeats.axiom.co/api/embed/2e8b94c1819db134a4f2f4371d06809ec86275b7.svg "Repobeats analytics image")
