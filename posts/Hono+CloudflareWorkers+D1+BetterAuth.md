@@ -32,7 +32,7 @@ description: 这是一个使用 Hono + Cloudflare Workers + D1 + BetterAuth 实�
 
 ## 技术栈介绍
 
-### [Hono](https://hono.dev/)
+### Hono
 
 Hono 是一个轻量级、快速的 Web 框架，专为边缘运行时设计。它支持多种运行时环境，包括 Cloudflare Workers、Deno、Bun 等。
 
@@ -107,8 +107,9 @@ Drizzle 是一个轻量级、类型安全的 TypeScript ORM，专为现代应用
 │   │   ├── auth.ts          # 认证中间件
 │   │   └── cors.ts          # CORS 中间件
 │   ├── types/
-│   │   └── global.ts      # 全局类型定义
+│   │   └── global.ts        # 全局类型定义
 │   └── db/
+│       ├── migrations       # 迁移文件
 │       └── schema/          # Drizzle 数据库模式定义
 ├── drizzle.config.ts         # Drizzle 配置文件
 ├── worker-configuration.d.ts # Cloudflare Workers 类型定义
@@ -225,7 +226,7 @@ wrangler d1 create hono-cloudflare-workers-d1
 #
 # [[d1_databases]]
 # binding = "DB"
-# database_name = "hono-template-db"
+# database_name = "hono-cloudflare-workers-d1"
 # database_id = "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
 ```
 
@@ -312,19 +313,9 @@ export const verification = sqliteTable('verification', {
 npx drizzle-kit generate
 
 # 应用迁移到本地开发环境
-npx drizzle-kit migrate --local
+npx wrangler d1 migrations apply YOUR_DB_NAME --local
 
 # 应用迁移到生产环境
-npx drizzle-kit push
-```
-
-#### 使用传统 SQL 迁移
-
-```bash
-# 本地开发环境
-wrangler d1 execute hono-template-db --local --file=./src/drizzle/<database>.sql
-
-# 生产环境
 npx drizzle-kit push
 ```
 
@@ -340,7 +331,9 @@ interface CloudflareBindings extends Cloudflare.Env {
   CLOUDFLARE_ACCOUNT_ID: string
   CLOUDFLARE_DATABASE_ID: string
   CLOUDFLARE_D1_TOKEN: string
+  BETTER_AUTH_SECRET: string
   BETTER_AUTH_URL: string
+  CORS_ORIGIN: string
 }
 ```
 
@@ -350,197 +343,21 @@ interface CloudflareBindings extends Cloudflare.Env {
 import type { Session, User } from 'better-auth'
 
 export type HonoVariables = {
-  user: User | null
-  session: Session | null
+  user: User
+  session: Session
 }
 ```
 
 ### 2. Drizzle 数据库配置
 
-创建 `src/lib/drizzle.ts`：
+创建 `src/db/index.ts`：
 
 ```typescript
+import { env } from 'cloudflare:workers'
 import { drizzle } from 'drizzle-orm/d1'
-import { Env } from '../types/global'
 import * as schema from '../db/schema'
 
-export function createDrizzleDB(env: Env) {
-  return drizzle(env.DB, { schema })
-}
-
-export type DrizzleDB = ReturnType<typeof createDrizzleDB>
-```
-
-### 3. Drizzle 数据库服务
-
-创建 `src/lib/database.ts`：
-
-```typescript
-import { eq, and } from 'drizzle-orm'
-import { DrizzleDB } from './drizzle'
-import { users, sessions, accounts, type NewUser, type NewSession, type User } from '../db/schema'
-
-export class DatabaseService {
-  constructor(private db: DrizzleDB) {}
-
-  // 用户相关操作
-  async createUser(userData: NewUser): Promise<User> {
-    const [user] = await this.db.insert(users).values(userData).returning()
-    return user
-  }
-
-  async getUserById(id: string): Promise<User | undefined> {
-    const [user] = await this.db.select().from(users).where(eq(users.id, id))
-    return user
-  }
-
-  async getUserByEmail(email: string): Promise<User | undefined> {
-    const [user] = await this.db.select().from(users).where(eq(users.email, email))
-    return user
-  }
-
-  async updateUser(
-    id: string,
-    updates: Partial<{
-      name: string
-      avatar: string
-      emailVerified: boolean
-    }>,
-  ): Promise<User | undefined> {
-    if (Object.keys(updates).length === 0) return undefined
-
-    const [updatedUser] = await this.db
-      .update(users)
-      .set({ ...updates, updatedAt: new Date().toISOString() })
-      .where(eq(users.id, id))
-      .returning()
-
-    return updatedUser
-  }
-
-  async deleteUser(id: string): Promise<boolean> {
-    const result = await this.db.delete(users).where(eq(users.id, id))
-    return result.changes > 0
-  }
-
-  // 会话相关操作
-  async createSession(sessionData: NewSession) {
-    const [session] = await this.db.insert(sessions).values(sessionData).returning()
-    return session
-  }
-
-  async getSession(sessionId: string) {
-    const [session] = await this.db.select().from(sessions).where(eq(sessions.id, sessionId))
-    return session
-  }
-
-  async getSessionWithUser(sessionId: string) {
-    const result = await this.db
-      .select({
-        session: sessions,
-        user: users,
-      })
-      .from(sessions)
-      .innerJoin(users, eq(sessions.userId, users.id))
-      .where(eq(sessions.id, sessionId))
-
-    return result[0]
-  }
-
-  async deleteSession(sessionId: string): Promise<boolean> {
-    const result = await this.db.delete(sessions).where(eq(sessions.id, sessionId))
-    return result.changes > 0
-  }
-
-  async deleteExpiredSessions(): Promise<boolean> {
-    const now = new Date().toISOString()
-    const result = await this.db.delete(sessions).where(eq(sessions.expiresAt, now))
-    return result.changes > 0
-  }
-
-  async deleteUserSessions(userId: string): Promise<boolean> {
-    const result = await this.db.delete(sessions).where(eq(sessions.userId, userId))
-    return result.changes > 0
-  }
-
-  // 账户相关操作（OAuth）
-  async createAccount(accountData: typeof accounts.$inferInsert) {
-    const [account] = await this.db.insert(accounts).values(accountData).returning()
-    return account
-  }
-
-  async getAccountByProvider(provider: string, providerAccountId: string) {
-    const [account] = await this.db
-      .select()
-      .from(accounts)
-      .where(
-        and(eq(accounts.provider, provider), eq(accounts.providerAccountId, providerAccountId)),
-      )
-    return account
-  }
-
-  async getUserAccounts(userId: string) {
-    return await this.db.select().from(accounts).where(eq(accounts.userId, userId))
-  }
-
-  // 统计相关
-  async getUserCount(): Promise<number> {
-    const result = await this.db.select({ count: users.id }).from(users)
-    return result.length
-  }
-
-  async getActiveSessionCount(): Promise<number> {
-    const now = new Date().toISOString()
-    const result = await this.db
-      .select({ count: sessions.id })
-      .from(sessions)
-      .where(eq(sessions.expiresAt, now))
-    return result.length
-  }
-}
-```
-
-### 4. 传统数据库服务（可选）
-
-如果您更喜欢使用原生 SQL，可以创建传统的数据库服务：
-
-```typescript
-// src/lib/database-sql.ts
-import { Env } from '../types/global'
-
-export class SQLDatabaseService {
-  constructor(private db: D1Database) {}
-
-  async createUser(userData: { id: string; email: string; name?: string; avatar?: string }) {
-    const { id, email, name, avatar } = userData
-
-    const result = await this.db
-      .prepare(
-        `INSERT INTO users (id, email, name, avatar)
-         VALUES (?, ?, ?, ?)`,
-      )
-      .bind(id, email, name, avatar)
-      .run()
-
-    if (!result.success) {
-      throw new Error('Failed to create user')
-    }
-
-    return this.getUserById(id)
-  }
-
-  async getUserById(id: string) {
-    const result = await this.db.prepare('SELECT * FROM users WHERE id = ?').bind(id).first()
-    return result
-  }
-
-  async getUserByEmail(email: string) {
-    const result = await this.db.prepare('SELECT * FROM users WHERE email = ?').bind(email).first()
-    return result
-  }
-
-  // ... 其他方法
-}
+export const db = drizzle(env.DB, { schema })
 ```
 
 ### 3. BetterAuth 配置
@@ -548,29 +365,28 @@ export class SQLDatabaseService {
 创建 `src/lib/better-auth/index.ts`：
 
 ```typescript
+import { env } from 'cloudflare:workers';
 import { betterAuth } from 'better-auth'
 import { drizzleAdapter } from 'better-auth/adapters/drizzle'
-import { drizzle } from 'drizzle-orm/d1'
+import { db } from '@/db'
 import * as schema from '@/db/schema/auth'
 import { betterAuthOptions } from './options'
 
-export const auth = (env: CloudflareBindings): ReturnType<typeof betterAuth> => {
-  const db = drizzle(env.DB, { schema })
-
-  return betterAuth({
-    ...betterAuthOptions,
-    database: drizzleAdapter(db, {
-      provider: 'sqlite',
-      schema: {
-        account: schema.account,
-        session: schema.session,
-        user: schema.user,
-        verification: schema.verification,
-      },
-    }),
-    trustedOrigins: [env.BETTER_AUTH_URL, 'http://localhost:3000'],
-  })
-}
+export const auth = betterAuth({
+  ...betterAuthOptions,
+  database: drizzleAdapter(db, {
+    provider: 'sqlite',
+    schema: {
+      account: schema.account,
+      session: schema.session,
+      user: schema.user,
+      verification: schema.verification,
+    },
+  }),
+  trustedOrigins: [env.CORS_ORIGIN],
+  secret: env.BETTER_AUTH_SECRET,
+  baseURL: env.BETTER_AUTH_URL,
+})
 ```
 
 创建 `src/lib/better-auth/options.ts`：
@@ -599,6 +415,14 @@ export const betterAuthOptions: BetterAuthOptions = {
   emailAndPassword: {
     enabled: true,
   },
+  // 高级配置
+  advanced: {
+    defaultCookieAttributes: {
+      sameSite: 'none', // 跨站点 cookie 策略
+      secure: true, // 仅 HTTPS 传输
+      httpOnly: true, // 禁止 JS 访问
+    },
+  },
 }
 ```
 
@@ -607,53 +431,75 @@ export const betterAuthOptions: BetterAuthOptions = {
 创建 `src/middleware/auth.ts`：
 
 ```typescript
-import { Context, Next } from 'hono'
-import { Env } from '../types/global'
-import { createAuth } from '../lib/auth'
+import type { Context, Next } from 'hono'
+import { whiteRoutes } from '@/constants'
+import { auth } from '@/lib/better-auth'
+import type { HonoVariables } from '@/types/global'
 
-export async function authMiddleware(c: Context<{ Bindings: Env }>, next: Next) {
-  const auth = createAuth(c.env)
-
-  // 将 auth 实例添加到上下文中
-  c.set('auth', auth)
-
-  await next()
-}
-
-export async function requireAuth(c: Context<{ Bindings: Env }>, next: Next) {
-  const auth = c.get('auth')
-
-  if (!auth) {
-    return c.json({ error: 'Authentication not configured' }, 500)
+/**
+ * 路由鉴权中间件
+ */
+export const authMiddlewareHandler = async (
+  c: Context<{
+    Bindings: CloudflareBindings
+    Variables: HonoVariables
+  }>,
+  next: Next,
+) => {
+  // 排除白名单路径的 session 校验
+  if (whiteRoutes.includes(c.req.path)) {
+    return next()
   }
 
-  const session = await auth.api.getSession({
-    headers: c.req.header(),
+  const session = await auth(c.env).api.getSession({
+    headers: c.req.raw.headers,
   })
-
   if (!session) {
-    return c.json({ error: 'Unauthorized' }, 401)
+    c.set('user', null)
+    c.set('session', null)
+    c.status(401)
+    return c.json({
+      code: 401,
+      message: '未登录',
+    })
   }
 
-  // 将用户信息添加到上下文中
   c.set('user', session.user)
   c.set('session', session.session)
-
-  await next()
+  return next()
 }
 ```
 
 创建 `src/middleware/cors.ts`：
 
 ```typescript
+import type { MiddlewareHandler } from 'hono'
 import { cors } from 'hono/cors'
+import type { HonoVariables } from '@/types/global'
 
-export const corsMiddleware = cors({
-  origin: ['http://localhost:3000', 'https://your-domain.com'], // 替换为你的前端域名
-  allowHeaders: ['Content-Type', 'Authorization'],
-  allowMethods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-  credentials: true,
-})
+type Middleware = MiddlewareHandler<
+  {
+    Bindings: CloudflareBindings
+    Variables: HonoVariables
+  },
+  '*',
+  Record<string, unknown>
+>
+
+/**
+ * CORS 中间件
+ */
+export const corsMiddlewareHandler: Middleware = async (c, next) => {
+  const handler = cors({
+    allowHeaders: ['Content-Type', 'Authorization'],
+    allowMethods: ['POST', 'GET', 'OPTIONS', 'PUT', 'DELETE'],
+    credentials: true,
+    exposeHeaders: ['Content-Length'],
+    maxAge: 600,
+    origin: [c.env.CORS_ORIGIN],
+  })
+  return handler(c, next)
+}
 ```
 
 ### 5. 路由实现
@@ -662,22 +508,20 @@ export const corsMiddleware = cors({
 
 ```typescript
 import { Hono } from 'hono'
-import { Env } from '../types/global'
+import { auth } from '@/lib/better-auth'
 
-const auth = new Hono<{ Bindings: Env }>()
+const app = new Hono<HonoContext>()
 
-// 处理所有认证相关的请求
-auth.all('/*', async (c) => {
-  const authInstance = c.get('auth')
+// better-auth 处理器
+app.on(['POST', 'GET'], '/auth/*', async (c) => {
+  const response = await auth(c.env).handler(c.req.raw)
 
-  if (!authInstance) {
-    return c.json({ error: 'Authentication not configured' }, 500)
-  }
-
-  return authInstance.handler(c.req.raw)
+  // 确保响应包含正确的 CORS 头部
+  response.headers.set('Access-Control-Allow-Credentials', 'true')
+  return response
 })
 
-export default auth
+export default app
 ```
 
 创建 `src/routes/users.ts`：
@@ -686,7 +530,7 @@ export default auth
 import { Hono } from 'hono'
 import { Env } from '../types/global'
 import { DatabaseService } from '../lib/database'
-import { createDrizzleDB } from '../lib/drizzle'
+import { db } from '@/db'
 
 const users = new Hono<{ Bindings: Env }>()
 
@@ -712,10 +556,6 @@ users.put('/me', async (c) => {
   const body = await c.req.json()
   const { name, avatar } = body
 
-  // 使用 Drizzle
-  const drizzleDB = createDrizzleDB(c.env)
-  const db = new DatabaseService(drizzleDB)
-
   try {
     const updatedUser = await db.updateUser(user.id, {
       name,
@@ -731,12 +571,9 @@ users.put('/me', async (c) => {
 
 // 获取用户列表（管理员功能）
 users.get('/', async (c) => {
-  const drizzleDB = createDrizzleDB(c.env)
-  const db = new DatabaseService(drizzleDB)
-
   try {
     // 使用 Drizzle 查询
-    const userList = await drizzleDB
+    const userList = await db
       .select({
         id: users.id,
         email: users.email,
@@ -756,9 +593,6 @@ users.get('/', async (c) => {
 
 // 获取用户统计信息
 users.get('/stats', async (c) => {
-  const drizzleDB = createDrizzleDB(c.env)
-  const db = new DatabaseService(drizzleDB)
-
   try {
     const userCount = await db.getUserCount()
     const activeSessionCount = await db.getActiveSessionCount()
@@ -782,9 +616,6 @@ users.delete('/me', async (c) => {
   if (!user) {
     return c.json({ error: 'User not found' }, 404)
   }
-
-  const drizzleDB = createDrizzleDB(c.env)
-  const db = new DatabaseService(drizzleDB)
 
   try {
     // 删除用户会话
@@ -909,27 +740,13 @@ export default app
 
 在 Cloudflare Workers 控制台中设置以下环境变量：
 
-```bash
-# 必需的环境变量
-JWT_SECRET=your-super-secret-jwt-key-here
+或者在 `wrangler.jsonc` 中配置环境变量：
 
-# OAuth 配置（可选）
-GITHUB_CLIENT_ID=your-github-client-id
-GITHUB_CLIENT_SECRET=your-github-client-secret
-GOOGLE_CLIENT_ID=your-google-client-id
-GOOGLE_CLIENT_SECRET=your-google-client-secret
-```
-
-或者在 `wrangler.toml` 中配置：
-
-```toml
-[vars]
-NODE_ENV = "production"
-JWT_SECRET = "your-super-secret-jwt-key-here"
-
-# 对于敏感信息，建议使用 secrets
-# wrangler secret put GITHUB_CLIENT_SECRET
-# wrangler secret put GOOGLE_CLIENT_SECRET
+```json
+{
+  "vars": {
+  }
+}
 ```
 
 ### 2. Package.json 脚本
@@ -941,19 +758,14 @@ JWT_SECRET = "your-super-secret-jwt-key-here"
   "name": "hono-cloudflare-template",
   "version": "1.0.0",
   "scripts": {
+    "build": "vite build",
+    "cf-typegen": "wrangler types --env-interface CloudflareBindings",
     "dev": "wrangler dev",
-    "build": "tsc",
     "deploy": "wrangler deploy",
-    "db:create": "wrangler d1 create hono-template-db",
     "db:generate": "drizzle-kit generate",
-    "db:migrate:local": "drizzle-kit migrate --local",
-    "db:migrate:prod": "drizzle-kit migrate",
+    "db:migrate": "drizzle-kit migrate",
     "db:studio": "drizzle-kit studio",
-    "db:push:local": "drizzle-kit push --local",
-    "db:push:prod": "drizzle-kit push",
-    "db:seed": "tsx src/scripts/seed.ts",
-    "db:reset": "tsx src/scripts/reset.ts",
-    "type-check": "tsc --noEmit"
+    "db:push": "drizzle-kit push"
   },
   "dependencies": {
     "hono": "^4.0.0",
@@ -983,20 +795,14 @@ npm run db:generate
 
 ```bash
 # 本地开发环境
-npm run db:migrate:local
-
-# 生产环境
-npm run db:migrate:prod
+npx wrangler d1 migrations apply YOUR_DB_NAME --local
 ```
 
 #### 直接推送 schema（开发时使用）
 
 ```bash
-# 本地开发环境
-npm run db:push:local
-
 # 生产环境（谨慎使用）
-npm run db:push:prod
+npm run db:push
 ```
 
 #### 使用 Drizzle Studio
@@ -1013,71 +819,32 @@ npm run db:studio
 npm run dev
 
 # 在另一个终端中运行数据库迁移（首次运行）
-npm run db:migrate:local
+npx wrangler d1 migrations apply YOUR_DB_NAME --local
 ```
 
 ### 4. 生产部署
 
 ```bash
-# 首次部署前创建生产数据库
-npm run db:migrate:prod
-
 # 部署到 Cloudflare Workers
 npm run deploy
 ```
 
-## 使用示例
-
-### 1. 用户注册
-
-```bash
-curl -X POST https://your-domain.com/auth/sign-up \
-  -H "Content-Type: application/json" \
-  -d '{
-    "email": "user@example.com",
-    "password": "securepassword123",
-    "name": "John Doe"
-  }'
-```
-
-### 2. 用户登录
-
-```bash
-curl -X POST https://your-domain.com/auth/sign-in \
-  -H "Content-Type: application/json" \
-  -d '{
-    "email": "user@example.com",
-    "password": "securepassword123"
-  }'
-```
-
-### 3. 获取用户信息
-
-```bash
-curl -X GET https://your-domain.com/api/users/me \
-  -H "Authorization: Bearer your-session-token"
-```
-
-### 4. GitHub OAuth 登录
-
-访问：`https://your-domain.com/auth/sign-in/github`
-
 ## 最佳实践
 
-### 1. 安全性
+**1. 安全性**
 
 - **环境变量管理**：敏感信息使用 Cloudflare Workers Secrets
 - **CORS 配置**：严格限制允许的域名
 - **输入验证**：对所有用户输入进行验证和清理
 - **会话管理**：定期清理过期会话
 
-### 2. 性能优化
+**2. 性能优化**
 
 - **数据库查询优化**：使用索引和适当的查询模式
 - **缓存策略**：利用 Cloudflare 的缓存功能
 - **错误处理**：实现全面的错误处理和日志记录
 
-### 3. 监控和日志
+**3. 监控和日志**
 
 ```typescript
 // 添加请求日志中间件
@@ -1090,223 +857,15 @@ app.use('*', async (c, next) => {
 })
 ```
 
-## 扩展功能
-
-### 1. 添加邮件验证
-
-```typescript
-// src/lib/email.ts
-export async function sendVerificationEmail(email: string, token: string) {
-  // 使用 Cloudflare Workers 发送邮件
-  // 可以集成 SendGrid、Mailgun 等服务
-}
-```
-
-### 2. 添加角色权限系统
-
-```sql
--- 添加角色表
-CREATE TABLE IF NOT EXISTS roles (
-    id TEXT PRIMARY KEY,
-    name TEXT UNIQUE NOT NULL,
-    description TEXT,
-    created_at DATETIME DEFAULT CURRENT_TIMESTAMP
-);
-
--- 添加用户角色关联表
-CREATE TABLE IF NOT EXISTS user_roles (
-    user_id TEXT NOT NULL,
-    role_id TEXT NOT NULL,
-    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-    PRIMARY KEY (user_id, role_id),
-    FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE,
-    FOREIGN KEY (role_id) REFERENCES roles (id) ON DELETE CASCADE
-);
-```
-
-### 3. 添加 API 限流
-
-```typescript
-// src/middleware/rateLimit.ts
-import { Context, Next } from 'hono'
-
-const rateLimitMap = new Map<string, { count: number; resetTime: number }>()
-
-export function rateLimit(maxRequests: number, windowMs: number) {
-  return async (c: Context, next: Next) => {
-    const clientIP = c.req.header('CF-Connecting-IP') || 'unknown'
-    const now = Date.now()
-    const windowStart = now - windowMs
-
-    const clientData = rateLimitMap.get(clientIP)
-
-    if (!clientData || clientData.resetTime < windowStart) {
-      rateLimitMap.set(clientIP, { count: 1, resetTime: now + windowMs })
-      await next()
-      return
-    }
-
-    if (clientData.count >= maxRequests) {
-      return c.json({ error: 'Too Many Requests' }, 429)
-    }
-
-    clientData.count++
-    await next()
-  }
-}
-```
-
-### 4. 添加数据验证
-
-```typescript
-// src/lib/validation.ts
-import { z } from 'zod'
-
-export const userRegistrationSchema = z.object({
-  email: z.string().email('Invalid email format'),
-  password: z.string().min(8, 'Password must be at least 8 characters'),
-  name: z.string().min(2, 'Name must be at least 2 characters').optional(),
-})
-
-export const userUpdateSchema = z.object({
-  name: z.string().min(2, 'Name must be at least 2 characters').optional(),
-  avatar: z.string().url('Invalid avatar URL').optional(),
-})
-```
-
-### 5. Drizzle 高级查询示例
-
-```typescript
-// src/lib/advanced-queries.ts
-import { eq, and, or, like, desc, count, sql } from 'drizzle-orm'
-import { DrizzleDB } from './drizzle'
-import { users, sessions, accounts } from '../db/schema'
-
-export class AdvancedQueries {
-  constructor(private db: DrizzleDB) {}
-
-  // 复杂的用户查询
-  async searchUsers(searchTerm: string, limit = 10, offset = 0) {
-    return await this.db
-      .select({
-        id: users.id,
-        email: users.email,
-        name: users.name,
-        avatar: users.avatar,
-        createdAt: users.createdAt,
-      })
-      .from(users)
-      .where(or(like(users.name, `%${searchTerm}%`), like(users.email, `%${searchTerm}%`)))
-      .orderBy(desc(users.createdAt))
-      .limit(limit)
-      .offset(offset)
-  }
-
-  // 获取用户及其会话信息
-  async getUserWithSessions(userId: string) {
-    return await this.db
-      .select({
-        user: users,
-        sessions: {
-          id: sessions.id,
-          expiresAt: sessions.expiresAt,
-          createdAt: sessions.createdAt,
-        },
-      })
-      .from(users)
-      .leftJoin(sessions, eq(users.id, sessions.userId))
-      .where(eq(users.id, userId))
-  }
-
-  // 获取用户统计信息
-  async getUserStats() {
-    const [totalUsers] = await this.db.select({ count: count() }).from(users)
-
-    const [activeUsers] = await this.db
-      .select({ count: count() })
-      .from(users)
-      .innerJoin(sessions, eq(users.id, sessions.userId))
-      .where(sql`${sessions.expiresAt} > datetime('now')`)
-
-    const [verifiedUsers] = await this.db
-      .select({ count: count() })
-      .from(users)
-      .where(eq(users.emailVerified, true))
-
-    return {
-      total: totalUsers.count,
-      active: activeUsers.count,
-      verified: verifiedUsers.count,
-    }
-  }
-
-  // 批量操作示例
-  async batchCreateUsers(userData: Array<typeof users.$inferInsert>) {
-    return await this.db.insert(users).values(userData).returning()
-  }
-
-  // 事务示例
-  async transferUserData(fromUserId: string, toUserId: string) {
-    return await this.db.transaction(async (tx) => {
-      // 转移会话
-      await tx.update(sessions).set({ userId: toUserId }).where(eq(sessions.userId, fromUserId))
-
-      // 转移账户
-      await tx.update(accounts).set({ userId: toUserId }).where(eq(accounts.userId, fromUserId))
-
-      // 删除原用户
-      await tx.delete(users).where(eq(users.id, fromUserId))
-
-      return { success: true }
-    })
-  }
-}
-```
-
-### 6. 数据库种子脚本
-
-创建 `src/scripts/seed.ts`：
-
-```typescript
-import { drizzle } from 'drizzle-orm/d1'
-import { users, accounts } from '../db/schema'
-
-// 这是一个示例种子脚本
-export async function seedDatabase(db: D1Database) {
-  const drizzleDB = drizzle(db)
-
-  // 创建测试用户
-  const testUsers = [
-    {
-      id: 'user-1',
-      email: 'admin@example.com',
-      name: 'Admin User',
-      emailVerified: true,
-    },
-    {
-      id: 'user-2',
-      email: 'user@example.com',
-      name: 'Regular User',
-      emailVerified: false,
-    },
-  ]
-
-  await drizzleDB.insert(users).values(testUsers)
-
-  console.log('Database seeded successfully!')
-}
-```
-
 ## 故障排除
 
 ### 常见问题
 
 1. **数据库连接失败**
-   - 检查 `wrangler.toml` 中的数据库配置
+   - 检查 `wrangler.jsonc` 中的数据库配置
    - 确保数据库已创建并执行了迁移
 
 2. **认证失败**
-   - 验证 JWT_SECRET 环境变量
    - 检查 BetterAuth 配置中的 baseURL
 
 3. **CORS 错误**
@@ -1373,8 +932,4 @@ app.onError((err, c) => {
 - [Cloudflare Workers 文档](https://developers.cloudflare.com/workers/)
 - [D1 数据库文档](https://developers.cloudflare.com/d1/)
 - [BetterAuth 文档](https://www.better-auth.com/)
-- [项目源码](https://github.com/your-username/hono-cloudflare-template)
-
----
-
-_本文介绍的技术栈代表了现代 Web 开发的前沿趋势，希望能为你的项目开发提供有价值的参考。_
+- [项目源码](https://github.com/langliu/hono-cloudflare-workers)
