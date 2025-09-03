@@ -158,3 +158,38 @@ ID选择器用于选择具有特定ID的元素。ID选择器以 `#` 开头，在
   color: red;
 }
 ```
+
+## 伪类
+
+### 用户行为伪类
+
+#### **手势经过伪类 `:hover`**
+
+当鼠标经过元素时触发，在桌面端网页上非常常用（比如鼠标悬浮时改变按钮背景颜色），在移动端基本不使用。
+
+```css
+.btn:hover {
+  background-color: pink;
+}
+```
+
+#### 激活状态伪类 `:active`
+
+`:active` 可以设置元素激活状态的样式，当鼠标点击、手指触摸时触发激活状态，点击抬起时取消激活状态。`:active` 支持任何 HTML 元素。
+
+```css
+p:active {
+  color: orchid;
+}
+```
+
+#### 焦点伪类 `:focus`
+
+`:focus` 用于匹配当前处于聚焦状态的元素：
+
+- 非 `disabled` 状态的表单元素，如 `<input>`、`<select>` 等；
+- 包含 `href` 的 `<a>`元素；
+- `<area>` 元素（只支持有限的CSS属性）；
+- `<summary>` 元素；
+- 设置了 `contenteditable` 属性的其他元素；
+- 设置了 `tabindex` 属性的其他元素；
