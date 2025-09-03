@@ -18,6 +18,9 @@ type Props = {
 
 const { post } = Astro.props
 const { Content, headings } = await render(post)
+
+// 只显示前3级目录
+const renderHeadings = headings.filter(header=>header.depth<=3)
 ---
 
 <Layout title={post.data.title} description={post.data.description}>
@@ -36,7 +39,7 @@ const { Content, headings } = await render(post)
       <div class="content-of-tables">
         <nav class="nav">
           <h2 class="contents">目录</h2>
-          {headings.map(heading => (
+          {renderHeadings.map(heading => (
             <a class:list={['nav-link', `depth-${heading.depth}`]} href={`#${heading.slug}`}>{heading.text}</a>
           ))}
         </nav>
