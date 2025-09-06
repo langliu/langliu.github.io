@@ -193,3 +193,29 @@ p:active {
 - `<summary>` 元素；
 - 设置了 `contenteditable` 属性的其他元素；
 - 设置了 `tabindex` 属性的其他元素；
+
+#### 整体焦点伪类 `:focus-within`
+
+`:focus-within` 用于匹配当前元素或其后代元素处于聚焦状态时，当前元素的样式。
+
+```html
+<div class="input-wrapper">
+  <input type="text" />
+</div>
+```
+
+```css
+.input-wrapper:focus-within {
+  border: 1px solid red;
+}
+```
+
+#### 键盘焦点伪类 `:focus-visible`
+
+`:focus-visible` 用于匹配当前元素处于聚焦状态且需要显示焦点指示器时，当前元素的样式。通常在用户使用键盘导航时触发。
+
+```css
+button:focus-visible {
+  outline: 2px solid blue;
+}
+```
