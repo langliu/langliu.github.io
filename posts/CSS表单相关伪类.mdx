@@ -1,0 +1,100 @@
+---
+title: 'CSS 表单相关伪类'
+publishedAt: 2025-09-07
+category: "CSS"
+tags:
+  - 选择器
+  - 伪类
+slug: css-form-related-pseudo-classes
+isPublish: true
+description: 'CSS 表单相关伪类用于选择和样式化 HTML 表单元素的不同状态和行为。这些伪类包括 :disabled、:enabled、:checked、:indeterminate、:valid、:invalid、:in-range、:out-of-range、:required 和 :optional 等。'
+---
+
+## 表单相关伪类
+
+### 禁用状态伪类 `:disabled`
+
+`:disabled` 用于选择被禁用的表单元素，如 `<input>`、`<button>`、`<select>` 和 `<textarea>` 等。
+
+```css
+input:disabled {
+  background-color: #f0f0f0;
+  cursor: not-allowed;
+}
+```
+### 启用状态伪类 `:enabled`
+
+`:enabled` 用于选择未被禁用的表单元素。
+
+```css
+input:enabled {
+  background-color: #ffffff;
+  cursor: text;
+}
+```
+
+### 读写特性伪类 `:read-only` 和 `:read-write`
+
+`:read-only` 用于选择只读的表单元素，而 `:read-write` 用于选择可编辑的表单元素。
+
+```css
+input:read-only {
+  background-color: #f9f9f9;
+}
+```
+
+对于非表单元素的标签，比如 `<div>` 或 `<p>`，默认是匹配 `:read-only`的，除了向表单元素添加 `readonly` 属性外，还可以通过添加 `contenteditable="true"` 属性使非表单元素（如 `<div>` 或 `<p>`）变为可编辑状态。
+
+```css
+p:read-write {
+  background-color: #e0f7fa;
+}
+```
+
+### 占位符显示伪类 `:placeholder-shown`
+
+`:placeholder-shown` 用于选择显示占位符文本的输入字段，当输入框的 placeholder 显示时该伪类生效。
+
+```css
+input:placeholder-shown {
+  border-color: #ccc;
+}
+```
+
+### 默认选项伪类 `:default`
+
+`:default` 用于选择表单中默认选中的选项，如 `<input type="radio">` 或 `<input type="checkbox">`。
+
+```css
+input:default {
+  outline: 2px solid blue;
+}
+```
+
+> 当初始化后值改变时，`:default` 伪类不会匹配该元素，依然匹配最初的默认选中。
+
+### 选中状态伪类 `:checked`
+
+`:checked` 用于选择被选中的单选按钮（`<input type="radio">`）或复选框（`<input type="checkbox">`），以及 `<option>` 元素。
+
+```css
+input:checked {
+  background-color: #4caf50;
+}
+```
+
+### 不确定状态伪类 `:indeterminate`
+
+`:indeterminate` 用于选择处于不确定状态的复选框（`<input type="checkbox">`）。这种状态通常用于表示部分选中。
+
+此选择器针对的元素是：
+
+- `<input type="checkbox">` 元素，其 indeterminate 属性被 JavaScript 设置为 true 时。
+- `<input type="radio">` 元素，当表单中具有相同名称值的所有单选按钮均未被选中时。
+- 处于不确定状态的 `<progress>` 元素
+
+```css
+input:indeterminate {
+  background-color: #ffeb3b;
+}
+```
