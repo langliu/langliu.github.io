@@ -16,7 +16,8 @@ description: 深入探讨 CSS 嵌套的发展历程、语法特性、最佳实�
 
 ## 引言
 
-CSS 嵌套是现代前端开发中的一个重要特性，它允许开发者以更直观、更有组织的方式编写样式代码。从最初的 Sass 和 Less 预处理器，到如今浏览器原生支持的 CSS 嵌套，这项技术已经成为了前端开发的标准实践。
+CSS 嵌套是现代前端开发中的一个重要特性，它允许开发者以更直观、更有组织的方式编写样式代码。从最初的 Sass 和 Less
+预处理器，到如今浏览器原生支持的 CSS 嵌套，这项技术已经成为了前端开发的标准实践。
 
 本文将全面介绍 CSS 嵌套的各个方面：
 
@@ -36,29 +37,19 @@ CSS 嵌套是现代前端开发中的一个重要特性，它允许开发者以�
 
 ```scss
 // SCSS 语法
-.navbar {
-  background: #333;
-  padding: 1rem;
+.nav-item {
+  margin-right: 1rem;
 
-  .nav-list {
-    display: flex;
-    list-style: none;
+  .nav-link {
+    color: white;
+    text-decoration: none;
 
-    .nav-item {
-      margin-right: 1rem;
+    &:hover {
+      color: #ccc;
+    }
 
-      .nav-link {
-        color: white;
-        text-decoration: none;
-
-        &:hover {
-          color: #ccc;
-        }
-
-        &.active {
-          font-weight: bold;
-        }
-      }
+    &.active {
+      font-weight: bold;
     }
   }
 }
@@ -68,29 +59,19 @@ CSS 嵌套是现代前端开发中的一个重要特性，它允许开发者以�
 
 ```less
 // Less 语法
-.navbar {
-  background: #333;
-  padding: 1rem;
+.nav-item {
+  margin-right: 1rem;
 
-  .nav-list {
-    display: flex;
-    list-style: none;
+  .nav-link {
+    color: white;
+    text-decoration: none;
 
-    .nav-item {
-      margin-right: 1rem;
+    &:hover {
+      color: #ccc;
+    }
 
-      .nav-link {
-        color: white;
-        text-decoration: none;
-
-        &:hover {
-          color: #ccc;
-        }
-
-        &.active {
-          font-weight: bold;
-        }
-      }
+    &.active {
+      font-weight: bold;
     }
   }
 }
@@ -98,21 +79,48 @@ CSS 嵌套是现代前端开发中的一个重要特性，它允许开发者以�
 
 ### 原生 CSS 嵌套时代
 
-2023年，主流浏览器开始支持原生 CSS 嵌套：
+2023年，主流浏览器开始支持原生 CSS 嵌套 (CSS 嵌套发展分为2个阶段，以是否可省略 `&` 区分)：
+
+- 浏览器原生支持：需要显式选择器 `&` 来表示当前选择器的父级元素。
 
 ```css
 /* 原生 CSS 嵌套 */
-.feature {
-  button {
-    color: blue;
-  }
+.nav-item {
+  margin-right: 1rem;
 
-  .link {
-    color: red;
-  }
+  & .nav-link {
+    color: white;
+    text-decoration: none;
 
-  .text {
-    font-size: 1.3em;
+    &:hover {
+      color: #ccc;
+    }
+
+    &.active {
+      font-weight: bold;
+    }
+  }
+}
+```
+
+- 浏览器原生支持：可省略 `&` 符号。
+
+```css
+/* 原生 CSS 嵌套 */
+.nav-item {
+  margin-right: 1rem;
+
+  .nav-link {
+    color: white;
+    text-decoration: none;
+
+    &:hover {
+      color: #ccc;
+    }
+
+    &.active {
+      font-weight: bold;
+    }
   }
 }
 ```
@@ -120,16 +128,21 @@ CSS 嵌套是现代前端开发中的一个重要特性，它允许开发者以�
 这与单独写入每种样式相同：
 
 ```css
-.feature button {
-  color: blue;
+.nav-item {
+  margin-right: 1rem;
 }
 
-.feature .link {
-   color: red;
+.nav-item .nav-link {
+  color: white;
+  text-decoration: none;
 }
 
-.feature .text {
-   font-size: 1.3em;
+.nav-item .nav-link:hover {
+  color: #ccc;
+}
+
+.nav-item .nav-link.active {
+  font-weight: bold;
 }
 ```
 
@@ -146,6 +159,7 @@ CSS 嵌套是现代前端开发中的一个重要特性，它允许开发者以�
   & button {
     color: blue;
   }
+
   &:hover {
     color: pink;
   }
@@ -157,13 +171,13 @@ CSS 嵌套是现代前端开发中的一个重要特性，它允许开发者以�
 ```css
 button {
   & + & {
-    /* … */
+    /* button + button */
   }
 }
 
 img {
   .my-component & {
-    /* styles for images inside of `.my-component` ... */
+    /* .my-component img */
   }
 }
 ```
@@ -208,7 +222,6 @@ CSS 条件组规则（例如 `@container`、`@media`、`@supports` 和 `@layer`�
 .component {
   background: white;
 
-  // 直接嵌套，无需 &
   .child {
     color: blue;
   }
@@ -236,18 +249,19 @@ CSS 条件组规则（例如 `@container`、`@media`、`@supports` 和 `@layer`�
 .component {
   background: white;
 
-  /* 需要明确使用 & */
-  & .child {
+  .child {
     color: blue;
   }
 
   /* 父选择器引用 */
+
   &:hover {
     background: #f5f5f5;
   }
 
   /* 修饰符 */
-  &--large {
+
+  .component--large {
     padding: 2rem;
   }
 
@@ -260,15 +274,15 @@ CSS 条件组规则（例如 `@container`、`@media`、`@supports` 和 `@layer`�
 
 ### 功能特性对比
 
-| 特性 | Sass/SCSS | Less | 原生 CSS | 说明 |
-|------|-----------|------|----------|------|
-| 基本嵌套 | ✅ | ✅ | ✅ | 所有都支持 |
-| 父选择器引用 (&) | ✅ | ✅ | ✅ | 语法略有差异 |
-| 媒体查询嵌套 | ✅ | ✅ | ✅ | 原生支持较新 |
-| 属性嵌套 | ✅ | ✅ | ❌ | 原生不支持 |
-| 变量嵌套 | ✅ | ✅ | ✅ | CSS 自定义属性 |
-| 函数嵌套 | ✅ | ✅ | ❌ | 预处理器特有 |
-| 混入嵌套 | ✅ | ✅ | ❌ | 预处理器特有 |
+| 特性         | Sass/SCSS | 原生 CSS | 说明        |
+|------------|-----------|--------|-----------|
+| 基本嵌套       | ✅         | ✅      | 所有都支持     |
+| 父选择器引用 (&) | ✅         | ✅      | 语法略有差异    |
+| 媒体查询嵌套     | ✅         | ✅      | 原生支持较新    |
+| 属性嵌套       | ✅         | ❌      | 原生不支持     |
+| 变量嵌套       | ✅         | ✅      | CSS 自定义属性 |
+| 函数嵌套       | ✅         | ❌      | 预处理器特有    |
+| 混入嵌套       | ✅         | ❌      | 预处理器特有    |
 
 ## 嵌套的最佳实践
 
@@ -296,7 +310,7 @@ CSS 条件组规则（例如 `@container`、`@media`、`@supports` 和 `@layer`�
 
 /* ✅ 合理嵌套：最多 3-4 层 */
 .page {
-  & .content {
+  .content {
     display: grid;
     grid-template-columns: 1fr 300px;
     gap: 2rem;
@@ -308,18 +322,18 @@ CSS 条件组规则（例如 `@container`、`@media`、`@supports` 和 `@layer`�
   border-radius: 8px;
   padding: 1rem;
 
-  & .widget-header {
+  .widget-header {
     border-bottom: 1px solid #eee;
     padding-bottom: 0.5rem;
     margin-bottom: 1rem;
   }
 
-  & .widget-title {
+  .widget-title {
     display: flex;
     align-items: center;
     gap: 0.5rem;
 
-    & .title-icon {
+    .title-icon {
       width: 20px;
       height: 20px;
       fill: currentColor;
@@ -340,6 +354,7 @@ CSS 条件组规则（例如 `@container`、`@media`、`@supports` 和 `@layer`�
   border-radius: 4px;
 
   /* 状态变化 */
+
   &:hover,
   &:focus {
     background: #0056b3;
@@ -376,7 +391,7 @@ CSS 条件组规则（例如 `@container`、`@media`、`@supports` 和 `@layer`�
     gap: 1rem;
   }
 
-  & .card-image {
+  .card-image {
     width: 100%;
 
     @media (min-width: 768px) {
@@ -385,7 +400,7 @@ CSS 条件组规则（例如 `@container`、`@media`、`@supports` 和 `@layer`�
     }
   }
 
-  & .card-content {
+  .card-content {
     @media (min-width: 768px) {
       flex: 1;
     }
@@ -395,9 +410,9 @@ CSS 条件组规则（例如 `@container`、`@media`、`@supports` 和 `@layer`�
 /* ❌ 避免过度嵌套媒体查询 */
 .complex-component {
   @media (min-width: 768px) {
-    & .inner {
+    .inner {
       @media (min-width: 1024px) {
-        & .deep {
+        .deep {
           @media (min-width: 1200px) {
             /* 过度复杂 */
           }
@@ -474,7 +489,7 @@ CSS 条件组规则（例如 `@container`、`@media`、`@supports` 和 `@layer`�
 
 /* ✅ 适度嵌套：保持语义关系 */
 .widget {
-  & .widget-title {
+  .widget-title {
     font-size: 1.2rem;
   }
 }
@@ -538,6 +553,7 @@ CSS 条件组规则（例如 `@container`、`@media`、`@supports` 和 `@layer`�
   }
 
   /* 主题切换只需修改自定义属性 */
+
   &[data-theme="dark"] {
     --primary-color: #0d6efd;
     --secondary-color: #495057;
@@ -553,22 +569,22 @@ CSS 条件组规则（例如 `@container`、`@media`、`@supports` 和 `@layer`�
 
 第一阶段：浏览器开始支持 CSS 嵌套，但是表示根作用域的 `&` 不可省略；
 
-| 浏览器 | 版本 | 支持状态 |
-|--------|------|----------|
-| Chrome | 112-119 | 需使用 `&` |
-| Opera | 98-105 | 需使用 `&` |
+| 浏览器    | 版本        | 支持状态    |
+|--------|-----------|---------|
+| Chrome | 112-119   | 需使用 `&` |
+| Opera  | 98-105    | 需使用 `&` |
 | Safari | 16.5-17.1 | 需使用 `&` |
-| Edge | 112-119 | 需使用 `&` |
+| Edge   | 112-119   | 需使用 `&` |
 
 第二阶段：浏览器开始支持 CSS 嵌套，`&` 可以省略。
 
-| 浏览器 | 版本 | 支持状态 |
-|--------|------|----------|
-| Chrome | 120+ | ✅ 完全支持 |
-| Firefox | 117+ | ✅ 完全支持 |
-| Safari | 17.2+ | ✅ 完全支持 |
-| Edge | 112+ | ✅ 完全支持 |
-| Opera | 106+ | ✅ 完全支持 |
+| 浏览器     | 版本    | 支持状态   |
+|---------|-------|--------|
+| Chrome  | 120+  | ✅ 完全支持 |
+| Firefox | 117+  | ✅ 完全支持 |
+| Safari  | 17.2+ | ✅ 完全支持 |
+| Edge    | 112+  | ✅ 完全支持 |
+| Opera   | 106+  | ✅ 完全支持 |
 
 ### 兼容性解决方案
 
@@ -591,7 +607,7 @@ module.exports = {
 .component {
   background: white;
 
-  & .child {
+  .child {
     color: blue;
 
     &:hover {
@@ -613,190 +629,5 @@ module.exports = {
   color: darkblue;
 }
 ```
-
-## 迁移指南
-
-### 从 Sass 迁移到原生 CSS
-
-#### 1. 语法调整
-
-```scss
-// Sass 语法
-.component {
-  background: white;
-
-  .child {  // 无需 &
-    color: blue;
-  }
-
-  &:hover {
-    background: #f5f5f5;
-  }
-}
-```
-
-```css
-/* 原生 CSS 语法 */
-.component {
-  background: white;
-
-  & .child {  /* 需要明确使用 & */
-    color: blue;
-  }
-
-  &:hover {
-    background: #f5f5f5;
-  }
-}
-```
-
-#### 2. 功能替代
-
-```scss
-// Sass 变量和函数
-$primary-color: #007bff;
-$border-radius: 4px;
-
-.button {
-  background: $primary-color;
-  border-radius: $border-radius;
-
-  &:hover {
-    background: darken($primary-color, 10%);
-  }
-}
-```
-
-```css
-/* CSS 自定义属性和现代函数 */
-:root {
-  --primary-color: #007bff;
-  --border-radius: 4px;
-}
-
-.button {
-  background: var(--primary-color);
-  border-radius: var(--border-radius);
-
-  &:hover {
-    background: color-mix(in srgb, var(--primary-color) 90%, black);
-  }
-}
-```
-
-### 渐进式迁移策略
-
-#### 阶段 1：保持预处理器，添加原生嵌套
-
-```scss
-// 混合使用 Sass 和原生嵌套
-.component {
-  $local-color: #333;  // Sass 变量
-
-  background: white;
-
-  // 使用原生嵌套语法
-  & .child {
-    color: $local-color;
-
-    &:hover {
-      color: lighten($local-color, 20%);
-    }
-  }
-}
-```
-
-#### 阶段 2：逐步替换 Sass 特性
-
-```css
-/* 使用 CSS 自定义属性替代 Sass 变量 */
-.component {
-  --local-color: #333;
-
-  background: white;
-
-  & .child {
-    color: var(--local-color);
-
-    &:hover {
-      color: color-mix(in srgb, var(--local-color) 80%, white);
-    }
-  }
-}
-```
-
-#### 阶段 3：完全使用原生 CSS
-
-```css
-/* 纯原生 CSS 实现 */
-.component {
-  --local-color: #333;
-  --hover-color: color-mix(in srgb, var(--local-color) 80%, white);
-
-  background: white;
-
-  & .child {
-    color: var(--local-color);
-
-    &:hover {
-      color: var(--hover-color);
-    }
-  }
-}
-```
-
-## 总结与建议
-
-### 核心要点回顾
-
-1. **选择合适的工具**：
-   - 新项目：优先考虑原生 CSS 嵌套
-   - 现有项目：可以继续使用 Sass/Less，逐步迁移
-   - 需要高级功能：Sass 仍然是最佳选择
-
-2. **遵循最佳实践**：
-   - 控制嵌套深度（3-4层以内）
-   - 使用语义化的选择器命名
-   - 合理使用父选择器引用
-   - 避免过度复杂的嵌套结构
-
-3. **性能优化**：
-   - 避免生成过于复杂的选择器
-   - 使用 CSS 自定义属性优化动态样式
-   - 合理使用媒体查询嵌套
-
-4. **团队协作**：
-   - 建立统一的嵌套规范
-   - 使用代码检查工具
-   - 定期重构和优化代码
-
-### 未来展望
-
-CSS 嵌套的发展趋势：
-
-- **更好的工具支持**：IDE 和构建工具将提供更完善的嵌套支持
-- **性能优化**：浏览器将进一步优化嵌套选择器的解析性能
-- **新特性**：可能会有更多嵌套相关的 CSS 特性出现
-- **标准化**：W3C 将继续完善 CSS 嵌套规范
-
-### 实践建议
-
-1. **学习路径**：
-   - 掌握基本嵌套语法
-   - 理解性能影响
-   - 学习最佳实践
-   - 在实际项目中应用
-
-2. **工具选择**：
-   - 评估项目需求
-   - 考虑团队技能
-   - 权衡维护成本
-   - 制定迁移计划
-
-3. **持续改进**：
-   - 定期审查嵌套代码
-   - 关注新特性和最佳实践
-   - 优化性能和可维护性
-   - 分享经验和知识
 
 CSS 嵌套是现代前端开发的重要工具，合理使用可以显著提高开发效率和代码质量。随着浏览器支持的不断完善，原生 CSS 嵌套将成为未来的主流选择。
