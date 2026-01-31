@@ -12,25 +12,28 @@
   },
   "dependencies": {
     "@astrojs/mdx": "^4.3.13",
-    "@astrojs/rss": "^4.0.14",
-    "@astrojs/sitemap": "^3.6.0",
-    "@sentry/astro": "^10.32.1",
+    "@astrojs/rss": "^4.0.15",
+    "@astrojs/sitemap": "^3.7.0",
+    "@sentry/astro": "^10.38.0",
     "@tailwindcss/vite": "^4.1.18",
-    "astro": "^5.16.6",
+    "astro": "^5.17.1",
     "astro-font": "^1.1.0",
     "astro-robots-txt": "^1.0.0",
-    "astro-seo": "^0.8.4",
-    "limax": "^4.2.1",
+    "astro-seo": "^1.1.0",
+    "limax": "^4.2.2",
     "tailwindcss": "^4.1.18"
   },
   "devDependencies": {
-    "@typescript-eslint/parser": "^8.51.0",
+    "@typescript-eslint/parser": "^8.54.0",
     "eslint": "^9.39.2",
     "eslint-plugin-astro": "^1.5.0",
-    "prettier": "^3.7.4",
+    "prettier": "^3.8.1",
     "prettier-plugin-astro": "^0.14.1",
     "prettier-plugin-tailwindcss": "^0.7.2",
     "typescript": "^5.9.3"
   },
-  "packageManager": "npm@11.0.0"
+  "packageManager": "npm@11.0.0",
+  "overrides": {
+    "lodash": "^4.17.21"
+  }
 }
