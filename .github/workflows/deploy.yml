@@ -25,7 +25,7 @@ jobs:
         env:
           SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
         with:
-          package-manager: npm@latest # The Node package manager that should be used to install dependencies and build your site. Automatically detected based on your lockfile. (optional)
+          package-manager: bun # The Node package manager that should be used to install dependencies and build your site. Automatically detected based on your lockfile. (optional)
           node-version: 24 # The specific version of Node that should be used to build your site. Defaults to 18. (optional)
           # path: . # The root location of your Astro project inside the repository. (optional)
 
