@@ -16,7 +16,8 @@ const pathname = removeTrailingSlash(Astro.url.pathname)
           class:list={{
             ['hover:text-neutral-100']: true,
             ['text-neutral-100']: pathname === '/',
-          }}>首页</a
+          }}
+          aria-current={pathname === '/' ? 'page' : undefined}>首页</a
         >
       </li>
       <li>/</li>
@@ -26,7 +27,8 @@ const pathname = removeTrailingSlash(Astro.url.pathname)
           class:list={{
             ['hover:text-neutral-100']: true,
             ['text-neutral-100']: pathname === '/posts',
-          }}>文章</a
+          }}
+          aria-current={pathname === '/posts' ? 'page' : undefined}>文章</a
         >
       </li>
     </ul>

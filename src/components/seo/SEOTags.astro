@@ -11,12 +11,15 @@ const DEFAULT_TITLE_PAGE = '研之有物 - 首页'
 const DEFAULT_DESCRIPTION_PAGE = '刘浪的个人博客'
 const DEFAULT_URL_SITE = SITE_URL
 
+// 动态构建当前页面 URL
+const currentUrl = `${DEFAULT_URL_SITE}${Astro.url.pathname.replace(/^\//, '')}`
+
 const openGraph = {
   title: title || og?.title || DEFAULT_TITLE_PAGE,
   type: og?.type || 'website',
-  image: og?.image || '/opengraph-image.jpg',
+  image: og?.image ? (og.image.startsWith('http') ? og.image : `${DEFAULT_URL_SITE}${og.image}`) : `${DEFAULT_URL_SITE}opengraph-image.jpg`,
   alt: og?.alt || '刘浪的个人博客',
-  url: DEFAULT_URL_SITE,
+  url: currentUrl,
   description: og?.description || DEFAULT_DESCRIPTION_PAGE,
 }
 ---
@@ -44,6 +47,8 @@ const openGraph = {
       link: [
         { rel: 'icon', href: '/favicon.ico' },
         { rel: 'sitemap', href: '/sitemap-index.xml' },
+        { rel: 'canonical', href: currentUrl },
+        { rel: 'preconnect', href: 'https://www.googletagmanager.com' },
       ],
       meta: [
         { name: 'viewport', content: 'width=device-width, initial-scale=1' },
@@ -59,23 +64,6 @@ const openGraph = {
       ],
     }}
   />
-  <!-- Google tag (gtag.js) -->
-  <script async src='https://www.googletagmanager.com/gtag/js?id=G-MBVV1EEBQN'></script>
-  <script is:inline>
-    window.dataLayer = window.dataLayer || []
-    function gtag() {
-      dataLayer.push(arguments)
-    }
-    gtag('js', new Date())
-
-    gtag('config', 'G-MBVV1EEBQN')
-  </script>
-  <script is:inline>
-    window.dataLayer = window.dataLayer || []
-    function gtag() {
-      dataLayer.push(arguments)
-    }
-  </script>
   <!-- Google Tag Manager -->
   <script is:inline>
     ;(function (w, d, s, l, i) {

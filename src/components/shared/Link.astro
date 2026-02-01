@@ -6,7 +6,14 @@ type Props = HTMLAttributes<"a"> & {
   isUnderline?: boolean;
 };
 
-const { label, isUnderline, ...props } = Astro.props;
+const { label, isUnderline, target, rel, ...props } = Astro.props;
+
+// 判断是否为外部链接
+const isExternal = props.href?.toString().startsWith('http');
+// 如果没有指定 target，外部链接默认使用 _blank
+const finalTarget = target || (isExternal ? "_blank" : undefined);
+// 如果没有指定 rel，外部链接默认使用 noreferrer
+const finalRel = rel || (isExternal ? "noreferrer" : undefined);
 ---
 
 <a
@@ -16,8 +23,8 @@ const { label, isUnderline, ...props } = Astro.props;
     ["underline decoration-dashed underline-offset-8"]: isUnderline,
   }}
   {...props}
-  rel="noreferrer"
-  target="_blank"
+  rel={finalRel}
+  target={finalTarget}
 >
   {label}
   <span class="sr-only">{label} link</span>

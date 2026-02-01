@@ -14,6 +14,7 @@ const { title, publishedAt, description, slug } = Astro.props
 <a
   class='group flex flex-1 cursor-pointer flex-col gap-2 rounded-md border border-neutral-700 p-4 transition-all duration-300 hover:-translate-y-2 hover:border-neutral-400'
   href={`/posts/${slug}`}
+  aria-label={`阅读文章：${title}`}
 >
   <div class='flex w-full flex-col justify-between gap-2 md:flex-row md:items-start'>
     <p class='text-neutral-100'>{title}</p>
@@ -26,6 +27,7 @@ const { title, publishedAt, description, slug } = Astro.props
         viewBox='0 0 18 18'
         fill='none'
         class='transition-all duration-300 group-hover:translate-x-1'
+        aria-hidden='true'
       >
         <path
           d='M5.25 12.75L12.75 5.25'

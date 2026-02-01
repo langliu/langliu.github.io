@@ -25,6 +25,17 @@ const renderHeadings = headings.filter(header=>header.depth<=3)
 
 <Layout title={post.data.title} description={post.data.description}>
   <main class="post mx-auto flex w-full flex-col gap-4">
+    <div class="mb-4">
+      <a
+        href="/posts"
+        class="text-neutral-400 hover:text-neutral-100 transition-colors inline-flex items-center gap-2"
+      >
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M19 12H5M12 19l-7-7 7-7"/>
+        </svg>
+        返回文章列表
+      </a>
+    </div>
     <header role="presentation">
       <h1 class="text-md">
         {post.data.title} - {formatDate(post.data.publishedAt)}

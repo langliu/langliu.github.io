@@ -12,9 +12,11 @@ import convertAsteriskToStrongTag from '@/utils/convertAsteriskToStrongTag'
 import presentation from '@/data/presentation'
 import projects from '@/data/projects'
 
-const posts = (await getCollection('posts')).sort(function (first, second) {
-  return second.data.publishedAt.getTime() - first.data.publishedAt.getTime()
-})
+const posts = (await getCollection('posts'))
+  .filter((post) => post.data.isPublish && !post.data.isDraft)
+  .sort(function (first, second) {
+    return second.data.publishedAt.getTime() - first.data.publishedAt.getTime()
+  })
 ---
 
 <Layout>
@@ -25,7 +27,7 @@ const posts = (await getCollection('posts')).sort(function (first, second) {
           <Image
             src={presentation.profile}
             class='w-1/4 self-center rounded-full'
-            alt='Your Profile'
+            alt='刘浪的个人头像'
             width='200'
             height='200'
           />
@@ -34,7 +36,7 @@ const posts = (await getCollection('posts')).sort(function (first, second) {
 
       <div class='flex flex-col gap-8'>
         <h1
-          class='text-4xl font-bold text-neutral-100 bg-clip-text bg-gradient-to-r from-orange-400 to-purple-500 w-max'
+          class='text-4xl font-bold text-neutral-100 bg-clip-text bg-linear-to-r from-orange-400 to-purple-500 w-max'
         >
           {presentation.title}
         </h1>
@@ -43,8 +45,6 @@ const posts = (await getCollection('posts')).sort(function (first, second) {
           class='w-auto leading-6'
           set:html={convertAsteriskToStrongTag(presentation.description)}
         />
-
-        <SocialLinks />
       </div>
     </article>
 
