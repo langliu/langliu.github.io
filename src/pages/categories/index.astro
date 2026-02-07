@@ -1,0 +1,86 @@
+---
+import { getCollection } from 'astro:content'
+import Layout from '@/layouts/Layout.astro'
+
+const posts = (await getCollection('posts'))
+  .filter(post => post.data.isPublish && !post.data.isDraft)
+
+// 获取所有分类并统计文章数量
+const categoryStats = posts.reduce((acc, post) => {
+  const category = post.data.category
+  if (!acc[category]) {
+    acc[category] = 0
+  }
+  acc[category]++
+  return acc
+}, {} as Record<string, number>)
+
+// 转换为数组并排序
+const categories = Object.entries(categoryStats)
+  .sort(([, a], [, b]) => b - a)
+
+// 分类显示名称映射（可选美化）
+const categoryLabels: Record<string, string> = {
+  'CSS': 'CSS',
+  'Vue': 'Vue',
+  'React': 'React',
+  '其他': '其他',
+  'HTML': 'HTML',
+  'JavaScript': 'JavaScript',
+  'TypeScript': 'TypeScript',
+}
+---
+
+<Layout title="刘浪的博客 - 文章分类">
+  <main class="flex flex-col gap-12">
+    <div class="flex flex-col gap-4">
+      <h1 class="text-2xl text-neutral-100">文章分类</h1>
+      <p class="text-neutral-400">共 {categories.length} 个分类，{posts.length} 篇文章</p>
+    </div>
+
+    <article class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+      {
+        categories.map(([category, count]) => (
+          <a
+            href={`/categories/${category}`}
+            class="group flex flex-col gap-2 rounded-md border border-neutral-700 p-6 transition-all duration-300 hover:-translate-y-1 hover:border-neutral-400"
+            aria-label={`查看 ${categoryLabels[category] || category} 分类的 ${count} 篇文章`}
+          >
+            <div class="flex items-center justify-between">
+              <h2 class="text-lg text-neutral-100 group-hover:text-white">
+                {categoryLabels[category] || category}
+              </h2>
+              <span class="rounded-full bg-neutral-800 px-3 py-1 text-sm text-neutral-400">
+                {count} 篇
+              </span>
+            </div>
+            <div class="flex items-center gap-2 text-sm text-neutral-500">
+              <span>查看文章</span>
+              <svg
+                width="16"
+                height="16"
+                viewBox="0 0 18 18"
+                fill="none"
+                class="transition-all duration-300 group-hover:translate-x-1"
+                aria-hidden="true"
+              >
+                <path
+                  d="M5.25 12.75L12.75 5.25"
+                  stroke="#999999"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+                <path
+                  d="M5.25 5.25H12.75V12.75"
+                  stroke="#999999"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+              </svg>
+            </div>
+          </a>
+        ))
+      }
+    </article>
+  </main>
+</Layout>

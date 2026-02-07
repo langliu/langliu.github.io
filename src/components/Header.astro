@@ -31,6 +31,17 @@ const pathname = removeTrailingSlash(Astro.url.pathname)
           aria-current={pathname === '/posts' ? 'page' : undefined}>文章</a
         >
       </li>
+      <li>/</li>
+      <li>
+        <a
+          href='/categories'
+          class:list={{
+            ['hover:text-neutral-100']: true,
+            ['text-neutral-100']: pathname === '/categories' || pathname.startsWith('/categories/'),
+          }}
+          aria-current={pathname === '/categories' || pathname.startsWith('/categories/') ? 'page' : undefined}>分类</a
+        >
+      </li>
     </ul>
   </nav>
 </header>
