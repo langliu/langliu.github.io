@@ -16,6 +16,7 @@ export default defineConfig({
       sourceMapsUploadOptions: {
         project: 'langliu-blog',
         authToken: process.env.SENTRY_AUTH_TOKEN,
+        telemetry: false,
       },
     }),
   ],
