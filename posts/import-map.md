@@ -46,7 +46,7 @@ Node.js 会自动从 node_modules 目录中去加载对应的模块， 但是浏
 
 import-maps 就是为了解决浏览器中的全局模块而出现的， 目前浏览器的支持情况如下图所示， 基于 Chromium 和 Firefox 的浏览器已经实现这个功能。
 
-![Can I Use](/can-i-use-import-maps.png)
+![Can I Use](/can-i-use-import-maps.webp)
 
 对于不支持 import-maps 的浏览器， 可以使用 [es-module-shims](https://github.com/guybedford/es-module-shims) 进行处理。
 

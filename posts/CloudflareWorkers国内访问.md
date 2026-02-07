@@ -28,7 +28,7 @@ description: 解决cloudflare workers 部署后国内无法访问的问题
 
 在 Cloudflare 控制台中，为自定义域添加 CNAME 记录，指向优选域名，如下图所示：
 
-![cloudflare dns setting](/cloudflare-dns-setting.png)
+![cloudflare dns setting](/cloudflare-dns-setting.webp)
 
 > 不要打开 Cloudflare 的代理功能
 
@@ -36,6 +36,6 @@ description: 解决cloudflare workers 部署后国内无法访问的问题
 
 路由填入 Worker 项目最终使用的自定义域 `hono-cloudflare-workers.langliu.top/*`，Worker 选中对应的Worker项目名后点击保存即可。
 
-![cloudflare workers 路由设置](/cloudflare-workers-routes.png)
+![cloudflare workers 路由设置](/cloudflare-workers-routes.webp)
 
 上述的路由设置完成后，即可在 `hono-cloudflare-workers.langliu.top` 访问到 Worker 项目。

@@ -11,7 +11,7 @@ category: 'React'
 
 在很多组件库（比如Antd和Arco都 Watermark 水印组件），那么这个组件的实现原理是什么呢？
 
-![Arco Watermark](/acro-watermark.png)
+![Arco Watermark](/acro-watermark.webp)
 
 从上面的图可以看出，水印组件的实现有3点：
 
