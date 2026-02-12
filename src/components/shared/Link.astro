@@ -12,8 +12,8 @@ const { label, isUnderline, target, rel, href, ...props } = Astro.props
 const isExternal = href?.toString().startsWith('http')
 // 如果没有指定 target，外部链接默认使用 _blank
 const finalTarget = target || (isExternal ? '_blank' : undefined)
-// 如果没有指定 rel，外部链接默认使用 noreferrer
-const finalRel = rel || (isExternal ? 'noreferrer' : undefined)
+// 如果没有指定 rel，_blank 链接默认使用 noopener noreferrer
+const finalRel = rel || (finalTarget === '_blank' ? 'noopener noreferrer' : undefined)
 ---
 
 <a

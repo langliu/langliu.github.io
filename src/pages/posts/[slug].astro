@@ -189,7 +189,9 @@ const renderHeadings = headings.filter((header) => header.depth <= 3)
     return activeHeadingId
   }
 
-  if (tocLinks.length !== 0 && headingElements.length !== 0) {
+  const isDesktop = window.matchMedia('(min-width: 1081px)').matches
+
+  if (isDesktop && tocLinks.length !== 0 && headingElements.length !== 0) {
     const visibleHeadingIds = new Set<string>()
 
     const observer = new IntersectionObserver(
