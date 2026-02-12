@@ -6,7 +6,7 @@
 }
 
 .post blockquote {
-  @apply flex flex-row gap-2 before:block before:h-auto before:w-1 before:max-w-[1px] before:bg-red-400 before:content-[''];
+  @apply flex flex-row gap-2 before:block before:h-auto before:w-1 before:max-w-px before:bg-red-400 before:content-[''];
   margin-bottom: 20px;
 
   p {
@@ -15,7 +15,7 @@
 }
 
 .post code {
-  @apply mt-4 mb-2 rounded-sm bg-neutral-800 px-1 py-[2px] text-red-500;
+  @apply mt-4 mb-2 rounded-sm bg-neutral-800 px-1 py-0.5 text-red-500;
 }
 
 .post h2 {
@@ -50,18 +50,20 @@
   padding: 1rem 2rem;
   border-radius: 0.375rem;
   border: 1px solid hsl(210deg 10% 30%);
+  /* biome-ignore lint/complexity/noImportantStyles: 忽略 */
   background-color: transparent !important;
   margin-bottom: 20px;
 }
 
-.post pre > code {
+.post pre>code {
   background-color: transparent;
 }
 
 .post table {
   width: 100%;
   border-collapse: collapse;
-  + p {
+
+  +p {
     margin-top: 1.25rem;
   }
 }
