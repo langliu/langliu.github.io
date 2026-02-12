@@ -16,7 +16,7 @@ const presentation: Presentation = {
   title: '你好，我是刘浪',
   // profile: "/profile.webp",
   description:
-    "我是一名来自中国的*前端开发工程师*，拥有超过 *6 年* 的 Web 经验。 我目前正在使用 *ReactJS 和 Typescript*。 工作之余，我会去野外钓鱼并学习 Svelte。",
+    '我是一名来自中国的*前端开发工程师*，拥有超过 *6 年* 的 Web 经验。 我目前正在使用 *ReactJS 和 Typescript*。 工作之余，我会去野外钓鱼并学习 Svelte。',
   socials: [
     {
       label: 'Github',

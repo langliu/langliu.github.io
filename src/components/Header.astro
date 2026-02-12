@@ -39,7 +39,9 @@ const pathname = removeTrailingSlash(Astro.url.pathname)
             ['hover:text-neutral-100']: true,
             ['text-neutral-100']: pathname === '/categories' || pathname.startsWith('/categories/'),
           }}
-          aria-current={pathname === '/categories' || pathname.startsWith('/categories/') ? 'page' : undefined}>分类</a
+          aria-current={pathname === '/categories' || pathname.startsWith('/categories/')
+            ? 'page'
+            : undefined}>分类</a
         >
       </li>
     </ul>

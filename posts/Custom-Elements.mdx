@@ -1,6 +1,6 @@
 ---
 title: 'Custom Elements'
-description: '近日被问到一个问题：在 JavaScript 中如何判断一个数组是数组？。在听到这个问题的时候我就在想有那些方式，在我们常用的类型判断中可以通过 `typeof` 或 `instanceof` 来进行类型判断。'
+description: '在 Custom Elements 中，我们可以根据是否继承基本 HTML 元素，可以将自定义元素分为两类'
 publishedAt: 2022-08-29
 tags:
   - Web Components
@@ -56,33 +56,33 @@ window.customElements.define('hello-world', HelloWorld)
 // index.js
 
 class MyCard extends HTMLDivElement {
-    constructor() {
-        super();
-        let shadow = this.attachShadow({ mode: "open" });
+  constructor() {
+    super()
+    let shadow = this.attachShadow({ mode: 'open' })
 
-        let containerEle = document.createElement("div");
-        containerEle.style.display = "flex";
-        containerEle.style.flexDirection = "column"
-        containerEle.style.margin = "100px";
-        containerEle.style.border = "1px solid #aaa";
+    let containerEle = document.createElement('div')
+    containerEle.style.display = 'flex'
+    containerEle.style.flexDirection = 'column'
+    containerEle.style.margin = '100px'
+    containerEle.style.border = '1px solid #aaa'
 
-        const headerEle = document.createElement("div");
-        headerEle.innerText = "名片";
-        headerEle.style.height = "20px";
-        headerEle.style.padding = "10px";
-        headerEle.style.borderBottom = "1px solid blue";
+    const headerEle = document.createElement('div')
+    headerEle.innerText = '名片'
+    headerEle.style.height = '20px'
+    headerEle.style.padding = '10px'
+    headerEle.style.borderBottom = '1px solid blue'
 
-        const bodyEle = document.createElement("div");
-        bodyEle.innerText = "姓名：编程三昧";
-        bodyEle.style.padding = "10px";
+    const bodyEle = document.createElement('div')
+    bodyEle.innerText = '姓名：编程三昧'
+    bodyEle.style.padding = '10px'
 
-        containerEle.appendChild(headerEle);
-        containerEle.appendChild(bodyEle);
-        shadow.appendChild(containerEle);
-    }
+    containerEle.appendChild(headerEle)
+    containerEle.appendChild(bodyEle)
+    shadow.appendChild(containerEle)
+  }
 }
 
-customElements.define("my-card", MyCard, {extends: "div"});
+customElements.define('my-card', MyCard, { extends: 'div' })
 ```
 
 ## 总结

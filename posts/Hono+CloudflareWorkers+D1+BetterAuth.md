@@ -365,7 +365,7 @@ export const db = drizzle(env.DB, { schema })
 创建 `src/lib/better-auth/index.ts`：
 
 ```typescript
-import { env } from 'cloudflare:workers';
+import { env } from 'cloudflare:workers'
 import { betterAuth } from 'better-auth'
 import { drizzleAdapter } from 'better-auth/adapters/drizzle'
 import { db } from '@/db'
@@ -744,8 +744,7 @@ export default app
 
 ```json
 {
-  "vars": {
-  }
+  "vars": {}
 }
 ```
 

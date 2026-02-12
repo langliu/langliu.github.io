@@ -1,5 +1,4 @@
 ---
-import { getCollection } from 'astro:content'
 import { Image } from 'astro:assets'
 
 import Layout from '@/layouts/Layout.astro'
@@ -8,15 +7,12 @@ import PostCard from '@/components/PostCard.astro'
 import ProjectCard from '@/components/ProjectCard.astro'
 import Link from '@/components/shared/Link.astro'
 import convertAsteriskToStrongTag from '@/utils/convertAsteriskToStrongTag'
+import { getPostSlug, getPublishedPosts } from '@/utils/posts'
 
 import presentation from '@/data/presentation'
 import projects from '@/data/projects'
 
-const posts = (await getCollection('posts'))
-  .filter((post) => post.data.isPublish && !post.data.isDraft)
-  .sort(function (first, second) {
-    return second.data.publishedAt.getTime() - first.data.publishedAt.getTime()
-  })
+const posts = await getPublishedPosts()
 ---
 
 <Layout>
@@ -65,7 +61,7 @@ const posts = (await getCollection('posts'))
                   publishedAt={post.data.publishedAt}
                   title={post.data.title}
                   description={post.data.description}
-                  slug={post.id}
+                  slug={getPostSlug(post)}
                 />
               ))
         }

@@ -1,7 +1,7 @@
 ---
 title: 'CSS 选择器'
 publishedAt: 2025-08-31
-category: "CSS"
+category: 'CSS'
 tags:
   - 选择器
 slug: css-selector
@@ -19,7 +19,6 @@ description: 'CSS 选择器是 CSS 的核心概念之一，它用于选择 HTML 
 
 1. 标签选择器不能重复自身；
 2. 标签选择器必须写在最前面；
-
 
 ```css
 /* 选择所有 <p> 元素 */
@@ -93,7 +92,7 @@ ID选择器用于选择具有特定ID的元素。ID选择器以 `#` 开头，在
 **[attr="val"]**: 选择具有 `attr` 属性且属性值为 `val` 的元素。
 
 ```css
-[lang="en"] {
+[lang='en'] {
   font-family: Arial, sans-serif;
 }
 ```
@@ -101,13 +100,13 @@ ID选择器用于选择具有特定ID的元素。ID选择器以 `#` 开头，在
 **[attr~="val"]**: 选择具有 `attr` 属性且属性值包含 `val` 的元素，并且该属性是一个以空格作为分隔的值列表，其中至少有一个值为 val。
 
 ```html
-<link rel="author publisher" href="https://example.com/author">
-<link rel="author-test" href="https://example.com/publisher">
+<link rel="author publisher" href="https://example.com/author" />
+<link rel="author-test" href="https://example.com/publisher" />
 ```
 
 ```css
 /* 只匹配第一个 */
-[rel~="author"] {
+[rel~='author'] {
   font-weight: bold;
 }
 ```
@@ -117,7 +116,7 @@ ID选择器用于选择具有特定ID的元素。ID选择器以 `#` 开头，在
 匹配 `lang="zh"` 和 `lang="zh-CN"`
 
 ```css
-[lang|="zh"] {
+[lang|='zh'] {
   cursor: pointer;
 }
 ```
@@ -125,7 +124,7 @@ ID选择器用于选择具有特定ID的元素。ID选择器以 `#` 开头，在
 **[attr^="val"]**: 选择具有 `attr` 属性且属性值以 `val` 开头的元素。
 
 ```css
-[href^="https://"] {
+[href^='https://'] {
   color: blue;
 }
 ```
@@ -133,7 +132,7 @@ ID选择器用于选择具有特定ID的元素。ID选择器以 `#` 开头，在
 **[attr$="val"]**: 选择具有 `attr` 属性且属性值以 `val` 结尾的元素。
 
 ```css
-[href$=".pdf"] {
+[href$='.pdf'] {
   color: red;
 }
 ```
@@ -141,7 +140,7 @@ ID选择器用于选择具有特定ID的元素。ID选择器以 `#` 开头，在
 **[attr*="val"]**: 选择具有 `attr` 属性且属性值包含 `val` 的元素。
 
 ```css
-[href*="github.com"] {
+[href*='github.com'] {
   color: green;
 }
 ```
@@ -154,7 +153,7 @@ ID选择器用于选择具有特定ID的元素。ID选择器以 `#` 开头，在
 
 ```css
 /* 选择所有 class 属性值包含 "test" 的元素，不区分大小写 */
-[class*="test" i] {
+[class*='test' i] {
   color: red;
 }
 ```

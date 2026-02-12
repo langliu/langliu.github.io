@@ -9,18 +9,16 @@
     "preview": "astro preview",
     "check": "astro check",
     "astro": "astro",
-    "lint": "eslint ./src --fix"
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix"
   },
   "dependencies": {
     "@astrojs/mdx": "^4.3.13",
-    "@astrojs/rss": "^4.0.15",
     "@astrojs/sitemap": "^3.7.0",
     "@tailwindcss/vite": "^4.1.18",
     "astro": "^5.17.2",
-    "astro-font": "^1.1.0",
     "astro-robots-txt": "^1.0.0",
     "astro-seo": "^1.1.0",
-    "limax": "^4.2.2",
     "tailwindcss": "^4.1.18"
   },
   "devDependencies": {

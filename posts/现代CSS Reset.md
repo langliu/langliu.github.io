@@ -1,7 +1,7 @@
 ---
 title: '现代 CSS Reset 规则'
 publishedAt: 2025-09-20
-category: "CSS"
+category: 'CSS'
 tags:
   - CSS
 slug: 'modern-css-reset'
@@ -25,8 +25,16 @@ html {
 }
 
 /* Remove default margin in favour of better control in authored CSS */
-body, h1, h2, h3, h4, p,
-figure, blockquote, dl, dd {
+body,
+h1,
+h2,
+h3,
+h4,
+p,
+figure,
+blockquote,
+dl,
+dd {
   margin-block-end: 0;
 }
 
@@ -43,14 +51,21 @@ body {
 }
 
 /* Set shorter line heights on headings and interactive elements */
-h1, h2, h3, h4,
-button, input, label {
+h1,
+h2,
+h3,
+h4,
+button,
+input,
+label {
   line-height: 1.1;
 }
 
 /* Balance text wrapping on headings */
-h1, h2,
-h3, h4 {
+h1,
+h2,
+h3,
+h4 {
   text-wrap: balance;
 }
 
@@ -68,8 +83,10 @@ picture {
 }
 
 /* Inherit fonts for inputs and buttons */
-input, button,
-textarea, select {
+input,
+button,
+textarea,
+select {
   font-family: inherit;
   font-size: inherit;
 }
@@ -99,7 +116,6 @@ textarea:not([rows]) {
 这条规则很容易理解，简而言之，我将所有元素和伪元素设置为使用 `border-box` ， 而不是默认的 `content-box` 来设置 sizing 。现在我们更专注于让浏览器通过流体类型和空间的灵活布局来处理更多工作 ，这条规则不再像以前那么有用了。但是，很少有项目没有明确的尺寸设置，所以它在重置中仍然有一席之地。
 
 ```css
-
 /* Prevent font size inflation */
 html {
   -moz-text-size-adjust: none;
@@ -111,10 +127,17 @@ html {
 对此最好的解释是 Kilian 的 。他还解释了为什么我们仍然需要那些丑陋的前缀。
 
 ```css
-
 /* Remove default margin in favour of better control in authored CSS */
-body, h1, h2, h3, h4, p,
-figure, blockquote, dl, dd {
+body,
+h1,
+h2,
+h3,
+h4,
+p,
+figure,
+blockquote,
+dl,
+dd {
   margin-block-end: 0;
 }
 ```
@@ -122,7 +145,6 @@ figure, blockquote, dl, dd {
 我一直倾向于移除用户代理样式中的边距，以便在更宏观的层面上定义流和空间 。有了逻辑属性，我现在移除的是末端边距，而不是像旧重置那样移除所有边距。这在生产环境中似乎效果很好。
 
 ```css
-
 /* Remove list styles on ul, ol elements with a list role, which suggests default styling will be removed */
 ul[role='list'],
 ol[role='list'] {
@@ -133,7 +155,6 @@ ol[role='list'] {
 Safari 做了一些疯狂的事情，其中​​包括这个 ：如果你删除列表样式，他们就会删除 VoiceOver 的语义。有人会说这是个功能，有人会说是个 bug。我认为这很愚蠢，但为了确保它能发挥 role ，我默认删除了列表样式，算是给它一点小奖励。
 
 ```css
-
 /* Set core body defaults */
 body {
   min-height: 100vh;
@@ -145,8 +166,13 @@ body {
 
 ```css
 /* Set shorter line heights on headings and interactive elements */
-h1, h2, h3, h4,
-button, input, label {
+h1,
+h2,
+h3,
+h4,
+button,
+input,
+label {
   line-height: 1.1;
 }
 ```
@@ -155,8 +181,10 @@ button, input, label {
 
 ```css
 /* Balance text wrapping on headings */
-h1, h2,
-h3, h4 {
+h1,
+h2,
+h3,
+h4 {
   text-wrap: balance;
 }
 ```
@@ -189,7 +217,7 @@ select {
 ```css
 /* Make sure textareas without a rows attribute are not tiny */
 textarea:not([rows]) {
-  min-height: 10em
+  min-height: 10em;
 }
 ```
 

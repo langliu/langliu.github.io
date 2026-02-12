@@ -18,8 +18,8 @@ slug: 'react-children-best-practices'
 
 ```tsx
 type Props = {
-  children?: ReactNode;
-};
+  children?: ReactNode
+}
 ```
 
 这种对子元素的类型声明是很常用的，React 对此提供了一个简单的封装，在使用时我们直接引入即可
@@ -27,17 +27,17 @@ type Props = {
 ```ts
 type PropsWithChildren<P = unknown> = P & {
   children?: ReactNode | undefined
-};
+}
 ```
 
 **引入**
 
 ```ts
-import type { PropsWithChildren } from 'react';
+import type { PropsWithChildren } from 'react'
 
 type Props = PropsWithChildren<{
-  title: string;
-}>;
+  title: string
+}>
 ```
 
 这时候不管我们子元素是一个还是多个，都会被当成一个整体进行处理。
@@ -59,19 +59,17 @@ type Props = PropsWithChildren<{
 当我们需要多个子元素的时候，我们可以使用 React.Children.map 方法来遍历子元素。
 
 ```tsx
-import { Children } from 'react';
+import { Children } from 'react'
 
 function Space({ children }) {
   return (
-    <div className="space">
-      {Children.map(children, child =>
-        <div className="space-item">
-          {child}
-        </div>
-      )}
+    <div className='space'>
+      {Children.map(children, (child) => (
+        <div className='space-item'>{child}</div>
+      ))}
     </div>
-  );
+  )
 }
 ```
 
-[//]: # (可以使用 React.Children.only 方法来确保组件只有一个子元素。)
+[//]: # '可以使用 React.Children.only 方法来确保组件只有一个子元素。'

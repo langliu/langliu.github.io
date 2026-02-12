@@ -42,15 +42,15 @@
 
 > 所有命令均在项目根目录执行。
 
-| 命令 | 作用 |
-|---|---|
-| `bun install` | 安装依赖 |
-| `bun run dev` | 启动本地开发服务器（默认 `localhost:4321`） |
-| `bun run start` | 启动开发服务器（等同 Astro dev） |
-| `bun run build` | 构建产物到 `./dist/` |
-| `bun run preview` | 本地预览构建产物 |
-| `bun run check` | Astro 类型/内容检查 |
-| `bun run astro -- --help` | 查看 Astro CLI 帮助 |
+| 命令                      | 作用                                        |
+| ------------------------- | ------------------------------------------- |
+| `bun install`             | 安装依赖                                    |
+| `bun run dev`             | 启动本地开发服务器（默认 `localhost:4321`） |
+| `bun run start`           | 启动开发服务器（等同 Astro dev）            |
+| `bun run build`           | 构建产物到 `./dist/`                        |
+| `bun run preview`         | 本地预览构建产物                            |
+| `bun run check`           | Astro 类型/内容检查                         |
+| `bun run astro -- --help` | 查看 Astro CLI 帮助                         |
 
 ### 常见操作
 

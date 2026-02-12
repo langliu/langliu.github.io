@@ -39,8 +39,9 @@ pnpm create astro@latest
 #### 目录结构
 
 一个寻常的 Astro 项目目录可能看起来像这样：
-- src/* - 你的项目源代码（组件、页面、样式等）。
-- public/* - 你的非代码、未处理的资源（字体、图标等）。
+
+- src/\* - 你的项目源代码（组件、页面、样式等）。
+- public/\* - 你的非代码、未处理的资源（字体、图标等）。
 - package.json - 项目列表。
 - astro.config.mjs - Astro 配置文件（可选）。
 
@@ -208,18 +209,19 @@ const { url, emoji, title, publishDate, tags } = Astro.props as Props
 
 > 因为 Astro 默认是按照文件目录设置路由，所以我们在 markdown/mdx 文件中需要在文件顶部手动声明使用的布局，例如 `layout: '@layouts/BlogPost.astro'`
 
-
 ### 文章列表页设计
 
 Astro 提供了 `glob` API用于获取本地相关数据，可以使用下面的例子获取所有的 markdown/mdx 文件，获取所有文章后可以通过 `frontmatter` 字段来获取文章的相关信息。
 
 ```js
 const posts = (await Astro.glob('../pages/posts/**/*.{md,mdx}')).sort(
-  (a, b) => new Date(b.frontmatter.publishDate).valueOf() - new Date(a.frontmatter.publishDate).valueOf()
+  (a, b) =>
+    new Date(b.frontmatter.publishDate).valueOf() - new Date(a.frontmatter.publishDate).valueOf(),
 )
 ```
 
 > 在 markdown/mdx 文件顶部通常会声明文章的一些简要信息，字段可以自定义，通过 `frontmatter` 字段可以拿到这些声明的字段：
+>
 > ```js
 > ---
 >
@@ -287,7 +289,6 @@ tags = [...new Set(tags)]
 
 点击某个标签，需要查看到所有包含这个标签的文章列表，哪么进入页面后如何知道当前是哪个标签呢？这是就需要使用到 Astro 的动态路由了，动态生成路由的 Astro 组件可以访问每个路由的 `Astro.params` 对象。这使得你可以在组件脚本和模板中使用那些生成的链接部分。代码如下：
 
-
 ```ts
 type Props = {
   /** 标签名称 */
@@ -296,7 +297,7 @@ type Props = {
 
 export async function getStaticPaths() {
   let tags: string[] = []
-  const posts = (await Astro.glob('../../pages/posts/**/*.{md,mdx}'))
+  const posts = await Astro.glob('../../pages/posts/**/*.{md,mdx}')
 
   posts.forEach((post) => {
     tags = [...tags, ...post.frontmatter.tags]
@@ -331,7 +332,7 @@ export default {
       wrap: true,
     },
   },
-};
+}
 ```
 
 ### 字体美化
@@ -347,7 +348,7 @@ npm install @fontsource/jetbrains-mono
 #### 引入
 
 ```js
-import "@fontsource/jetbrains-mono"
+import '@fontsource/jetbrains-mono'
 ```
 
 > 目前引入字体的时候遇见了一个问题，通过 js 的方式引入后，在打包时会报错，具体什么原因没有搞清楚，但是换为通过 CSS `@import` 引入则没有问题 `@import '@fontsource/jetbrains-mono';`
@@ -371,7 +372,7 @@ on:
   # Trigger the workflow every time you push to the `main` branch
   # Using a different branch name? Replace `main` with your branch’s name
   push:
-    branches: [ main ]
+    branches: [main]
   # Allows you to run this workflow manually from the Actions tab on GitHub.
   workflow_dispatch:
 

@@ -1,10 +1,5 @@
 {
-  "cSpell.words": [
-    "astro",
-    "astrojs",
-    "pnpm",
-    "shiki"
-  ],
+  "cSpell.words": ["astro", "astrojs", "pnpm", "shiki"],
   "npm.packageManager": "pnpm",
   "eslint.packageManager": "pnpm",
   "stylelint.packageManager": "pnpm",

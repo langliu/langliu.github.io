@@ -1,7 +1,7 @@
 ---
 title: CSS选择器最佳实践：编写高效、可维护的样式代码
 publishedAt: 2025-08-28
-category: "CSS"
+category: 'CSS'
 tags:
   - CSS
   - 选择器
@@ -53,21 +53,21 @@ style="color: red"    /* (1, 0, 0, 0) = 1000 */
 ```css
 /* ❌ 问题示例：高优先级选择器难以覆盖 */
 #sidebar #menu .item {
-  color: blue;  /* 优先级：(0, 2, 1, 0) = 210 */
+  color: blue; /* 优先级：(0, 2, 1, 0) = 210 */
 }
 
 /* 后续想要修改颜色，需要更高优先级 */
 #sidebar #menu .item.active {
-  color: red;  /* 优先级：(0, 2, 2, 0) = 220 */
+  color: red; /* 优先级：(0, 2, 2, 0) = 220 */
 }
 
 /* ✅ 更好的方案：使用低优先级选择器 */
 .menu-item {
-  color: blue;  /* 优先级：(0, 0, 1, 0) = 10 */
+  color: blue; /* 优先级：(0, 0, 1, 0) = 10 */
 }
 
 .menu-item--active {
-  color: red;   /* 优先级：(0, 0, 1, 0) = 10 */
+  color: red; /* 优先级：(0, 0, 1, 0) = 10 */
 }
 ```
 
@@ -88,12 +88,12 @@ ID 选择器的优先级过高（100），会导致样式难以覆盖和维护�
 
 /* 想要在特定页面修改样式，需要更高优先级 */
 .home-page #header {
-  background: red;  /* 必须使用更复杂的选择器 */
+  background: red; /* 必须使用更复杂的选择器 */
 }
 
 /* 或者被迫使用 !important */
 .special-header {
-  background: green !important;  /* 不推荐 */
+  background: green !important; /* 不推荐 */
 }
 ```
 
@@ -115,8 +115,8 @@ ID 选择器的优先级过高（100），会导致样式难以覆盖和维护�
 }
 
 /* ✅ 如果必须使用 ID，用属性选择器降低优先级 */
-[id="header"] {
-  background: blue;  /* 优先级等同于类选择器 */
+[id='header'] {
+  background: blue; /* 优先级等同于类选择器 */
 }
 ```
 
@@ -180,30 +180,46 @@ body div.container section.main article.post p.content span.highlight {
 
 ```css
 /* ❌ 基于外观的命名 */
-.red-text { color: red; }
-.big-font { font-size: 24px; }
-.left-box { float: left; }
+.red-text {
+  color: red;
+}
+.big-font {
+  font-size: 24px;
+}
+.left-box {
+  float: left;
+}
 .blue-button {
   background: blue;
   color: white;
 }
 
 /* 当设计变更时，类名就失去了意义 */
-.red-text { color: green; }  /* 类名与样式不符 */
+.red-text {
+  color: green;
+} /* 类名与样式不符 */
 
 /* ✅ 基于语义的命名 */
-.error-message { color: red; }
-.page-title { font-size: 24px; }
-.sidebar { float: left; }
+.error-message {
+  color: red;
+}
+.page-title {
+  font-size: 24px;
+}
+.sidebar {
+  float: left;
+}
 .primary-button {
   background: blue;
   color: white;
 }
 
 /* 设计变更时，类名仍然有意义 */
-.error-message { color: orange; }  /* 类名依然准确 */
+.error-message {
+  color: orange;
+} /* 类名依然准确 */
 .primary-button {
-  background: green;  /* 主按钮颜色改变，但语义不变 */
+  background: green; /* 主按钮颜色改变，但语义不变 */
   color: white;
 }
 ```
@@ -243,7 +259,7 @@ BEM（Block Element Modifier）是一种流行的 CSS 命名方法论：
 
 .card--featured {
   border-color: #007bff;
-  box-shadow: 0 4px 8px rgba(0,123,255,0.1);
+  box-shadow: 0 4px 8px rgba(0, 123, 255, 0.1);
 }
 
 .card__header--centered {
@@ -285,9 +301,15 @@ div.container section.main article.blog-post h2.post-title {
   line-height: 1.2;
 }
 
-.title--large { font-size: 36px; }
-.title--medium { font-size: 28px; }
-.title--small { font-size: 20px; }
+.title--large {
+  font-size: 36px;
+}
+.title--medium {
+  font-size: 28px;
+}
+.title--small {
+  font-size: 20px;
+}
 ```
 
 ### 5. 合理使用通配符选择器
@@ -308,12 +330,24 @@ div.container section.main article.blog-post h2.post-title {
 }
 
 /* ✅ 更好的重置方案 */
-html, body, div, span, h1, h2, h3, h4, h5, h6, p {
+html,
+body,
+div,
+span,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p {
   margin: 0;
   padding: 0;
 }
 
-*, *::before, *::after {
+*,
+*::before,
+*::after {
   box-sizing: border-box;
 }
 ```
@@ -324,18 +358,34 @@ html, body, div, span, h1, h2, h3, h4, h5, h6, p {
 
 ```css
 /* ❌ 元素选择器：不够具体，容易冲突 */
-h1 { font-size: 32px; }
-p { line-height: 1.6; }
-button { padding: 8px 16px; }
+h1 {
+  font-size: 32px;
+}
+p {
+  line-height: 1.6;
+}
+button {
+  padding: 8px 16px;
+}
 
 /* ❌ 属性选择器：性能较差 */
-[data-type="button"] { padding: 8px 16px; }
-[class*="btn"] { border-radius: 4px; }
+[data-type='button'] {
+  padding: 8px 16px;
+}
+[class*='btn'] {
+  border-radius: 4px;
+}
 
 /* ✅ 类选择器：性能好，灵活性高 */
-.page-title { font-size: 32px; }
-.content-text { line-height: 1.6; }
-.btn { padding: 8px 16px; }
+.page-title {
+  font-size: 32px;
+}
+.content-text {
+  line-height: 1.6;
+}
+.btn {
+  padding: 8px 16px;
+}
 ```
 
 ### 7. 避免使用 !important
@@ -352,7 +402,7 @@ button { padding: 8px 16px; }
 
 /* 导致后续修改困难 */
 .special-header {
-  background: red !important !important;  /* 无效 */
+  background: red !important !important; /* 无效 */
 }
 
 /* ✅ 通过合理的选择器优先级管理 */
@@ -363,12 +413,12 @@ button { padding: 8px 16px; }
 }
 
 .header--special {
-  background: red;  /* 通过修饰符覆盖 */
+  background: red; /* 通过修饰符覆盖 */
 }
 
 /* ✅ 必要时使用 !important 的场景 */
 .utility-hidden {
-  display: none !important;  /* 工具类可以使用 */
+  display: none !important; /* 工具类可以使用 */
 }
 
 .accessibility-only {
@@ -401,20 +451,28 @@ button { padding: 8px 16px; }
 
 ```css
 /* ❌ 低效：关键选择器是通用元素 */
-.sidebar ul li a { }          /* 需要检查所有 a 元素 */
-.content div p span { }       /* 需要检查所有 span 元素 */
-#nav > ul > li > a { }        /* 需要检查所有 a 元素 */
+.sidebar ul li a {
+} /* 需要检查所有 a 元素 */
+.content div p span {
+} /* 需要检查所有 span 元素 */
+#nav > ul > li > a {
+} /* 需要检查所有 a 元素 */
 
 /* ✅ 高效：关键选择器是具体的类 */
-.nav-link { }                 /* 直接匹配类名 */
-.sidebar-item { }             /* 直接匹配类名 */
-.content-highlight { }        /* 直接匹配类名 */
+.nav-link {
+} /* 直接匹配类名 */
+.sidebar-item {
+} /* 直接匹配类名 */
+.content-highlight {
+} /* 直接匹配类名 */
 
 /* ❌ 低效：使用属性选择器作为关键选择器 */
-.form input[type="text"] { }  /* 需要检查所有 input 元素的 type 属性 */
+.form input[type='text'] {
+} /* 需要检查所有 input 元素的 type 属性 */
 
 /* ✅ 高效：使用类选择器 */
-.form .text-input { }         /* 直接匹配类名 */
+.form .text-input {
+} /* 直接匹配类名 */
 ```
 
 ### 选择器性能对比
@@ -482,14 +540,14 @@ CSS Modules 通过自动生成唯一类名来解决全局命名冲突问题。
 
 ```jsx
 // React 组件中使用
-import styles from './styles.module.css';
+import styles from './styles.module.css'
 
 function Header() {
   return (
     <header className={styles.header}>
       <h1 className={styles.title}>网站标题</h1>
     </header>
-  );
+  )
 }
 ```
 
@@ -497,7 +555,7 @@ function Header() {
 
 ```jsx
 // Styled Components 示例
-import styled from 'styled-components';
+import styled from 'styled-components'
 
 // ✅ 组件化的样式，避免全局污染
 const Header = styled.header`
@@ -518,53 +576,93 @@ const Header = styled.header`
   @media (max-width: 768px) {
     padding: 10px;
   }
-`;
+`
 
 // ✅ 动态样式
 const Button = styled.button`
-  background: ${props => props.primary ? 'blue' : 'gray'};
+  background: ${(props) => (props.primary ? 'blue' : 'gray')};
   color: white;
   padding: 8px 16px;
   border: none;
   border-radius: 4px;
-`;
+`
 ```
 
 ### 原子化 CSS（Atomic CSS）
 
 ```css
 /* 原子化工具类 */
-.m-0 { margin: 0; }
-.m-1 { margin: 4px; }
-.m-2 { margin: 8px; }
-.m-3 { margin: 12px; }
-.m-4 { margin: 16px; }
+.m-0 {
+  margin: 0;
+}
+.m-1 {
+  margin: 4px;
+}
+.m-2 {
+  margin: 8px;
+}
+.m-3 {
+  margin: 12px;
+}
+.m-4 {
+  margin: 16px;
+}
 
-.p-0 { padding: 0; }
-.p-1 { padding: 4px; }
-.p-2 { padding: 8px; }
-.p-3 { padding: 12px; }
-.p-4 { padding: 16px; }
+.p-0 {
+  padding: 0;
+}
+.p-1 {
+  padding: 4px;
+}
+.p-2 {
+  padding: 8px;
+}
+.p-3 {
+  padding: 12px;
+}
+.p-4 {
+  padding: 16px;
+}
 
-.text-sm { font-size: 14px; }
-.text-base { font-size: 16px; }
-.text-lg { font-size: 18px; }
-.text-xl { font-size: 20px; }
+.text-sm {
+  font-size: 14px;
+}
+.text-base {
+  font-size: 16px;
+}
+.text-lg {
+  font-size: 18px;
+}
+.text-xl {
+  font-size: 20px;
+}
 
-.text-center { text-align: center; }
-.text-left { text-align: left; }
-.text-right { text-align: right; }
+.text-center {
+  text-align: center;
+}
+.text-left {
+  text-align: left;
+}
+.text-right {
+  text-align: right;
+}
 
-.bg-blue { background-color: #3b82f6; }
-.bg-red { background-color: #ef4444; }
-.bg-green { background-color: #10b981; }
+.bg-blue {
+  background-color: #3b82f6;
+}
+.bg-red {
+  background-color: #ef4444;
+}
+.bg-green {
+  background-color: #10b981;
+}
 ```
 
 ```html
 <!-- 使用原子化类名 -->
-<div class="bg-blue text-white p-4 m-2 text-center">
-  <h1 class="text-xl m-0">标题</h1>
-  <p class="text-base m-1">内容描述</p>
+<div class="bg-blue m-2 p-4 text-center text-white">
+  <h1 class="m-0 text-xl">标题</h1>
+  <p class="m-1 text-base">内容描述</p>
 </div>
 ```
 
@@ -601,7 +699,7 @@ module.exports = {
       preset: 'default',
     }),
   ],
-};
+}
 ```
 
 ### 性能分析工具
@@ -610,15 +708,15 @@ module.exports = {
 
 ```javascript
 // 测量 CSS 选择器性能
-console.time('CSS Selector Performance');
-document.querySelectorAll('.complex-selector .nested .deep .element');
-console.timeEnd('CSS Selector Performance');
+console.time('CSS Selector Performance')
+document.querySelectorAll('.complex-selector .nested .deep .element')
+console.timeEnd('CSS Selector Performance')
 
 // 分析样式重计算
-performance.mark('style-start');
-element.className = 'new-class';
-performance.mark('style-end');
-performance.measure('style-recalc', 'style-start', 'style-end');
+performance.mark('style-start')
+element.className = 'new-class'
+performance.mark('style-end')
+performance.measure('style-recalc', 'style-start', 'style-end')
 ```
 
 #### CSS 统计分析

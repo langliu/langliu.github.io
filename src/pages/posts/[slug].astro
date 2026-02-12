@@ -1,14 +1,14 @@
 ---
-import { type CollectionEntry, getCollection, render } from 'astro:content'
+import { type CollectionEntry, render } from 'astro:content'
 import Layout from '@/layouts/Layout.astro'
 import formatDate from '@/utils/formatDate'
+import { getPostSlug, getPublishedPosts } from '@/utils/posts'
 
 export async function getStaticPaths() {
-  const posts = await getCollection('posts')
-  const publishedPosts = posts.filter((post) => post.data.isPublish && !post.data.isDraft)
+  const publishedPosts = await getPublishedPosts()
 
   return publishedPosts.map((post) => ({
-    params: { slug: post.id },
+    params: { slug: getPostSlug(post) },
     props: { post },
   }))
 }
@@ -17,7 +17,7 @@ type Props = {
   post: CollectionEntry<'posts'>
 }
 
-const { post } = Astro.props
+const { post } = Astro.props as Props
 const { Content, headings } = await render(post)
 
 // 只显示前3级目录
@@ -153,42 +153,60 @@ const renderHeadings = headings.filter((header) => header.depth <= 3)
 </style>
 
 <script>
-  import { getHeadingInView } from '@/utils'
-
-  const tocLinks = document.querySelectorAll('.content-of-tables a')
+  const tocLinks = Array.from(document.querySelectorAll('.content-of-tables a'))
   const headingElements = Array.from(
     document.querySelectorAll('h1[id], h2[id], h3[id], h4[id], h5[id], h6[id]'),
   )
 
-  function updateActiveHeading() {
-    const activeHeadingId = getHeadingInView(headingElements)
-
+  function setActiveHeading(activeHeadingId: string | undefined) {
     tocLinks.forEach((link) => {
       const href = link.getAttribute('href')?.slice(1)
-      if (href === activeHeadingId) {
-        link.classList.add('active')
-      } else {
-        link.classList.remove('active')
-      }
+      link.classList.toggle('active', href === activeHeadingId)
     })
   }
 
-  // Update on scroll
-  let ticking = false
-  const handleScroll = () => {
-    if (ticking) {
-      return
+  function getActiveHeadingId(visibleHeadingIds: Set<string>): string | undefined {
+    const firstVisibleHeading = headingElements.find((heading) => visibleHeadingIds.has(heading.id))
+
+    if (firstVisibleHeading) {
+      return firstVisibleHeading.id
     }
 
-    ticking = true
-    requestAnimationFrame(() => {
-      updateActiveHeading()
-      ticking = false
-    })
+    let activeHeadingId = headingElements[0]?.id
+    for (const heading of headingElements) {
+      if (heading.getBoundingClientRect().top <= 120) {
+        activeHeadingId = heading.id
+        continue
+      }
+      break
+    }
+
+    return activeHeadingId
   }
 
-  window.addEventListener('scroll', handleScroll, { passive: true })
+  if (tocLinks.length !== 0 && headingElements.length !== 0) {
+    const visibleHeadingIds = new Set<string>()
 
-  // Initial update
-  updateActiveHeading()
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          const headingId = entry.target.id
+          if (entry.isIntersecting) {
+            visibleHeadingIds.add(headingId)
+          } else {
+            visibleHeadingIds.delete(headingId)
+          }
+        })
+
+        setActiveHeading(getActiveHeadingId(visibleHeadingIds))
+      },
+      {
+        rootMargin: '-100px 0px -65% 0px',
+        threshold: [0, 1],
+      },
+    )
+
+    headingElements.forEach((heading) => observer.observe(heading))
+    setActiveHeading(getActiveHeadingId(visibleHeadingIds))
+  }
 </script>
