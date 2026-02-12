@@ -1,6 +1,6 @@
 ---
 import { SEO } from 'astro-seo'
-import { SITE_URL } from '@/data/config'
+import { GTM_ID, SITE_URL } from '@/data/config'
 import type { HeadTags } from '@/utils/types/HeadTags'
 
 type Props = HeadTags
@@ -10,9 +10,10 @@ const { title, description, noindex, og } = Astro.props
 const DEFAULT_TITLE_PAGE = '研之有物 - 首页'
 const DEFAULT_DESCRIPTION_PAGE = '研之有物 - 前端技术博客'
 const DEFAULT_URL_SITE = SITE_URL
+const shouldEnableGtm = import.meta.env.PROD && GTM_ID.length > 0
 
 // 动态构建当前页面 URL
-const currentUrl = `${DEFAULT_URL_SITE}${Astro.url.pathname.replace(/^\//, '')}`
+const currentUrl = new URL(Astro.url.pathname, DEFAULT_URL_SITE).toString()
 
 const openGraph = {
   title: title || og?.title || DEFAULT_TITLE_PAGE,
@@ -33,6 +34,7 @@ const openGraph = {
     charset='UTF-8'
     title={title || DEFAULT_TITLE_PAGE}
     description={description || DEFAULT_DESCRIPTION_PAGE}
+    canonical={currentUrl}
     noindex={noindex || false}
     openGraph={{
       basic: {
@@ -55,7 +57,7 @@ const openGraph = {
       link: [
         { rel: 'icon', href: '/favicon.ico' },
         { rel: 'sitemap', href: '/sitemap-index.xml' },
-        { rel: 'preconnect', href: 'https://www.googletagmanager.com' },
+        ...(shouldEnableGtm ? [{ rel: 'preconnect', href: 'https://www.googletagmanager.com' }] : []),
       ],
       meta: [
         { name: 'viewport', content: 'width=device-width, initial-scale=1' },
@@ -71,18 +73,24 @@ const openGraph = {
       ],
     }}
   />
-  <!-- Google Tag Manager -->
-  <script is:inline>
-    ;(function (w, d, s, l, i) {
-      w[l] = w[l] || []
-      w[l].push({ 'gtm.start': new Date().getTime(), event: 'gtm.js' })
-      var f = d.getElementsByTagName(s)[0],
-        j = d.createElement(s),
-        dl = l != 'dataLayer' ? '&l=' + l : ''
-      j.async = true
-      j.src = 'https://www.googletagmanager.com/gtm.js?id=' + i + dl
-      f.parentNode.insertBefore(j, f)
-    })(window, document, 'script', 'dataLayer', 'GTM-PHSGPZQH')
-  </script>
-  <!-- End Google Tag Manager -->
+  {
+    shouldEnableGtm && (
+      <>
+        <!-- Google Tag Manager -->
+        <script is:inline define:vars={{ gtmId: GTM_ID }}>
+          ;(function (w, d, s, l, i) {
+            w[l] = w[l] || []
+            w[l].push({ 'gtm.start': new Date().getTime(), event: 'gtm.js' })
+            var f = d.getElementsByTagName(s)[0],
+              j = d.createElement(s),
+              dl = l != 'dataLayer' ? '&l=' + l : ''
+            j.async = true
+            j.src = 'https://www.googletagmanager.com/gtm.js?id=' + i + dl
+            f.parentNode.insertBefore(j, f)
+          })(window, document, 'script', 'dataLayer', gtmId)
+        </script>
+        <!-- End Google Tag Manager -->
+      </>
+    )
+  }
 </head>

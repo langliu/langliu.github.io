@@ -1,6 +1,7 @@
 ---
-import Header from '../components/Header.astro'
+import Header from '@/components/Header.astro'
 import SEOTags from '@/components/seo/SEOTags.astro'
+import { GTM_ID } from '@/data/config'
 import type { HeadTags } from '@/utils/types/HeadTags'
 
 import '@/styles/global.css'
@@ -9,6 +10,7 @@ import '@/styles/post.css'
 export type Props = HeadTags
 
 const headTags = Astro.props
+const shouldEnableGtm = import.meta.env.PROD && GTM_ID.length > 0
 ---
 
 <html lang='zh-CN'>
@@ -16,15 +18,21 @@ const headTags = Astro.props
   <body
     class='mx-auto flex min-h-screen max-w-300 flex-col gap-9 bg-dot bg-[#0d1117] px-4 md:px-10 py-4 text-base/7 text-neutral-300 md:gap-8 md:py-8'
   >
-    <!-- Google Tag Manager (noscript) -->
-    <noscript>
-      <iframe
-        src='https://www.googletagmanager.com/ns.html?id=GTM-PHSGPZQH'
-        height='0'
-        width='0'
-        style='display:none;visibility:hidden'></iframe>
-    </noscript>
-    <!-- End Google Tag Manager (noscript) -->
+    {
+      shouldEnableGtm && (
+        <>
+          <!-- Google Tag Manager (noscript) -->
+          <noscript>
+            <iframe
+              src={`https://www.googletagmanager.com/ns.html?id=${GTM_ID}`}
+              height='0'
+              width='0'
+              style='display:none;visibility:hidden'></iframe>
+          </noscript>
+          <!-- End Google Tag Manager (noscript) -->
+        </>
+      )
+    }
     <Header />
     <slot />
   </body>
