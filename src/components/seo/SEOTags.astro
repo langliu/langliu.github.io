@@ -8,7 +8,7 @@ type Props = HeadTags
 const { title, description, noindex, og } = Astro.props
 
 const DEFAULT_TITLE_PAGE = '研之有物 - 首页'
-const DEFAULT_DESCRIPTION_PAGE = '刘浪的个人博客'
+const DEFAULT_DESCRIPTION_PAGE = '研之有物 - 前端技术博客'
 const DEFAULT_URL_SITE = SITE_URL
 
 // 动态构建当前页面 URL
@@ -22,7 +22,7 @@ const openGraph = {
       ? og.image
       : `${DEFAULT_URL_SITE}${og.image}`
     : `${DEFAULT_URL_SITE}opengraph-image.webp`,
-  alt: og?.alt || '刘浪的个人博客',
+  alt: og?.alt || '研之有物',
   url: currentUrl,
   description: og?.description || DEFAULT_DESCRIPTION_PAGE,
 }
