@@ -6,16 +6,13 @@ let publishedPostsPromise: Promise<PostEntry[]> | undefined
 
 export async function getPublishedPosts(): Promise<PostEntry[]> {
   publishedPostsPromise ??= getCollection('posts')
-    .then((posts) =>
-      posts
-        .filter((post) => post.data.isPublish && !post.data.isDraft)
-        .sort(
-          (first, second) => second.data.publishedAt.getTime() - first.data.publishedAt.getTime(),
-        ),
-    )
     .then((posts) => {
       assertUniquePostSlugs(posts)
       return posts
+        .filter((post) => post.data.isPublish && !post.data.isDraft)
+        .sort(
+          (first, second) => second.data.publishedAt.getTime() - first.data.publishedAt.getTime(),
+        )
     })
 
   return publishedPostsPromise

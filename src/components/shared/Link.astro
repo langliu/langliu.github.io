@@ -13,7 +13,24 @@ const isExternal = href?.toString().startsWith('http')
 // 如果没有指定 target，外部链接默认使用 _blank
 const finalTarget = target || (isExternal ? '_blank' : undefined)
 // 如果没有指定 rel，_blank 链接默认使用 noopener noreferrer
-const finalRel = rel || (finalTarget === '_blank' ? 'noopener noreferrer' : undefined)
+const finalRel = (() => {
+  if (finalTarget !== '_blank') {
+    return rel
+  }
+
+  const relTokens = new Set(
+    rel
+      ?.toString()
+      .split(/\s+/)
+      .map((token) => token.trim())
+      .filter(Boolean) ?? [],
+  )
+
+  relTokens.add('noopener')
+  relTokens.add('noreferrer')
+
+  return Array.from(relTokens).join(' ')
+})()
 ---
 
 <a
