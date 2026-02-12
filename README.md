@@ -7,7 +7,7 @@
 - [Astro](https://astro.build/)（站点与内容渲染）
 - Markdown / MDX（文章编写）
 - TypeScript
-- ESLint + Prettier
+- Biome
 - Tailwind CSS
 - Sentry（可选，用于错误监控与构建相关集成）
 
@@ -50,6 +50,10 @@
 | `bun run build`           | 构建产物到 `./dist/`                        |
 | `bun run preview`         | 本地预览构建产物                            |
 | `bun run check`           | Astro 类型/内容检查                         |
+| `bun run lint`            | 使用 Biome 进行代码检查                     |
+| `bun run lint:fix`        | 使用 Biome 自动修复可修复问题               |
+| `bun run format:check`    | 仅检查格式                                  |
+| `bun run format`          | 仅执行格式化                                |
 | `bun run astro -- --help` | 查看 Astro CLI 帮助                         |
 
 ### 常见操作
@@ -60,7 +64,7 @@
 
 ## CI / 部署
 
-- `/.github/workflows/ci-check.yaml`：在 push / PR 时运行 `bun install --frozen-lockfile` + `bun run check`
+- `/.github/workflows/ci-check.yaml`：在 push / PR 时运行 `bun install --frozen-lockfile` + `bun run check` + `bun run lint` + `bun run build`
 - `/.github/workflows/deploy.yml`：使用 Astro 官方 GitHub Action 构建站点并部署到 GitHub Pages（已配置为使用 Bun）
 
 ## License

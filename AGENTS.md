@@ -21,10 +21,10 @@ bun run preview         # 本地预览生产构建
 bun run check           # Astro 类型/内容校验（CI 中使用）
 
 # 代码检查与格式化
-bunx eslint .           # 运行 ESLint
-bunx eslint . --fix     # 自动修复 ESLint 问题
-bunx prettier --check . # 检查格式化
-bunx prettier --write . # 修复格式化
+bun run lint            # 使用 Biome 进行代码检查
+bun run lint:fix        # 使用 Biome 自动修复可修复问题
+bun run format:check    # 仅检查格式化
+bun run format          # 仅执行格式化
 ```
 
 **注意**: 本项目未配置测试运行器。
@@ -51,13 +51,13 @@ bunx prettier --write . # 修复格式化
   ```
 - **导入顺序**: Astro 内置 → 第三方库 → 别名路径本地模块 → 相对路径本地模块
 
-### 格式化 (Prettier)
+### 格式化 (Biome)
 
 - **不使用分号**
 - **单引号**（JSX 也使用单引号）
 - **2 空格缩进**
 - **打印宽度**: 100
-- 提交前运行 `bunx prettier --write .`
+- 提交前运行 `bun run format`
 
 ### TypeScript
 
@@ -130,19 +130,22 @@ export default function formatDate(date: Date): string {
 - 使用 **中文** 编写注释，与项目语言保持一致
 - 保持注释简洁有意义
 
-## ESLint 配置
+## Biome 配置
 
-本项目使用 `eslint-plugin-better-tailwindcss` 来检查 Tailwind CSS 类名：
+本项目使用 Biome 统一处理代码检查与格式化：
 
 ```bash
 # 检查代码
-bunx eslint .
+bun run lint
 
 # 自动修复
-bunx eslint . --fix
+bun run lint:fix
+
+# 仅格式化
+bun run format
 ```
 
-配置中已禁用与 Prettier 冲突的规则（如类名排序）。
+Biome 配置文件位于 `biome.json`。
 
 ## CI/CD 说明
 
@@ -201,7 +204,7 @@ fix: 修复移动端导航栏样式问题
 
 docs: 更新 README 中的部署说明
 
-style: 格式化代码，修复 ESLint 警告
+style: 格式化代码，修复 Biome 警告
 
 refactor: 优化日期格式化工具函数
 
@@ -211,7 +214,7 @@ chore: 更新依赖版本
 ## 重要提醒
 
 - 推送前务必运行 `bun run check`
-- 提交前使用 Prettier 格式化代码
+- 提交前使用 Biome 格式化代码
 - 保持工具函数纯净且可测试
 - **不要主动提交（git commit）** - 除非用户明确要求
 - 用户界面内容使用中文，代码使用英文

@@ -1,11 +1,15 @@
 {
-  "cSpell.words": ["astro", "astrojs", "pnpm", "shiki"],
-  "npm.packageManager": "pnpm",
-  "eslint.packageManager": "pnpm",
-  "stylelint.packageManager": "pnpm",
+  "cSpell.words": [
+    "astro",
+    "astrojs",
+    "pnpm",
+    "shiki"
+  ],
+  "npm.packageManager": "bun",
+  "editor.defaultFormatter": "biomejs.biome",
   "editor.codeActionsOnSave": {
-    "source.fixAll": "always"
+    "source.fixAll.biome": "explicit",
+    "source.organizeImports.biome": "explicit"
   },
-  "editor.formatOnSave": true,
-  "marscode.chatLanguage": "cn"
+  "editor.formatOnSave": true
 }
