@@ -153,10 +153,15 @@ const renderHeadings = headings.filter((header) => header.depth <= 3)
 </style>
 
 <script>
-  const tocLinks = Array.from(document.querySelectorAll('.content-of-tables a'))
-  const headingElements = Array.from(
-    document.querySelectorAll('h1[id], h2[id], h3[id], h4[id], h5[id], h6[id]'),
+  const tocLinks = Array.from(
+    document.querySelectorAll<HTMLAnchorElement>('.content-of-tables a[href^="#"]'),
   )
+  const tocHeadingIds = new Set(
+    tocLinks.map((link) => decodeURIComponent(link.hash.slice(1))).filter(Boolean),
+  )
+  const headingElements = Array.from(
+    document.querySelectorAll<HTMLElement>('h1[id], h2[id], h3[id], h4[id], h5[id], h6[id]'),
+  ).filter((heading) => tocHeadingIds.has(heading.id))
 
   function setActiveHeading(activeHeadingId: string | undefined) {
     tocLinks.forEach((link) => {
@@ -208,5 +213,6 @@ const renderHeadings = headings.filter((header) => header.depth <= 3)
 
     headingElements.forEach((heading) => observer.observe(heading))
     setActiveHeading(getActiveHeadingId(visibleHeadingIds))
+    window.addEventListener('pagehide', () => observer.disconnect(), { once: true })
   }
 </script>
