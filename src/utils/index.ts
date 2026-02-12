@@ -1,16 +1,22 @@
 export function getHeadingInView(headingElements: Element[]): string | null {
-  const headingPositions = headingElements.map(heading => ({
+  const headingPositions = headingElements.map((heading) => ({
     id: heading.id,
-    top: heading.getBoundingClientRect().top
-  }));
+    top: heading.getBoundingClientRect().top,
+  }))
 
-  // Find the first heading that's either at the top or just above the viewport
-  const activeHeading = headingPositions.find((heading, index) => {
-    const nextHeading = headingPositions[index + 1];
-    if (!nextHeading) return false;
+  if (headingPositions.length === 0) {
+    return null
+  }
 
-    return (heading.top <= 100 && nextHeading.top > 100);
-  });
+  let activeHeadingId = headingPositions[0].id
 
-  return activeHeading?.id || null;
+  for (const heading of headingPositions) {
+    if (heading.top <= 100) {
+      activeHeadingId = heading.id
+      continue
+    }
+    break
+  }
+
+  return activeHeadingId
 }

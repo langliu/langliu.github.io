@@ -1,31 +1,31 @@
 ---
-import type { HTMLAttributes } from "astro/types";
+import type { HTMLAttributes } from 'astro/types'
 
-type Props = HTMLAttributes<"a"> & {
-  label: string;
-  isUnderline?: boolean;
-};
+type Props = HTMLAttributes<'a'> & {
+  label: string
+  isUnderline?: boolean
+}
 
-const { label, isUnderline, target, rel, ...props } = Astro.props;
+const { label, isUnderline, target, rel, href, ...props } = Astro.props
 
 // 判断是否为外部链接
-const isExternal = props.href?.toString().startsWith('http');
+const isExternal = href?.toString().startsWith('http')
 // 如果没有指定 target，外部链接默认使用 _blank
-const finalTarget = target || (isExternal ? "_blank" : undefined);
+const finalTarget = target || (isExternal ? '_blank' : undefined)
 // 如果没有指定 rel，外部链接默认使用 noreferrer
-const finalRel = rel || (isExternal ? "noreferrer" : undefined);
+const finalRel = rel || (isExternal ? 'noreferrer' : undefined)
 ---
 
 <a
-  href={props.href}
+  href={href}
   class:list={{
-    ["hover:text-neutral-100 cursor-pointer"]: true,
-    ["underline decoration-dashed underline-offset-8"]: isUnderline,
+    ['hover:text-neutral-100 cursor-pointer']: true,
+    ['underline decoration-dashed underline-offset-8']: isUnderline,
   }}
   {...props}
   rel={finalRel}
   target={finalTarget}
 >
   {label}
-  <span class="sr-only">{label} link</span>
+  <span class='sr-only'>{label} link</span>
 </a>

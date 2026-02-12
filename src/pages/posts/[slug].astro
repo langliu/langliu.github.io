@@ -1,58 +1,72 @@
 ---
-import { type CollectionEntry, getCollection,render } from 'astro:content'
+import { type CollectionEntry, getCollection, render } from 'astro:content'
 import Layout from '@/layouts/Layout.astro'
 import formatDate from '@/utils/formatDate'
 
-export async function getStaticPaths () {
+export async function getStaticPaths() {
   const posts = await getCollection('posts')
+  const publishedPosts = posts.filter((post) => post.data.isPublish && !post.data.isDraft)
 
-  return posts.map((post) => ({
+  return publishedPosts.map((post) => ({
     params: { slug: post.id },
-    props: { post }
+    props: { post },
   }))
 }
 
 type Props = {
-  post: CollectionEntry<'posts'>;
-};
+  post: CollectionEntry<'posts'>
+}
 
 const { post } = Astro.props
 const { Content, headings } = await render(post)
 
 // 只显示前3级目录
-const renderHeadings = headings.filter(header=>header.depth<=3)
+const renderHeadings = headings.filter((header) => header.depth <= 3)
 ---
 
 <Layout title={post.data.title} description={post.data.description}>
-  <main class="post mx-auto flex w-full flex-col gap-4">
-    <div class="mb-4">
+  <main class='post mx-auto flex w-full flex-col gap-4'>
+    <div class='mb-4'>
       <a
-        href="/posts"
-        class="text-neutral-400 hover:text-neutral-100 transition-colors inline-flex items-center gap-2"
+        href='/posts'
+        class='text-neutral-400 hover:text-neutral-100 transition-colors inline-flex items-center gap-2'
       >
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M19 12H5M12 19l-7-7 7-7"/>
+        <svg
+          width='16'
+          height='16'
+          viewBox='0 0 24 24'
+          fill='none'
+          stroke='currentColor'
+          stroke-width='2'
+          stroke-linecap='round'
+          stroke-linejoin='round'
+        >
+          <path d='M19 12H5M12 19l-7-7 7-7'></path>
         </svg>
         返回文章列表
       </a>
     </div>
-    <header role="presentation">
-      <h1 class="text-md">
+    <header role='presentation'>
+      <h1 class='text-md'>
         {post.data.title} - {formatDate(post.data.publishedAt)}
       </h1>
-      <p class="italic">{post.data.description}</p>
+      <p class='italic'>{post.data.description}</p>
     </header>
 
-    <div class="container">
-      <article class="flex-1">
+    <div class='container'>
+      <article class='flex-1'>
         <Content />
       </article>
-      <div class="content-of-tables">
-        <nav class="nav">
-          <h2 class="contents">目录</h2>
-          {renderHeadings.map(heading => (
-            <a class:list={['nav-link', `depth-${heading.depth}`]} href={`#${heading.slug}`}>{heading.text}</a>
-          ))}
+      <div class='content-of-tables'>
+        <nav class='nav'>
+          <h2 class='contents'>目录</h2>
+          {
+            renderHeadings.map((heading) => (
+              <a class:list={['nav-link', `depth-${heading.depth}`]} href={`#${heading.slug}`}>
+                {heading.text}
+              </a>
+            ))
+          }
         </nav>
       </div>
     </div>
@@ -60,93 +74,96 @@ const renderHeadings = headings.filter(header=>header.depth<=3)
 </Layout>
 
 <style>
-    .container {
-        display: flex;
-        gap: 64px;
-    }
+  .container {
+    display: flex;
+    gap: 64px;
+  }
 
+  .content-of-tables {
+    grid-column: 3;
+    grid-row: 1 / 200;
+    align-self: start;
+    width: 250px;
+    margin-left: auto;
+    margin-top: 0.125em;
+    flex-shrink: 0;
+    line-height: inherit;
+    position: sticky;
+    top: 8rem;
+  }
+
+  .nav {
+    transition:
+      opacity 0.4s,
+      transform 0.7s cubic-bezier(0.17, 0.67, 0.54, 1);
+    transform: translateX(0);
+  }
+
+  .contents {
+    font-size: 1rem;
+    margin-bottom: 16px;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: hsl(210deg 25% 88%);
+    line-height: 24px;
+  }
+
+  .nav-link {
+    display: block;
+    opacity: 0.7;
+    text-decoration: none;
+    transition: opacity 0.5s;
+    font-size: 14px;
+    line-height: 1.5;
+    word-break: break-word;
+
+    &:hover {
+      opacity: 1;
+      transition: opacity 0ms;
+    }
+  }
+
+  .depth-2 {
+    margin-top: 12px;
+    font-size: 16px;
+  }
+
+  .depth-3 {
+    margin-top: 4px;
+    padding-left: 12px;
+  }
+
+  .depth-4 {
+    margin-top: 4px;
+    padding-left: 24px;
+  }
+
+  .active {
+    opacity: 1;
+    color: hsl(225deg 100% 75%);
+    font-weight: 500;
+  }
+
+  @media screen and (max-width: 1080px) {
     .content-of-tables {
-        grid-column: 3;
-        grid-row: 1 / 200;
-        align-self: start;
-        width: 250px;
-        margin-left: auto;
-        margin-top: .125em;
-        flex-shrink: 0;
-        line-height: inherit;
-        position: sticky;
-        top: 8rem;
+      display: none;
     }
-
-    .nav {
-        transition: opacity .4s, transform .7s cubic-bezier(.17, .67, .54, 1);
-        transform: translateX(0);
-    }
-
-    .contents {
-        font-size: 1rem;
-        margin-bottom: 16px;
-        font-weight: 500;
-        text-transform: uppercase;
-        letter-spacing: 2px;
-        color: hsl(210deg 25% 88%);
-        line-height: 24px;
-    }
-
-    .nav-link {
-        display: block;
-        opacity: .7;
-        text-decoration: none;
-        transition: opacity .5s;
-        font-size: 14px;
-        line-height: 1.5;
-        word-break: break-word;
-
-        &:hover {
-            opacity: 1;
-            transition: opacity 0ms;
-        }
-    }
-
-    .depth-2 {
-        margin-top: 12px;
-        font-size: 16px;
-    }
-
-    .depth-3 {
-        margin-top: 4px;
-        padding-left: 12px;
-    }
-
-    .depth-4 {
-        margin-top: 4px;
-        padding-left: 24px;
-    }
-
-    .active {
-        opacity: 1;
-        color: hsl(225deg 100% 75%);
-        font-weight: 500;
-    }
-
-    @media screen and (max-width: 1080px) {
-        .content-of-tables {
-            display: none;
-        }
-    }
+  }
 </style>
-
 
 <script>
   import { getHeadingInView } from '@/utils'
 
   const tocLinks = document.querySelectorAll('.content-of-tables a')
-  const headingElements = Array.from(document.querySelectorAll('h1[id], h2[id], h3[id], h4[id], h5[id], h6[id]'))
+  const headingElements = Array.from(
+    document.querySelectorAll('h1[id], h2[id], h3[id], h4[id], h5[id], h6[id]'),
+  )
 
-  function updateActiveHeading () {
+  function updateActiveHeading() {
     const activeHeadingId = getHeadingInView(headingElements)
 
-    tocLinks.forEach(link => {
+    tocLinks.forEach((link) => {
       const href = link.getAttribute('href')?.slice(1)
       if (href === activeHeadingId) {
         link.classList.add('active')
@@ -157,9 +174,20 @@ const renderHeadings = headings.filter(header=>header.depth<=3)
   }
 
   // Update on scroll
-  window.addEventListener('scroll', () => {
-    requestAnimationFrame(updateActiveHeading)
-  })
+  let ticking = false
+  const handleScroll = () => {
+    if (ticking) {
+      return
+    }
+
+    ticking = true
+    requestAnimationFrame(() => {
+      updateActiveHeading()
+      ticking = false
+    })
+  }
+
+  window.addEventListener('scroll', handleScroll, { passive: true })
 
   // Initial update
   updateActiveHeading()

@@ -17,7 +17,11 @@ const currentUrl = `${DEFAULT_URL_SITE}${Astro.url.pathname.replace(/^\//, '')}`
 const openGraph = {
   title: title || og?.title || DEFAULT_TITLE_PAGE,
   type: og?.type || 'website',
-  image: og?.image ? (og.image.startsWith('http') ? og.image : `${DEFAULT_URL_SITE}${og.image}`) : `${DEFAULT_URL_SITE}opengraph-image.jpg`,
+  image: og?.image
+    ? og.image.startsWith('http')
+      ? og.image
+      : `${DEFAULT_URL_SITE}${og.image}`
+    : `${DEFAULT_URL_SITE}opengraph-image.webp`,
   alt: og?.alt || '刘浪的个人博客',
   url: currentUrl,
   description: og?.description || DEFAULT_DESCRIPTION_PAGE,
@@ -47,7 +51,6 @@ const openGraph = {
       link: [
         { rel: 'icon', href: '/favicon.ico' },
         { rel: 'sitemap', href: '/sitemap-index.xml' },
-        { rel: 'canonical', href: currentUrl },
         { rel: 'preconnect', href: 'https://www.googletagmanager.com' },
       ],
       meta: [

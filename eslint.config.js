@@ -3,6 +3,9 @@ import typescriptParser from '@typescript-eslint/parser'
 import betterTailwindcss from 'eslint-plugin-better-tailwindcss'
 
 export default [
+  {
+    ignores: ['dist/**', '.astro/**', 'node_modules/**'],
+  },
   // Apply to all files
   {
     languageOptions: {
