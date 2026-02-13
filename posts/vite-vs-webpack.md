@@ -35,11 +35,11 @@ Vite 旨在解决 Webpack 在大型项目中的性能瓶颈，通过简化配置
 
 ### 构建方式
 
-![Webpack 构建原理图](/images/webpack-build.jpg)
+![Webpack 构建原理图](/images/webpack-build.webp)
 
 上图是Webpack在本地启动项目时的一个过程表示，当你使用 Webpack 打包一个项目时，通常会生成一个或多个 bundle 文件，这些文件包含了你的应用程序所需的所有代码、样式和资源。然后，你可以在 HTML 文件中通过 `<script>` 标签引入这些 bundle 文件，从而加载你的应用程序。但是随着项目规模的增大，通常会有更多的模块需要打包。Webpack 需要扫描整个项目的依赖图，并分析模块之间的依赖关系，这个过程会变得更加复杂和耗时。
 
-![Vite 构建原理图](/images/vite-build.jpg)
+![Vite 构建原理图](/images/vite-build.webp)
 
 本地启动一个Vite项目时，和Webpack有一些不一样了，Server服务一开始就启动，然后通过网络请求去加载对应了文件。
 
