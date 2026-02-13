@@ -17,7 +17,7 @@ category: 'JavaScript'
 
 两个线程之间由 Native 层之间统一处理，无论是线程之间的通信，还是数据的传递，网络请求都是由 Native 层做转发。
 
-![微信小程序架构模型](/images//wechat-mini-program.webp)
+![微信小程序架构模型](/images/wechat-mini-program.webp)
 
 逻辑层和视图层之间的工作方式为：数据变更通过 setData 驱动视图更新；视图层交互触发事件，然后触发逻辑层的事件响应函数，函数中修改数据再次触发视图更新。
 

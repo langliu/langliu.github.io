@@ -1,4 +1,4 @@
-@import 'tailwindcss';
+@reference 'tailwindcss';
 
 .post p {
   line-height: 1.75rem;
