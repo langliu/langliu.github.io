@@ -47,10 +47,11 @@ const renderHeadings = headings.filter((header) => header.depth <= 3)
         返回文章列表
       </a>
     </div>
-    <header role='presentation'>
-      <h1 class='text-md'>
-        {post.data.title} - {formatDate(post.data.publishedAt)}
-      </h1>
+    <header>
+      <h1 class='text-md'>{post.data.title}</h1>
+      <p class='text-sm text-neutral-400'>
+        发布于 <time datetime={post.data.publishedAt.toISOString()}>{formatDate(post.data.publishedAt)}</time>
+      </p>
       <p class='italic'>{post.data.description}</p>
     </header>
 
