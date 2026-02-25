@@ -1,12 +1,15 @@
 {
   "extends": "astro/tsconfigs/strict",
   "compilerOptions": {
-    "baseUrl": ".",
     "paths": {
-      "@/*": ["src/*"]
+      "@/*": ["./src/*"],
     },
-    "allowJs": true
+    "allowJs": true,
+    "strict": true,
+    "module": "ESNext",
+    "moduleResolution": "bundler",
+    "target": "ESNext",
   },
   "include": [".astro/types.d.ts", "astro.config.mjs", "src/**/*"],
-  "exclude": ["dist", ".worktrees", "worktrees", "public"]
+  "exclude": ["dist", ".worktrees", "worktrees", "public", "node_modules"],
 }

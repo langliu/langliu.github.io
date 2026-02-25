@@ -7,15 +7,15 @@
       "dependencies": {
         "@astrojs/mdx": "^4.3.13",
         "@astrojs/sitemap": "^3.7.0",
-        "@tailwindcss/vite": "^4.1.18",
-        "astro": "^5.17.2",
+        "@tailwindcss/vite": "^4.2.1",
+        "astro": "^5.17.3",
         "astro-robots-txt": "^1.0.0",
         "astro-seo": "^1.1.0",
-        "tailwindcss": "^4.1.18",
+        "tailwindcss": "^4.2.1",
       },
       "devDependencies": {
-        "@biomejs/biome": "^2.3.14",
-        "typescript": "^5.9.3",
+        "@biomejs/biome": "^2.4.4",
+        "typescript": "^6.0.0-beta",
       },
     },
   },
@@ -917,7 +917,7 @@
 
     "typesafe-path": ["typesafe-path@0.2.2", "https://registry.npmmirror.com/typesafe-path/-/typesafe-path-0.2.2.tgz", {}, "sha512-OJabfkAg1WLZSqJAJ0Z6Sdt3utnbzr/jh+NAHoyWHJe8CMSy79Gm085094M9nvTPy22KzTVn5Zq5mbapCI/hPA=="],
 
-    "typescript": ["typescript@5.9.3", "https://registry.npmmirror.com/typescript/-/typescript-5.9.3.tgz", { "bin": { "tsc": "bin/tsc", "tsserver": "bin/tsserver" } }, "sha512-jl1vZzPDinLr9eUt3J/t7V6FgNEw9QjvBPdysz9KfQDD41fQrC2Y4vKQdiaUpFT4bXlb1RHhLpp8wtm6M5TgSw=="],
+    "typescript": ["typescript@6.0.0-beta", "https://registry.npmmirror.com/typescript/-/typescript-6.0.0-beta.tgz", { "bin": { "tsc": "bin/tsc", "tsserver": "bin/tsserver" } }, "sha512-CldZdztDpQRLM1HC6WDQjQkQN5Ub5zRau737a1diGh3lPmb9oRsaWHk1y5iqK0o7+1bNJ0oXfEGRkAogFZBL+Q=="],
 
     "typescript-auto-import-cache": ["typescript-auto-import-cache@0.3.6", "https://registry.npmmirror.com/typescript-auto-import-cache/-/typescript-auto-import-cache-0.3.6.tgz", { "dependencies": { "semver": "^7.3.8" } }, "sha512-RpuHXrknHdVdK7wv/8ug3Fr0WNsNi5l5aB8MYYuXhq2UH5lnEB1htJ1smhtD5VeCsGr2p8mUDtd83LCQDFVgjQ=="],
 
