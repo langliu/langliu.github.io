@@ -15,10 +15,10 @@
     "format:check": "biome check . --linter-enabled=false --assist-enabled=false"
   },
   "dependencies": {
-    "@astrojs/mdx": "^4.3.13",
-    "@astrojs/sitemap": "^3.7.0",
+    "@astrojs/mdx": "^5.0.0",
+    "@astrojs/sitemap": "^3.7.1",
     "@tailwindcss/vite": "^4.2.1",
-    "astro": "^5.17.3",
+    "astro": "^6.0.3",
     "astro-robots-txt": "^1.0.0",
     "astro-seo": "^1.1.0",
     "tailwindcss": "^4.2.1"
