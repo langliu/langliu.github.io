@@ -5,11 +5,15 @@ import { GTM_ID } from '@/data/config'
 import type { HeadTags } from '@/utils/types/HeadTags'
 
 import '@/styles/global.css'
+import { inject } from '@vercel/analytics'
 
 export type Props = HeadTags
 
 const headTags = Astro.props
 const shouldEnableGtm = import.meta.env.PROD && GTM_ID.length > 0
+
+// Inject Vercel Web Analytics
+inject()
 ---
 
 <html lang='zh-CN'>
