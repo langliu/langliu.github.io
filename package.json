@@ -17,6 +17,7 @@
   "dependencies": {
     "@astrojs/mdx": "^5.0.0",
     "@astrojs/sitemap": "^3.7.1",
+    "@astrojs/vercel": "^10.0.4",
     "@tailwindcss/vite": "^4.2.1",
     "@vercel/analytics": "^2.0.1",
     "astro": "^6.0.3",
