@@ -19,8 +19,8 @@
       "slug: $5",
       "isPublish: ${6|true,false|}",
       "description: $7",
-      "---",
+      "---"
     ],
-    "description": "Blog Post Header",
-  },
+    "description": "Blog Post Header"
+  }
 }
