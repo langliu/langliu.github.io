@@ -5,15 +5,12 @@ export type PostEntry = CollectionEntry<'posts'>
 let publishedPostsPromise: Promise<PostEntry[]> | undefined
 
 export async function getPublishedPosts(): Promise<PostEntry[]> {
-  publishedPostsPromise ??= getCollection('posts')
-    .then((posts) => {
-      assertUniquePostSlugs(posts)
-      return posts
-        .filter((post) => post.data.isPublish && !post.data.isDraft)
-        .sort(
-          (first, second) => second.data.publishedAt.getTime() - first.data.publishedAt.getTime(),
-        )
-    })
+  publishedPostsPromise ??= getCollection('posts').then((posts) => {
+    assertUniquePostSlugs(posts)
+    return posts
+      .filter((post) => post.data.isPublish && !post.data.isDraft)
+      .sort((first, second) => second.data.publishedAt.getTime() - first.data.publishedAt.getTime())
+  })
 
   return publishedPostsPromise
 }
@@ -33,14 +30,11 @@ export function getSortedCategoryStats(
     POST_CATEGORIES.map((category) => [category, 0]),
   ) as Record<PostEntry['data']['category'], number>
 
-  const categoryStats = posts.reduce<Record<PostEntry['data']['category'], number>>(
-    (acc, post) => {
-      const category = post.data.category
-      acc[category] = (acc[category] ?? 0) + 1
-      return acc
-    },
-    initialCategoryStats,
-  )
+  const categoryStats = posts.reduce<Record<PostEntry['data']['category'], number>>((acc, post) => {
+    const category = post.data.category
+    acc[category] = (acc[category] ?? 0) + 1
+    return acc
+  }, initialCategoryStats)
 
   return Object.entries(categoryStats)
     .filter(([, count]) => count > 0)

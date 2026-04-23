@@ -1,10 +1,5 @@
 {
-  "cSpell.words": [
-    "astro",
-    "astrojs",
-    "pnpm",
-    "shiki"
-  ],
+  "cSpell.words": ["astro", "astrojs", "pnpm", "shiki"],
   "npm.packageManager": "bun",
   "editor.defaultFormatter": "biomejs.biome",
   "editor.codeActionsOnSave": {

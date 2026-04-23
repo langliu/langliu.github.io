@@ -55,7 +55,7 @@
   margin-bottom: 20px;
 }
 
-.post pre>code {
+.post pre > code {
   background-color: transparent;
 }
 
@@ -63,7 +63,7 @@
   width: 100%;
   border-collapse: collapse;
 
-  +p {
+  + p {
     margin-top: 1.25rem;
   }
 }
