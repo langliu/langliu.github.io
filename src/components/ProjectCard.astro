@@ -5,7 +5,7 @@ type Props = Project
 
 const { title, techs, link, isComingSoon } = Astro.props
 
-const formatTechs = (values: string[]) => values.toString().replaceAll(',', ' • ')
+const formatTechs = (values: string[]) => values.join(' • ')
 ---
 
 <>

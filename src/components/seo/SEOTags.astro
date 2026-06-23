@@ -14,15 +14,12 @@ const shouldEnableGtm = import.meta.env.PROD && GTM_ID.length > 0
 
 // 动态构建当前页面 URL
 const currentUrl = new URL(Astro.url.pathname, DEFAULT_URL_SITE).toString()
+const defaultOgImageUrl = new URL('opengraph-image.webp', DEFAULT_URL_SITE).toString()
 
 const openGraph = {
   title: title || og?.title || DEFAULT_TITLE_PAGE,
   type: og?.type || 'website',
-  image: og?.image
-    ? og.image.startsWith('http')
-      ? og.image
-      : `${DEFAULT_URL_SITE}${og.image}`
-    : `${DEFAULT_URL_SITE}opengraph-image.webp`,
+  image: og?.image ? new URL(og.image, DEFAULT_URL_SITE).toString() : defaultOgImageUrl,
   alt: og?.alt || '研之有物',
   url: currentUrl,
   description: og?.description || DEFAULT_DESCRIPTION_PAGE,
