@@ -87,11 +87,11 @@ createContext 函数返回一个 context 对象，其中包含三个属性：
 
 这种 Provider 类型的 vdom 自然会转为对应的 fiber 节点，在 reconcile 的时候会做单独的处理：
 
-![](/images/react-provider.awebp)
+![](../src/assets/posts/react-provider.webp)
 
 可以看到 Provider 的处理就是修改了 `context._currentValue` 的值：
 
-![](/images/react-provider2.awebp)
+![](../src/assets/posts/react-provider2.webp)
 
 ### Context 的缺点和解决方案
 
@@ -140,11 +140,11 @@ export default Aaa
 在修改 `context._currentValue` 之前还有一个 push。
 这个就是把当前的 context 值入栈：
 
-![](/images/react-provider3.webp)
+![](../src/assets/posts/react-provider3.webp)
 
 之后处理完这个 fiber 节点会再 pop 出栈，回到父节点的时候，context 恢复回之前的：
 
-![](/images/react-provider4.webp)
+![](../src/assets/posts/react-provider4.webp)
 
 这就是为什么 context 只能影响子组件，影响不了父组件。
 

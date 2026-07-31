@@ -23,6 +23,25 @@ export function getPostPath(post: PostEntry): string {
   return `/posts/${getPostSlug(post)}`
 }
 
+export function getAdjacentPosts(
+  posts: PostEntry[],
+  current: PostEntry,
+): {
+  newer?: PostEntry
+  older?: PostEntry
+} {
+  const currentIndex = posts.findIndex((post) => post.id === current.id)
+
+  if (currentIndex === -1) {
+    return {}
+  }
+
+  return {
+    newer: currentIndex > 0 ? posts[currentIndex - 1] : undefined,
+    older: currentIndex < posts.length - 1 ? posts[currentIndex + 1] : undefined,
+  }
+}
+
 export function getSortedCategoryStats(
   posts: PostEntry[],
 ): Array<[PostEntry['data']['category'], number]> {

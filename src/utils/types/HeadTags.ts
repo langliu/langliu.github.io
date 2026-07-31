@@ -9,4 +9,5 @@ export type HeadTags = {
     image?: string
     alt?: string
   }
+  jsonLd?: Record<string, unknown> | Array<Record<string, unknown>>
 }

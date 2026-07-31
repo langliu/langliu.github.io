@@ -32,7 +32,7 @@ const posts = await getPublishedPosts()
 
       <div class='flex flex-col gap-8'>
         <h1
-          class='text-4xl font-bold text-neutral-100 bg-clip-text bg-linear-to-r from-orange-400 to-purple-500 w-max'
+          class='w-max bg-linear-to-r from-orange-400 to-purple-500 bg-clip-text text-4xl font-bold text-transparent'
         >
           {presentation.title}
         </h1>
@@ -49,13 +49,13 @@ const posts = await getPublishedPosts()
         <h3 class='text-lg text-neutral-100'>最新文章</h3>
         <Link href='/posts' label='查看所有' isUnderline target='_self' />
       </header>
-      {posts.length === 0 && <p>Soon, stay connected 👀...</p>}
+      {posts.length === 0 && <p class='text-neutral-400'>暂无文章，稍后再来看看。</p>}
 
       <section class='grid grid-cols-1 md:grid-cols-2 gap-4'>
         {
           posts.length !== 0 &&
             posts
-              .slice(0, 2)
+              .slice(0, 6)
               .map((post) => (
                 <PostCard
                   publishedAt={post.data.publishedAt}
@@ -74,7 +74,7 @@ const posts = await getPublishedPosts()
           我的项目 ({projects.length})
         </h3>
       </header>
-      {projects.length === 0 && <p>Oops, I must work^^^^^</p>}
+      {projects.length === 0 && <p class='text-neutral-400'>项目筹备中，敬请期待。</p>}
       <section class='grid md:grid-cols-2 gap-4'>
         {projects.length !== 0 && projects.map((project) => <ProjectCard {...project} />)}
       </section>

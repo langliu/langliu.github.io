@@ -20,7 +20,6 @@
 
 .post h2 {
   @apply mt-8 mb-6 text-3xl text-neutral-100;
-  color: var(--color-tertiary);
 }
 
 .post h3 {
@@ -79,4 +78,8 @@
   list-style-type: decimal;
   padding-left: 1rem;
   margin-bottom: 20px;
+}
+
+.post img {
+  @apply my-6 h-auto max-w-full rounded-md;
 }

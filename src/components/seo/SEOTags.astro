@@ -5,7 +5,7 @@ import type { HeadTags } from '@/utils/types/HeadTags'
 
 type Props = HeadTags
 
-const { title, description, noindex, og } = Astro.props
+const { title, description, noindex, og, jsonLd } = Astro.props
 
 const DEFAULT_TITLE_PAGE = '研之有物 - 首页'
 const DEFAULT_DESCRIPTION_PAGE = '研之有物 - 前端技术博客'
@@ -24,6 +24,9 @@ const openGraph = {
   url: currentUrl,
   description: og?.description || DEFAULT_DESCRIPTION_PAGE,
 }
+
+// 避免 frontmatter 中的 </script> 打断 JSON-LD
+const jsonLdHtml = jsonLd ? JSON.stringify(jsonLd).replace(/</g, '\\u003c') : undefined
 ---
 
 <head>
@@ -52,9 +55,18 @@ const openGraph = {
     }}
     extend={{
       link: [
-        { rel: 'icon', href: '/favicon.ico' },
+        { rel: 'icon', href: '/favicon.svg', type: 'image/svg+xml' },
+        { rel: 'icon', href: '/favicon.ico', sizes: '32x32' },
         { rel: 'sitemap', href: '/sitemap-index.xml' },
-        ...(shouldEnableGtm ? [{ rel: 'preconnect', href: 'https://www.googletagmanager.com' }] : []),
+        {
+          rel: 'alternate',
+          type: 'application/rss+xml',
+          href: '/rss.xml',
+          title: '研之有物 RSS',
+        },
+        ...(shouldEnableGtm
+          ? [{ rel: 'preconnect', href: 'https://www.googletagmanager.com' }]
+          : []),
       ],
       meta: [
         { name: 'viewport', content: 'width=device-width, initial-scale=1' },
@@ -70,6 +82,11 @@ const openGraph = {
       ],
     }}
   />
+  {
+    jsonLdHtml && (
+      <script is:inline type='application/ld+json' set:html={jsonLdHtml} />
+    )
+  }
   {
     shouldEnableGtm && (
       <>

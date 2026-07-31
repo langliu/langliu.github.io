@@ -1,5 +1,6 @@
 ---
 import Layout from '@/layouts/Layout.astro'
+import ArrowIcon from '@/components/shared/ArrowIcon.astro'
 import { getPublishedPosts, getSortedCategoryStats } from '@/utils/posts'
 
 const posts = await getPublishedPosts()
@@ -29,27 +30,7 @@ const categories = getSortedCategoryStats(posts)
             </div>
             <div class='flex items-center gap-2 text-sm text-neutral-500'>
               <span>查看文章</span>
-              <svg
-                width='16'
-                height='16'
-                viewBox='0 0 18 18'
-                fill='none'
-                class='transition-all duration-300 group-hover:translate-x-1'
-                aria-hidden='true'
-              >
-                <path
-                  d='M5.25 12.75L12.75 5.25'
-                  stroke='#999999'
-                  stroke-linecap='round'
-                  stroke-linejoin='round'
-                />
-                <path
-                  d='M5.25 5.25H12.75V12.75'
-                  stroke='#999999'
-                  stroke-linecap='round'
-                  stroke-linejoin='round'
-                />
-              </svg>
+              <ArrowIcon size={16} />
             </div>
           </a>
         ))

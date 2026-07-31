@@ -1,0 +1,23 @@
+---
+import Link from '@/components/shared/Link.astro'
+import SocialLinks from '@/components/SocialLinks.astro'
+
+const year = new Date().getFullYear()
+---
+
+<footer
+  class='mt-auto flex w-full flex-col gap-4 border-t border-neutral-800 pt-6 text-sm text-neutral-500 md:flex-row md:items-center md:justify-between'
+>
+  <div class='flex flex-col gap-2'>
+    <p>© {year} 研之有物</p>
+    <div class='flex flex-row flex-wrap items-center gap-3'>
+      <Link href='/posts' label='文章' />
+      <span aria-hidden='true'>/</span>
+      <Link href='/categories' label='分类' />
+      <span aria-hidden='true'>/</span>
+      <Link href='/rss.xml' label='RSS' />
+    </div>
+  </div>
+
+  <SocialLinks />
+</footer>

@@ -1,0 +1,20 @@
+---
+import Layout from '@/layouts/Layout.astro'
+import Link from '@/components/shared/Link.astro'
+---
+
+<Layout title='页面未找到 - 研之有物' description='你访问的页面不存在或已被移动。' noindex>
+  <main class='flex flex-1 flex-col items-start justify-center gap-6 py-16 md:py-24'>
+    <p class='text-sm tracking-[0.2em] text-neutral-500 uppercase'>404</p>
+    <h1 class='text-3xl font-bold text-neutral-100 md:text-4xl'>页面走丢了</h1>
+    <p class='max-w-xl text-neutral-400'>
+      这个地址没有对应内容，可能是链接过期，或页面已经搬家。你可以回到首页继续浏览，或者直接查看全部文章。
+    </p>
+    <div class='flex flex-row flex-wrap gap-4'>
+      <Link href='/' label='返回首页' isUnderline />
+      <Link href='/posts' label='查看文章' isUnderline />
+      <Link href='/categories' label='浏览分类' isUnderline />
+      <Link href='/rss.xml' label='RSS 订阅' isUnderline />
+    </div>
+  </main>
+</Layout>

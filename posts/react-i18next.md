@@ -288,7 +288,7 @@ i18n 是一个比较通用的功能，目前WebStorm和VSCode都有对应的插�
 这时我们可以借助一些工具来快速翻译，我最近做了一个支持翻译JSON文件的工具网站 [i18n JSON Translate](https://i18n-json-translate.langliu.xyz/)，
 支持输入JSON格式的翻译文案，选择目标语言，点击翻译按钮，即可快速翻译。
 
-![i18n JSON Translate screenshot](/images/i18n-json-translate.webp)
+![i18n JSON Translate screenshot](../src/assets/posts/i18n-json-translate.webp)
 
 ## 参考文章
 

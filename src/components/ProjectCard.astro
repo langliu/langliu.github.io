@@ -1,4 +1,5 @@
 ---
+import ArrowIcon from '@/components/shared/ArrowIcon.astro'
 import type { Project } from '@/data/projects'
 
 type Props = Project
@@ -36,27 +37,7 @@ const formatTechs = (values: string[]) => values.join(' • ')
           <p>{formatTechs(techs)}</p>
         </div>
 
-        <svg
-          width='18'
-          height='18'
-          viewBox='0 0 18 18'
-          fill='none'
-          class='transition-all duration-300 group-hover:translate-x-1'
-          aria-hidden='true'
-        >
-          <path
-            d='M5.25 12.75L12.75 5.25'
-            stroke='#999999'
-            stroke-linecap='round'
-            stroke-linejoin='round'
-          />
-          <path
-            d='M5.25 5.25H12.75V12.75'
-            stroke='#999999'
-            stroke-linecap='round'
-            stroke-linejoin='round'
-          />
-        </svg>
+        <ArrowIcon />
       </a>
     )
   }
