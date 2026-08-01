@@ -3,6 +3,10 @@ title: '快速创建组件库🚀'
 publishedAt: 2024-05-01
 description: '快速创建组件库🚀（使用Vite的库模式）'
 slug: 'vite-component-library'
+tags:
+  - Vite
+  - 组件库
+  - JavaScript
 isPublish: false
 category: 'JavaScript'
 ---

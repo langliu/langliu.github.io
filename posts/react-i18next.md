@@ -3,6 +3,9 @@ title: 'React i18next 配置'
 publishedAt: 2024-12-10
 description: 'React i18next 配置'
 slug: 'react-i18next'
+tags:
+  - React
+  - i18n
 isPublish: true
 category: 'React'
 ---

@@ -23,6 +23,36 @@ export function getPostPath(post: PostEntry): string {
   return `/posts/${getPostSlug(post)}`
 }
 
+export function getPostTags(post: PostEntry): string[] {
+  return post.data.tags?.filter((tag): tag is string => Boolean(tag?.trim())) ?? []
+}
+
+export function getTagPath(tag: string): string {
+  return `/tags/${encodeURIComponent(tag)}`
+}
+
+export function getPostUpdatedAt(post: PostEntry): Date {
+  return post.data.updatedAt ?? post.data.publishedAt
+}
+
+export function getSortedTagStats(posts: PostEntry[]): Array<[string, number]> {
+  const tagStats = new Map<string, number>()
+
+  for (const post of posts) {
+    for (const tag of getPostTags(post)) {
+      tagStats.set(tag, (tagStats.get(tag) ?? 0) + 1)
+    }
+  }
+
+  return [...tagStats.entries()].sort((left, right) => {
+    if (right[1] !== left[1]) {
+      return right[1] - left[1]
+    }
+
+    return left[0].localeCompare(right[0], 'zh-CN')
+  })
+}
+
 export function getAdjacentPosts(
   posts: PostEntry[],
   current: PostEntry,

@@ -3,6 +3,10 @@ title: 'Windows 下使用7-Zip批量压缩文件夹'
 publishedAt: 2022-09-03
 description: 'Windows 下使用7-Zip批量压缩文件夹'
 slug: 'windows-use-7zip-batch-zip'
+tags:
+  - Tools
+  - 7-Zip
+  - Windows
 isPublish: true
 category: '其他'
 ---

@@ -2,6 +2,9 @@
 title: 微信小程序底层原理
 description: 小程序是基于双线程模型的，在这个模型中，小程序的逻辑层与渲染层分开在不同的线程运行，这跟传统的Web 单线程模型有很大的不同
 slug: wechat-mini-program-underlying-principle
+tags:
+  - 小程序
+  - JavaScript
 isPublish: true
 publishedAt: 2024-04-02
 category: 'JavaScript'

@@ -7,7 +7,15 @@ import presentation from '@/data/presentation'
 import '@/styles/post.css'
 import formatDate from '@/utils/formatDate'
 import getReadingTimeMinutes from '@/utils/readingTime'
-import { getAdjacentPosts, getPostPath, getPostSlug, getPublishedPosts } from '@/utils/posts'
+import {
+  getAdjacentPosts,
+  getPostPath,
+  getPostSlug,
+  getPostTags,
+  getPostUpdatedAt,
+  getPublishedPosts,
+  getTagPath,
+} from '@/utils/posts'
 
 export async function getStaticPaths() {
   const publishedPosts = await getPublishedPosts()
@@ -28,10 +36,14 @@ const { Content, headings } = await render(post)
 
 // 只显示前3级目录
 const renderHeadings = headings.filter((header) => header.depth <= 3)
-const tags = post.data.tags?.filter(Boolean) ?? []
+const tags = getPostTags(post)
 const postPath = getPostPath(post)
 const postUrl = new URL(postPath, SITE_URL).toString()
-const publishedAt = post.data.publishedAt.toISOString()
+const publishedAtDate = post.data.publishedAt
+const updatedAtDate = getPostUpdatedAt(post)
+const publishedAt = publishedAtDate.toISOString()
+const updatedAt = updatedAtDate.toISOString()
+const showUpdatedAt = updatedAtDate.getTime() !== publishedAtDate.getTime()
 const readingTimeMinutes = getReadingTimeMinutes(post.body)
 const { newer, older } = getAdjacentPosts(posts, post)
 
@@ -41,7 +53,7 @@ const jsonLd = {
   headline: post.data.title,
   description: post.data.description,
   datePublished: publishedAt,
-  dateModified: publishedAt,
+  dateModified: updatedAt,
   mainEntityOfPage: {
     '@type': 'WebPage',
     '@id': postUrl,
@@ -74,11 +86,11 @@ const jsonLd = {
   }}
   jsonLd={jsonLd}
 >
-  <main class='post mx-auto flex w-full flex-col gap-4'>
-    <div class='mb-4'>
+  <main class='mx-auto flex w-full flex-col gap-6'>
+    <div>
       <a
         href='/posts'
-        class='inline-flex items-center gap-2 text-neutral-400 transition-colors hover:text-neutral-100'
+        class='inline-flex items-center gap-2 text-sm text-neutral-400 transition-colors hover:text-neutral-100'
       >
         <svg
           width='16'
@@ -96,36 +108,65 @@ const jsonLd = {
         返回文章列表
       </a>
     </div>
-    <header class='flex flex-col gap-3'>
+
+    <header class='flex flex-col gap-4'>
       <h1 class='text-3xl font-bold text-neutral-100 md:text-4xl'>{post.data.title}</h1>
-      <div class='flex flex-row flex-wrap items-center gap-x-3 gap-y-2 text-sm text-neutral-400'>
-        <p>
-          发布于 <time datetime={publishedAt}>{formatDate(post.data.publishedAt)}</time>
-        </p>
-        <span aria-hidden='true'>·</span>
-        <p>{`约 ${readingTimeMinutes} 分钟阅读`}</p>
-        <span aria-hidden='true'>·</span>
-        <a
-          href={`/categories/${post.data.category}`}
-          class='rounded-full border border-neutral-700 px-2.5 py-0.5 text-neutral-300 transition-colors hover:border-neutral-400 hover:text-neutral-100'
-        >
-          {post.data.category}
-        </a>
+
+      <div class='flex flex-col gap-3 text-sm text-neutral-400'>
+        <div class='flex flex-row flex-wrap items-center gap-x-2 gap-y-2'>
+          <span>
+            发布于 <time datetime={publishedAt}>{formatDate(publishedAtDate)}</time>
+          </span>
+          {
+            showUpdatedAt && (
+              <>
+                <span class='text-neutral-600' aria-hidden='true'>
+                  ·
+                </span>
+                <span>
+                  更新于 <time datetime={updatedAt}>{formatDate(updatedAtDate)}</time>
+                </span>
+              </>
+            )
+          }
+          <span class='text-neutral-600' aria-hidden='true'>
+            ·
+          </span>
+          <span>{`约 ${readingTimeMinutes} 分钟阅读`}</span>
+          <span class='text-neutral-600' aria-hidden='true'>
+            ·
+          </span>
+          <a
+            href={`/categories/${post.data.category}`}
+            class='inline-flex items-center rounded-full border border-neutral-700 px-2.5 py-0.5 text-neutral-300 no-underline transition-colors hover:border-neutral-400 hover:text-neutral-100'
+          >
+            {post.data.category}
+          </a>
+        </div>
+
+        {
+          tags.length > 0 && (
+            <ul class='m-0 flex list-none flex-row flex-wrap items-center gap-2 p-0' aria-label='文章标签'>
+              {tags.map((tag) => (
+                <li class='m-0 list-none p-0'>
+                  <a
+                    href={getTagPath(tag)}
+                    class='inline-flex items-center rounded-md bg-neutral-800 px-2.5 py-1 text-xs text-neutral-300 no-underline transition-colors hover:bg-neutral-700 hover:text-neutral-100'
+                  >
+                    {tag}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          )
+        }
       </div>
-      {
-        tags.length > 0 && (
-          <ul class='flex list-none flex-row flex-wrap gap-2 p-0' aria-label='文章标签'>
-            {tags.map((tag) => (
-              <li class='rounded-md bg-neutral-800 px-2.5 py-1 text-xs text-neutral-300'>{tag}</li>
-            ))}
-          </ul>
-        )
-      }
-      <p class='text-neutral-300 italic'>{post.data.description}</p>
+
+      <p class='m-0 text-base leading-7 text-neutral-300 italic'>{post.data.description}</p>
     </header>
 
     <div class='container'>
-      <article class='flex-1'>
+      <article class='post flex-1'>
         <Content />
       </article>
       <Toc headings={renderHeadings} />

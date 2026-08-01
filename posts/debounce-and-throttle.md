@@ -3,6 +3,9 @@ title: '防抖和节流'
 publishedAt: 2024-03-09
 description: '防抖和节流介绍和应用'
 slug: 'debounce-and-throttle'
+tags:
+  - JavaScript
+  - 性能优化
 isPublish: true
 category: 'JavaScript'
 ---

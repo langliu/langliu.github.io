@@ -1,8 +1,13 @@
 ---
 title: '从头开始实现一个水印组件'
 publishedAt: 2024-12-30
-description: 'Windows 下使用7-Zip批量压缩文件夹'
+updatedAt: 2026-07-31
+description: '从零实现 React 水印组件：遮罩层、事件穿透与 Canvas 生成 base64 背景图。'
 slug: 'watermark'
+tags:
+  - React
+  - 组件
+  - Canvas
 isPublish: true
 category: 'React'
 ---

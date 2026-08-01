@@ -3,6 +3,10 @@ title: 'Intl 解决前端日期和时间的格式化'
 publishedAt: 2023-03-07
 description: 'Intl 解决前端日期和时间的格式化'
 slug: 'intl-date-format'
+tags:
+  - JavaScript
+  - Intl
+  - 日期时间
 isPublish: true
 category: 'JavaScript'
 ---

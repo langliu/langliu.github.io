@@ -3,6 +3,10 @@ title: '从零开始实现lazy-load'
 publishedAt: 2024-12-29
 description: '懒加载是一种优化网页性能的技术，它可以延迟加载非关键资源（如图片），直到用户滚动到相应位置时才进行加载，从而提高页面的初始加载速度和性能。我们将通过 JavaScript 代码来实现这一功能，并对其原理和实现步骤进行深入探讨。'
 slug: 'lazy-load'
+tags:
+  - React
+  - 性能优化
+  - 组件
 isPublish: true
 category: 'React'
 ---

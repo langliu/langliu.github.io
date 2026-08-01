@@ -44,6 +44,19 @@ const pathname = removeTrailingSlash(Astro.url.pathname)
             : undefined}>分类</a
         >
       </li>
+      <li>/</li>
+      <li>
+        <a
+          href='/tags'
+          class:list={{
+            ['hover:text-neutral-100']: true,
+            ['text-neutral-100']: pathname === '/tags' || pathname.startsWith('/tags/'),
+          }}
+          aria-current={pathname === '/tags' || pathname.startsWith('/tags/')
+            ? 'page'
+            : undefined}>标签</a
+        >
+      </li>
     </ul>
   </nav>
 </header>

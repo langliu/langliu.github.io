@@ -1,5 +1,9 @@
 ---
 title: '前端安全：如何防御XSS攻击'
+tags:
+  - 安全
+  - XSS
+  - JavaScript
 isPublish: true
 description: '随着互联网的高速发展，信息安全问题已经成为企业最为关注的焦点之一，而前端又是引发企业安全问题的高危据点。'
 publishedAt: 2024-03-23
