@@ -1,0 +1,75 @@
+---
+import Layout from '@/layouts/Layout.astro'
+---
+
+<Layout title='研之有物 - 搜索' description='搜索博客文章与内容'>
+  <main class='flex flex-col gap-8'>
+    <div class='flex flex-col gap-3'>
+      <h1 class='text-2xl text-neutral-100'>搜索</h1>
+      <p class='text-neutral-400'>输入关键词，查找文章标题与正文内容。</p>
+    </div>
+
+    <div id='search' class='search'></div>
+  </main>
+</Layout>
+
+<link href='/pagefind/pagefind-ui.css' rel='stylesheet' />
+<script is:inline src='/pagefind/pagefind-ui.js'></script>
+<script is:inline>
+  window.addEventListener('DOMContentLoaded', () => {
+    if (!window.PagefindUI) {
+      const root = document.querySelector('#search')
+      if (root) {
+        root.innerHTML =
+          '<p class="text-neutral-400">搜索索引尚未生成。请先执行生产构建后再试。</p>'
+      }
+      return
+    }
+
+    new window.PagefindUI({
+      element: '#search',
+      showImages: false,
+      showSubResults: true,
+      excerptLength: 20,
+      translations: {
+        placeholder: '搜索文章…',
+        clear_search: '清空',
+        load_more: '加载更多',
+        search_label: '搜索本站',
+        filters_label: '筛选',
+        zero_results: '没有找到「[SEARCH_TERM]」相关内容',
+        many_results: '找到 [COUNT] 条与「[SEARCH_TERM]」相关的结果',
+        one_result: '找到 [COUNT] 条与「[SEARCH_TERM]」相关的结果',
+        alt_search: '没有找到「[SEARCH_TERM]」。显示「[DIFFERENT_TERM]」的结果',
+        search_suggestion: '没有找到「[SEARCH_TERM]」。试试以下搜索：',
+        searching: '正在搜索「[SEARCH_TERM]」…',
+      },
+    })
+  })
+</script>
+
+<style is:global>
+  .search .pagefind-ui {
+    --pagefind-ui-scale: 0.95;
+    --pagefind-ui-primary: #fb923c;
+    --pagefind-ui-text: #d4d4d4;
+    --pagefind-ui-background: #0d1117;
+    --pagefind-ui-border: #404040;
+    --pagefind-ui-tag: #262626;
+    --pagefind-ui-border-width: 1px;
+    --pagefind-ui-border-radius: 8px;
+    --pagefind-ui-font: inherit;
+  }
+
+  .search .pagefind-ui__search-input {
+    background: #111827;
+  }
+
+  .search .pagefind-ui__result-link {
+    color: #f5f5f5;
+  }
+
+  .search .pagefind-ui__result-excerpt {
+    color: #a3a3a3;
+  }
+</style>
