@@ -1,12 +1,13 @@
 ---
 import { type CollectionEntry, render } from 'astro:content'
-import Layout from '@/layouts/Layout.astro'
-import Toc from '@/components/Toc.astro'
+import CodeCopy from '@/components/CodeCopy.astro'
+import ReadingProgress from '@/components/ReadingProgress.astro'
 import { SITE_URL } from '@/data/config'
+import { getCategoryPath } from '@/data/postCategories'
 import presentation from '@/data/presentation'
+import Layout from '@/layouts/Layout.astro'
 import '@/styles/post.css'
 import formatDate from '@/utils/formatDate'
-import getReadingTimeMinutes from '@/utils/readingTime'
 import {
   getAdjacentPosts,
   getPostPath,
@@ -14,8 +15,10 @@ import {
   getPostTags,
   getPostUpdatedAt,
   getPublishedPosts,
+  getRelatedPosts,
   getTagPath,
 } from '@/utils/posts'
+import getReadingTimeMinutes from '@/utils/readingTime'
 
 export async function getStaticPaths() {
   const publishedPosts = await getPublishedPosts()
@@ -32,10 +35,8 @@ type Props = {
 }
 
 const { post, posts } = Astro.props as Props
-const { Content, headings } = await render(post)
+const { Content } = await render(post)
 
-// 只显示前3级目录
-const renderHeadings = headings.filter((header) => header.depth <= 3)
 const tags = getPostTags(post)
 const postPath = getPostPath(post)
 const postUrl = new URL(postPath, SITE_URL).toString()
@@ -46,6 +47,13 @@ const updatedAt = updatedAtDate.toISOString()
 const showUpdatedAt = updatedAtDate.getTime() !== publishedAtDate.getTime()
 const readingTimeMinutes = getReadingTimeMinutes(post.body)
 const { newer, older } = getAdjacentPosts(posts, post)
+const relatedPosts = getRelatedPosts(posts, post, 3)
+const cover = post.data.cover
+const ogImage = cover
+  ? cover.startsWith('http')
+    ? cover
+    : new URL(cover.startsWith('/') ? cover.slice(1) : cover, SITE_URL).toString()
+  : undefined
 
 const jsonLd = {
   '@context': 'https://schema.org',
@@ -73,6 +81,7 @@ const jsonLd = {
   keywords: tags.length > 0 ? tags.join(', ') : post.data.category,
   inLanguage: 'zh-CN',
   timeRequired: `PT${readingTimeMinutes}M`,
+  ...(ogImage ? { image: [ogImage] } : {}),
 }
 ---
 
@@ -83,10 +92,13 @@ const jsonLd = {
     title: post.data.title,
     description: post.data.description,
     type: 'article',
+    image: ogImage,
+    alt: post.data.title,
   }}
   jsonLd={jsonLd}
 >
-  <main class='mx-auto flex w-full flex-col gap-6'>
+  <ReadingProgress />
+  <main class='mx-auto flex w-full max-w-3xl flex-col gap-6'>
     <div>
       <a
         href='/posts'
@@ -137,7 +149,7 @@ const jsonLd = {
             ·
           </span>
           <a
-            href={`/categories/${post.data.category}`}
+            href={getCategoryPath(post.data.category)}
             class='inline-flex items-center rounded-full border border-neutral-700 px-2.5 py-0.5 text-neutral-300 no-underline transition-colors hover:border-neutral-400 hover:text-neutral-100'
           >
             {post.data.category}
@@ -165,17 +177,39 @@ const jsonLd = {
       <p class='m-0 text-base leading-7 text-neutral-300 italic'>{post.data.description}</p>
     </header>
 
-    <div class='container'>
-      <article class='post flex-1'>
-        <Content />
-      </article>
-      <Toc headings={renderHeadings} />
-    </div>
+    <article class='post' data-pagefind-body>
+      <Content />
+    </article>
+
+    <CodeCopy />
+
+    {
+      relatedPosts.length > 0 && (
+        <section class='border-t border-neutral-800 pt-8' aria-labelledby='related-posts-title'>
+          <h2 id='related-posts-title' class='mb-4 text-lg text-neutral-100'>
+            相关文章
+          </h2>
+          <ul class='grid list-none gap-3 p-0 md:grid-cols-3'>
+            {relatedPosts.map((related) => (
+              <li class='m-0 p-0'>
+                <a
+                  href={getPostPath(related)}
+                  class='flex h-full flex-col gap-2 rounded-md border border-neutral-700 p-4 transition-colors hover:border-neutral-400'
+                >
+                  <span class='text-sm text-neutral-500'>{related.data.category}</span>
+                  <span class='text-neutral-100'>{related.data.title}</span>
+                </a>
+              </li>
+            ))}
+          </ul>
+        </section>
+      )
+    }
 
     {
       (newer || older) && (
         <nav
-          class='mt-8 grid gap-4 border-t border-neutral-800 pt-8 md:grid-cols-2'
+          class='grid gap-4 border-t border-neutral-800 pt-8 md:grid-cols-2'
           aria-label='相邻文章'
         >
           {older ? (
@@ -205,10 +239,3 @@ const jsonLd = {
     }
   </main>
 </Layout>
-
-<style>
-  .container {
-    display: flex;
-    gap: 64px;
-  }
-</style>

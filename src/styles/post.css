@@ -46,6 +46,7 @@
 }
 
 .post pre {
+  position: relative;
   padding: 1rem 2rem;
   border-radius: 0.375rem;
   border: 1px solid hsl(210deg 10% 30%);
@@ -56,6 +57,32 @@
 
 .post pre > code {
   background-color: transparent;
+}
+
+.post pre .code-copy-button {
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
+  border: 1px solid hsl(210deg 10% 35%);
+  border-radius: 0.375rem;
+  background: rgb(23 23 23 / 0.9);
+  color: #d4d4d4;
+  font-size: 0.75rem;
+  line-height: 1;
+  padding: 0.4rem 0.55rem;
+  cursor: pointer;
+  opacity: 0;
+  transition: opacity 0.15s ease;
+}
+
+.post pre:hover .code-copy-button,
+.post pre:focus-within .code-copy-button {
+  opacity: 1;
+}
+
+.post pre .code-copy-button:hover {
+  border-color: hsl(210deg 10% 55%);
+  color: #f5f5f5;
 }
 
 .post table {

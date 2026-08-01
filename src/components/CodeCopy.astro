@@ -1,0 +1,45 @@
+---
+---
+
+<script>
+  function enhanceCodeBlocks() {
+    const blocks = document.querySelectorAll<HTMLElement>('article.post pre')
+
+    blocks.forEach((pre) => {
+      if (pre.dataset.copyReady === 'true') {
+        return
+      }
+
+      pre.dataset.copyReady = 'true'
+      pre.classList.add('code-block')
+
+      const button = document.createElement('button')
+      button.type = 'button'
+      button.className = 'code-copy-button'
+      button.textContent = '复制'
+      button.setAttribute('aria-label', '复制代码')
+
+      button.addEventListener('click', async () => {
+        const code = pre.querySelector('code')
+        const text = code?.textContent ?? pre.textContent ?? ''
+
+        try {
+          await navigator.clipboard.writeText(text)
+          button.textContent = '已复制'
+          window.setTimeout(() => {
+            button.textContent = '复制'
+          }, 1600)
+        } catch {
+          button.textContent = '失败'
+          window.setTimeout(() => {
+            button.textContent = '复制'
+          }, 1600)
+        }
+      })
+
+      pre.appendChild(button)
+    })
+  }
+
+  enhanceCodeBlocks()
+</script>

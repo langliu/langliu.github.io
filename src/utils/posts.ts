@@ -72,6 +72,30 @@ export function getAdjacentPosts(
   }
 }
 
+export function getRelatedPosts(posts: PostEntry[], current: PostEntry, limit = 3): PostEntry[] {
+  const currentTags = new Set(getPostTags(current))
+
+  return posts
+    .filter((post) => post.id !== current.id)
+    .map((post) => {
+      const sharedTags = getPostTags(post).filter((tag) => currentTags.has(tag)).length
+      const sameCategory = post.data.category === current.data.category ? 1 : 0
+      const score = sharedTags * 2 + sameCategory
+
+      return { post, score }
+    })
+    .filter((item) => item.score > 0)
+    .sort((left, right) => {
+      if (right.score !== left.score) {
+        return right.score - left.score
+      }
+
+      return right.post.data.publishedAt.getTime() - left.post.data.publishedAt.getTime()
+    })
+    .slice(0, limit)
+    .map((item) => item.post)
+}
+
 export function getSortedCategoryStats(
   posts: PostEntry[],
 ): Array<[PostEntry['data']['category'], number]> {

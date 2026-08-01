@@ -9,6 +9,7 @@ const posts = defineCollection({
     title: z.string(),
     publishedAt: z.date(),
     updatedAt: z.date().optional(),
+    cover: z.string().optional(),
     description: z.string(),
     isPublish: z.boolean(),
     slug: z.string().regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/, {

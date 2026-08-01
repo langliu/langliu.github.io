@@ -2,6 +2,7 @@
 title: '从头开始实现一个水印组件'
 publishedAt: 2024-12-30
 updatedAt: 2026-07-31
+cover: /opengraph-image.webp
 description: '从零实现 React 水印组件：遮罩层、事件穿透与 Canvas 生成 base64 背景图。'
 slug: 'watermark'
 tags:
