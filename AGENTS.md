@@ -23,8 +23,9 @@ bun run check           # Astro 类型/内容校验（CI 中使用）
 # 代码检查与格式化
 bun run lint            # 使用 Biome 进行代码检查
 bun run lint:fix        # 使用 Biome 自动修复可修复问题
-bun run format:check    # 仅检查格式化
-bun run format          # 仅执行格式化
+bun run format:check    # 仅检查代码格式化
+bun run format          # 仅执行代码格式化
+bun run content:lint    # 校验 posts frontmatter
 ```
 
 **注意**: 本项目未配置测试运行器。
@@ -116,7 +117,7 @@ export default function formatDate(date: Date): string {
 文章使用 `src/content.config.ts` 中的 Zod 进行校验：
 
 - 必需字段: `title`, `publishedAt`, `description`, `isPublish`, `slug`, `category`
-- 可选字段: `tags`, `isDraft`（默认为 false）
+- 可选字段: `tags`, `updatedAt`, `cover`
 - 分类: `'CSS' | 'Vue' | 'React' | '其他' | 'HTML' | 'JavaScript' | 'TypeScript'`
 
 ### 样式规范
@@ -211,10 +212,18 @@ refactor: 优化日期格式化工具函数
 chore: 更新依赖版本
 ```
 
+## Git Hooks (Lefthook)
+
+- 使用 `lefthook` 管理 hooks（配置见 `lefthook.yml`）
+- `pre-commit`：对暂存的 JS/TS/JSON/CSS/Astro 文件运行 Biome 并写回
+- `pre-push`：运行 `bun run check` 与 `bun run lint`
+- 安装依赖后通过 `prepare` 自动执行 `lefthook install`
+- 本地个人覆盖可写 `lefthook-local.yml`（已 gitignore）
+
 ## 重要提醒
 
 - 推送前务必运行 `bun run check`
-- 提交前使用 Biome 格式化代码
+- 提交前使用 Biome 格式化代码（pre-commit 会自动处理常见文件）
 - 保持工具函数纯净且可测试
 - **不要主动提交（git commit）** - 除非用户明确要求
 - 用户界面内容使用中文，代码使用英文

@@ -1,21 +1,40 @@
 name: 部署 GitHub Pages
 
 on:
-  # Trigger the workflow every time you push to the `main` branch
-  # Using a different branch name? Replace `main` with your branch’s name
   push:
     branches: [main]
-  # Allows you to run this workflow manually from the Actions tab on GitHub.
   workflow_dispatch:
 
-# Allow this job to clone the repo and create a page deployment
 permissions:
   contents: read
   pages: write
   id-token: write
 
 jobs:
+  quality:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v5
+        with:
+          node-version-file: '.nvmrc'
+
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: 1.3.8
+
+      - run: bun install --frozen-lockfile
+      - run: bun run check
+      - run: bun run lint
+      - run: bun run format:check
+      - run: bun run content:lint
+
   build:
+    needs: quality
     runs-on: ubuntu-latest
     steps:
       - name: Checkout your repository using git
@@ -23,9 +42,8 @@ jobs:
       - name: Install, build, and upload your site output
         uses: withastro/action@v4
         with:
-          package-manager: bun # The Node package manager that should be used to install dependencies and build your site. Automatically detected based on your lockfile. (optional)
-          node-version: 24 # The specific version of Node that should be used to build your site. Defaults to 18. (optional)
-          # path: . # The root location of your Astro project inside the repository. (optional)
+          package-manager: bun
+          node-version: 24
 
   deploy:
     needs: build
