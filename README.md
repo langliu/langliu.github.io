@@ -18,7 +18,7 @@
 - `src/pages/`：页面路由
 - `src/components/`：通用组件
 - `public/`：静态资源
-- `.github/workflows/`：CI 检查与 GitHub Pages 部署流水线（已切换为 Bun）
+- `.github/workflows/`：CI 检查与 GitHub Pages 部署流水线（已切换为 pnpm）
 
 ### 文章 Frontmatter 约定（posts）
 
@@ -36,36 +36,36 @@
 
 > 说明：实际字段与默认值以 `src/content.config.ts` 为准；新增字段时也需要同步更新 schema。
 
-## 开发与构建（Bun）
+## 开发与构建（pnpm）
 
-本项目包管理已从 npm 迁移至 **Bun**，使用 `bun.lock` 作为锁文件。
+本项目使用 **pnpm** 管理依赖，使用 `pnpm-lock.yaml` 作为锁文件。
 
 > 所有命令均在项目根目录执行。
 
-| 命令                      | 作用                                        |
-| ------------------------- | ------------------------------------------- |
-| `bun install`             | 安装依赖                                    |
-| `bun run dev`             | 启动本地开发服务器（默认 `localhost:4321`） |
-| `bun run start`           | 启动开发服务器（等同 Astro dev）            |
-| `bun run build`           | 构建产物到 `./dist/`                        |
-| `bun run preview`         | 本地预览构建产物                            |
-| `bun run check`           | Astro 类型/内容检查                         |
-| `bun run lint`            | 使用 Biome 进行代码检查                     |
-| `bun run lint:fix`        | 使用 Biome 自动修复可修复问题               |
-| `bun run format:check`    | 仅检查格式                                  |
-| `bun run format`          | 仅执行格式化                                |
-| `bun run astro -- --help` | 查看 Astro CLI 帮助                         |
+| 命令                         | 作用                                        |
+| ---------------------------- | ------------------------------------------- |
+| `pnpm install`               | 安装依赖                                    |
+| `pnpm run dev`               | 启动本地开发服务器（默认 `localhost:4321`） |
+| `pnpm run start`             | 启动开发服务器（等同 Astro dev）            |
+| `pnpm run build`             | 构建产物到 `./dist/`                        |
+| `pnpm run preview`           | 本地预览构建产物                            |
+| `pnpm run check`             | Astro 类型/内容检查                         |
+| `pnpm run lint`              | 使用 Biome 进行代码检查                     |
+| `pnpm run lint:fix`          | 使用 Biome 自动修复可修复问题               |
+| `pnpm run format:check`      | 仅检查格式                                  |
+| `pnpm run format`            | 仅执行格式化                                |
+| `pnpm run astro -- --help`   | 查看 Astro CLI 帮助                         |
 
 ### 常见操作
 
 - 新增文章：在 `posts/` 下添加 `.md`/`.mdx` 文件，并补充 Frontmatter
-- 本地检查：`bun run check`
-- 本地构建验证：`bun run build && bun run preview`
+- 本地检查：`pnpm run check`
+- 本地构建验证：`pnpm run build && pnpm run preview`
 
 ## CI / 部署
 
-- `/.github/workflows/ci-check.yaml`：在 push / PR 时运行 `bun install --frozen-lockfile` + `bun run check` + `bun run lint` + `bun run build`
-- `/.github/workflows/deploy.yml`：使用 Astro 官方 GitHub Action 构建站点并部署到 GitHub Pages（已配置为使用 Bun）
+- `/.github/workflows/ci-check.yaml`：在 push / PR 时运行 `pnpm install --frozen-lockfile` + `pnpm run check` + `pnpm run lint` + `pnpm run build`
+- `/.github/workflows/deploy.yml`：使用 Astro 官方 GitHub Action 构建站点并部署到 GitHub Pages（已配置为使用 pnpm）
 
 ## License
 

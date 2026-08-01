@@ -5,14 +5,14 @@ pre-commit:
     - name: biome
       glob:
         - '*.{js,ts,mjs,cjs,jsx,tsx,json,jsonc,css,astro}'
-      run: bunx biome check --write --no-errors-on-unmatched --files-ignore-unknown=true {staged_files}
+      run: pnpm exec biome check --write --no-errors-on-unmatched --files-ignore-unknown=true {staged_files}
       stage_fixed: true
 
 pre-push:
   jobs:
     - name: check
-      run: bun run check
+      run: pnpm run check
     - name: lint
-      run: bun run lint
+      run: pnpm run lint
     - name: content-lint
-      run: bun run content:lint
+      run: pnpm run content:lint

@@ -3,29 +3,29 @@
 ## 项目概述
 
 - **项目类型**: Astro 5 个人博客（中文内容）
-- **包管理器**: Bun 1.3.8
+- **包管理器**: pnpm 11.18.0
 - **部署平台**: GitHub Pages
 
 ## 构建命令
 
 ```bash
 # 开发环境
-bun run dev              # 启动开发服务器（带 host 绑定）
-bun run start           # 等同于 astro dev
+pnpm run dev              # 启动开发服务器（带 host 绑定）
+pnpm run start            # 等同于 astro dev
 
 # 生产环境
-bun run build           # 构建静态站点到 ./dist/
-bun run preview         # 本地预览生产构建
+pnpm run build            # 构建静态站点到 ./dist/
+pnpm run preview          # 本地预览构建产物
 
 # 类型检查
-bun run check           # Astro 类型/内容校验（CI 中使用）
+pnpm run check            # Astro 类型/内容校验（CI 中使用）
 
 # 代码检查与格式化
-bun run lint            # 使用 Biome 进行代码检查
-bun run lint:fix        # 使用 Biome 自动修复可修复问题
-bun run format:check    # 仅检查代码格式化
-bun run format          # 仅执行代码格式化
-bun run content:lint    # 校验 posts frontmatter
+pnpm run lint             # 使用 Biome 进行代码检查
+pnpm run lint:fix        # 使用 Biome 自动修复可修复问题
+pnpm run format:check    # 仅检查代码格式化
+pnpm run format          # 仅执行代码格式化
+pnpm run content:lint    # 校验 posts frontmatter
 ```
 
 **注意**: 本项目未配置测试运行器。
@@ -58,7 +58,7 @@ bun run content:lint    # 校验 posts frontmatter
 - **单引号**（JSX 也使用单引号）
 - **2 空格缩进**
 - **打印宽度**: 100
-- 提交前运行 `bun run format`
+- 提交前运行 `pnpm run format`
 
 ### TypeScript
 
@@ -137,22 +137,22 @@ export default function formatDate(date: Date): string {
 
 ```bash
 # 检查代码
-bun run lint
+pnpm run lint
 
 # 自动修复
-bun run lint:fix
+pnpm run lint:fix
 
 # 仅格式化
-bun run format
+pnpm run format
 ```
 
 Biome 配置文件位于 `biome.json`。
 
 ## CI/CD 说明
 
-- CI 在每次 PR/push 时运行 `bun run check`
+- CI 在每次 PR/push 时运行 `pnpm run check`
 - 推送到 `main` 分支时自动部署到 GitHub Pages
-- 使用 Bun 并锁定版本: `bun install --frozen-lockfile`
+- 使用 pnpm 并锁定版本: `pnpm install --frozen-lockfile`
 - Node 版本: 24（见 `.nvmrc`）
 
 ## Git Commit 规范
@@ -216,13 +216,13 @@ chore: 更新依赖版本
 
 - 使用 `lefthook` 管理 hooks（配置见 `lefthook.yml`）
 - `pre-commit`：对暂存的 JS/TS/JSON/CSS/Astro 文件运行 Biome 并写回
-- `pre-push`：运行 `bun run check` 与 `bun run lint`
+- `pre-push`：运行 `pnpm run check` 与 `pnpm run lint`
 - 安装依赖后通过 `prepare` 自动执行 `lefthook install`
 - 本地个人覆盖可写 `lefthook-local.yml`（已 gitignore）
 
 ## 重要提醒
 
-- 推送前务必运行 `bun run check`
+- 推送前务必运行 `pnpm run check`
 - 提交前使用 Biome 格式化代码（pre-commit 会自动处理常见文件）
 - 保持工具函数纯净且可测试
 - **不要主动提交（git commit）** - 除非用户明确要求

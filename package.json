@@ -14,7 +14,7 @@
     "format": "biome check . --write --linter-enabled=false --assist-enabled=false",
     "format:check": "biome check . --linter-enabled=false --assist-enabled=false",
     "prepare": "lefthook install",
-    "content:lint": "bun scripts/content-lint.mjs",
+    "content:lint": "node scripts/content-lint.mjs",
     "pagefind": "pagefind --site dist"
   },
   "dependencies": {
@@ -34,11 +34,5 @@
     "pagefind": "^1.5.2",
     "typescript": "^6.0.3"
   },
-  "packageManager": "bun@1.3.8",
-  "overrides": {
-    "lodash": "^4.17.21"
-  },
-  "trustedDependencies": [
-    "lefthook"
-  ]
+  "packageManager": "pnpm@11.18.0"
 }

@@ -1,6 +1,6 @@
 {
   "cSpell.words": ["astro", "astrojs", "pnpm", "shiki"],
-  "npm.packageManager": "bun",
+  "npm.packageManager": "pnpm",
   "editor.defaultFormatter": "biomejs.biome",
   "editor.codeActionsOnSave": {
     "source.fixAll.biome": "explicit",
