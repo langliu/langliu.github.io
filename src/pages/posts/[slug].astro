@@ -49,11 +49,39 @@ const readingTimeMinutes = getReadingTimeMinutes(post.body)
 const { newer, older } = getAdjacentPosts(posts, post)
 const relatedPosts = getRelatedPosts(posts, post, 3)
 const cover = post.data.cover
-const ogImage = cover
-  ? cover.startsWith('http')
-    ? cover
-    : new URL(cover.startsWith('/') ? cover.slice(1) : cover, SITE_URL).toString()
-  : undefined
+const postImageModules = import.meta.glob<{ default: { src: string } }>(
+  '../../assets/posts/*.{webp,png,jpg,jpeg,avif}',
+  { eager: true },
+)
+
+function resolveCoverUrl(coverValue: string | undefined): string | undefined {
+  if (!coverValue) {
+    return undefined
+  }
+
+  if (coverValue.startsWith('http://') || coverValue.startsWith('https://')) {
+    return coverValue
+  }
+
+  if (coverValue.startsWith('/')) {
+    return new URL(coverValue.slice(1), SITE_URL).toString()
+  }
+
+  const fileName = coverValue.split('/').pop()
+  if (!fileName) {
+    return undefined
+  }
+
+  const matched = Object.entries(postImageModules).find(([path]) => path.endsWith(`/${fileName}`))
+  if (!matched) {
+    return undefined
+  }
+
+  const assetSrc = matched[1].default.src
+  return new URL(assetSrc.replace(/^\//, ''), SITE_URL).toString()
+}
+
+const ogImage = resolveCoverUrl(cover)
 
 const jsonLd = {
   '@context': 'https://schema.org',

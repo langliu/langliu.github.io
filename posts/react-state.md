@@ -1,6 +1,7 @@
 ---
 title: React状态管理深度解析：从 Context 到 Zustand 实现
 publishedAt: 2025-03-02
+cover: assets/posts/react-provider.webp
 category: 'React'
 tags:
   - 状态管理

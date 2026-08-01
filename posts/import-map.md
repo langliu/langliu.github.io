@@ -2,6 +2,7 @@
 title: '在浏览器中通过 import maps 使用 ES 模块'
 description: '在浏览器中通过 import maps 使用 ES 模块'
 publishedAt: 2022-12-22
+cover: assets/posts/can-i-use-import-maps.webp
 tags:
   - JavaScript
   - HTML

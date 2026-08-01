@@ -7,6 +7,7 @@ tags:
   - JavaScript
 isPublish: true
 publishedAt: 2024-04-02
+cover: assets/posts/wechat-mini-program.webp
 category: 'JavaScript'
 ---
 

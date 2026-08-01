@@ -28,4 +28,5 @@ jobs:
       - run: bun run check
       - run: bun run lint
       - run: bun run format:check
+      - run: bun run content:lint
       - run: bun run build

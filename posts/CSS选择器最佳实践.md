@@ -1,6 +1,7 @@
 ---
 title: CSS选择器最佳实践：编写高效、可维护的样式代码
 publishedAt: 2025-08-28
+updatedAt: 2026-02-12
 category: 'CSS'
 tags:
   - CSS

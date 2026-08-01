@@ -4,6 +4,7 @@ tags:
   - 软件工程
   - 软件设计原则
 publishedAt: 2025-02-24
+updatedAt: 2025-08-15
 description: '软件设计原则是程序员编写可维护、可扩展代码的指南针。本文将通过通俗易懂的JavaScript示例，讲解7个最实用的设计原则。'
 isPublish: true
 slug: 'software-design-principle'

@@ -2,6 +2,7 @@
 title: 'Go WebAssembly 入门'
 description: 'Go WebAssembly 入门'
 publishedAt: 2022-11-03
+cover: assets/posts/go-webassembly.webp
 tags:
   - Golang
   - WebAssembly

@@ -1,6 +1,7 @@
 ---
 title: Cloudflare Workers 国内访问
 publishedAt: 2025-08-17
+cover: assets/posts/cloudflare-dns-setting.webp
 category: 其他
 tags:
   - Cloudflare

@@ -1,6 +1,7 @@
 ---
 title: '现代 CSS Reset 规则'
 publishedAt: 2025-09-20
+updatedAt: 2026-02-12
 category: 'CSS'
 tags:
   - CSS

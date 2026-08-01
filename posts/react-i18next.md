@@ -1,6 +1,7 @@
 ---
 title: 'React i18next 配置'
 publishedAt: 2024-12-10
+cover: assets/posts/i18n-json-translate.webp
 description: 'React i18next 配置'
 slug: 'react-i18next'
 tags:

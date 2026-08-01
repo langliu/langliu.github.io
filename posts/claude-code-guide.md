@@ -2,6 +2,7 @@
 title: 'Claude Code 入门指南'
 description: 'Claude Code 是由 Anthropic 推出的通用的命令行代理（Agent），本文介绍了它的核心功能、安装方法以及高效使用技巧。'
 publishedAt: 2026-01-02
+updatedAt: 2026-02-12
 tags:
   - AI
   - Claude

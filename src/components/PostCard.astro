@@ -1,5 +1,6 @@
 ---
 import ArrowIcon from '@/components/shared/ArrowIcon.astro'
+import { getCategoryPath } from '@/data/postCategories'
 import formatDate from '@/utils/formatDate'
 import { getPostPath, type PostEntry } from '@/utils/posts'
 import getReadingTimeMinutes from '@/utils/readingTime'
@@ -10,26 +11,38 @@ type Props = {
 
 const { post } = Astro.props as Props
 const readingTimeMinutes = getReadingTimeMinutes(post.body)
+const postPath = getPostPath(post)
+const categoryPath = getCategoryPath(post.data.category)
 ---
 
-<a
-  class='group flex flex-1 cursor-pointer flex-col gap-3 rounded-md border border-neutral-700 p-4 transition-all duration-300 hover:-translate-y-2 hover:border-neutral-400'
-  href={getPostPath(post)}
-  aria-label={`阅读文章：${post.data.title}`}
+<article
+  class='group flex flex-1 flex-col gap-3 rounded-md border border-neutral-700 p-4 transition-all duration-300 hover:-translate-y-2 hover:border-neutral-400'
 >
   <div class='flex w-full flex-col justify-between gap-2 md:flex-row md:items-start'>
-    <p class='text-neutral-100'>{post.data.title}</p>
+    <a href={postPath} class='text-neutral-100 transition-colors hover:text-white'>
+      {post.data.title}
+    </a>
     <div class='flex shrink-0 flex-row items-center gap-3 text-sm text-neutral-400'>
       <time datetime={post.data.publishedAt.toISOString()}>{formatDate(post.data.publishedAt)}</time>
-      <ArrowIcon />
+      <a href={postPath} aria-label={`阅读文章：${post.data.title}`}>
+        <ArrowIcon />
+      </a>
     </div>
   </div>
 
   <div class='flex flex-row flex-wrap items-center gap-x-2 gap-y-1 text-xs text-neutral-500'>
-    <span>{post.data.category}</span>
+    <a
+      href={categoryPath}
+      class='transition-colors hover:text-neutral-300'
+      aria-label={`查看分类 ${post.data.category}`}
+    >
+      {post.data.category}
+    </a>
     <span aria-hidden='true'>·</span>
     <span>{`约 ${readingTimeMinutes} 分钟`}</span>
   </div>
 
-  <p class='line-clamp-2 text-sm text-neutral-400'>{post.data.description}</p>
-</a>
+  <a href={postPath} class='line-clamp-2 text-sm text-neutral-400 transition-colors hover:text-neutral-300'>
+    {post.data.description}
+  </a>
+</article>

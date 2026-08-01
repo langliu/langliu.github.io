@@ -2,6 +2,7 @@
 title: 'LangChain OutputParser：把模型输出变成程序可用的数据'
 description: '本文介绍 LangChain 中 OutputParser 的作用、常见类型、与 LCEL 的组合方式，以及什么时候该用解析器、什么时候该用模型原生结构化输出。'
 publishedAt: 2026-03-11
+updatedAt: 2026-03-13
 tags:
   - AI
   - LangChain
