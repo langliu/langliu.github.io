@@ -1,13 +1,14 @@
 ---
-import Layout from '@/layouts/Layout.astro'
 import ArrowIcon from '@/components/shared/ArrowIcon.astro'
+import { getCategoryPath } from '@/data/postCategories'
+import Layout from '@/layouts/Layout.astro'
 import { getPublishedPosts, getSortedCategoryStats } from '@/utils/posts'
 
 const posts = await getPublishedPosts()
 const categories = getSortedCategoryStats(posts)
 ---
 
-<Layout title='研之有物 - 文章分类'>
+<Layout title='研之有物 - 文章分类' description='按分类浏览研之有物的全部文章'>
   <main class='flex flex-col gap-12'>
     <div class='flex flex-col gap-4'>
       <h1 class='text-2xl text-neutral-100'>文章分类</h1>
@@ -18,11 +19,11 @@ const categories = getSortedCategoryStats(posts)
       {
         categories.map(([category, count]) => (
           <a
-            href={`/categories/${category}`}
+            href={getCategoryPath(category)}
             class='group flex flex-col gap-2 rounded-md border border-neutral-700 p-6 transition-all duration-300 hover:-translate-y-1 hover:border-neutral-400'
             aria-label={`查看 ${category} 分类的 ${count} 篇文章`}
           >
-            <div class='flex items-center justify-between'>
+            <div class='flex items-center justify-between gap-3'>
               <h2 class='text-lg text-neutral-100 group-hover:text-white'>{category}</h2>
               <span class='rounded-full bg-neutral-800 px-3 py-1 text-sm text-neutral-400'>
                 {count} 篇

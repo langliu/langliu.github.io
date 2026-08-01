@@ -1,62 +1,58 @@
 ---
-import removeTrailingSlash from '@/utils/removeTrailingSlash'
 import presentation from '@/data/presentation'
+import removeTrailingSlash from '@/utils/removeTrailingSlash'
 
 const pathname = removeTrailingSlash(Astro.url.pathname)
+
+const navItems = [
+  { href: '/', label: '首页', active: pathname === '/' },
+  { href: '/posts', label: '文章', active: pathname === '/posts' },
+  {
+    href: '/categories',
+    label: '分类',
+    active: pathname === '/categories' || pathname.startsWith('/categories/'),
+  },
+  {
+    href: '/tags',
+    label: '标签',
+    active: pathname === '/tags' || pathname.startsWith('/tags/'),
+  },
+  {
+    href: '/search',
+    label: '搜索',
+    active: pathname === '/search',
+  },
+] as const
 ---
 
-<header class='z-40 flex w-full flex-col gap-2 md:flex-row md:justify-between'>
+<header class='z-40 flex w-full flex-col gap-3 sm:flex-row sm:items-center sm:justify-between'>
   <a href={`mailto:${presentation.mail}`} class='hover:text-neutral-100'>{presentation.mail}</a>
 
-  <nav role='navigation'>
-    <ul role='list' class='flex flex-row gap-2'>
-      <li>
-        <a
-          href='/'
-          class:list={{
-            ['hover:text-neutral-100']: true,
-            ['text-neutral-100']: pathname === '/',
-          }}
-          aria-current={pathname === '/' ? 'page' : undefined}>首页</a
-        >
-      </li>
-      <li>/</li>
-      <li>
-        <a
-          href='/posts'
-          class:list={{
-            ['hover:text-neutral-100']: true,
-            ['text-neutral-100']: pathname === '/posts',
-          }}
-          aria-current={pathname === '/posts' ? 'page' : undefined}>文章</a
-        >
-      </li>
-      <li>/</li>
-      <li>
-        <a
-          href='/categories'
-          class:list={{
-            ['hover:text-neutral-100']: true,
-            ['text-neutral-100']: pathname === '/categories' || pathname.startsWith('/categories/'),
-          }}
-          aria-current={pathname === '/categories' || pathname.startsWith('/categories/')
-            ? 'page'
-            : undefined}>分类</a
-        >
-      </li>
-      <li>/</li>
-      <li>
-        <a
-          href='/tags'
-          class:list={{
-            ['hover:text-neutral-100']: true,
-            ['text-neutral-100']: pathname === '/tags' || pathname.startsWith('/tags/'),
-          }}
-          aria-current={pathname === '/tags' || pathname.startsWith('/tags/')
-            ? 'page'
-            : undefined}>标签</a
-        >
-      </li>
+  <nav aria-label='主导航'>
+    <ul role='list' class='flex flex-row flex-wrap items-center gap-x-3 gap-y-2 text-sm sm:text-base'>
+      {
+        navItems.map((item, index) => (
+          <>
+            {index > 0 && (
+              <li class='text-neutral-600' aria-hidden='true'>
+                /
+              </li>
+            )}
+            <li>
+              <a
+                href={item.href}
+                class:list={{
+                  'hover:text-neutral-100': true,
+                  'text-neutral-100': item.active,
+                }}
+                aria-current={item.active ? 'page' : undefined}
+              >
+                {item.label}
+              </a>
+            </li>
+          </>
+        ))
+      }
     </ul>
   </nav>
 </header>

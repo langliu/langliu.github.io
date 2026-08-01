@@ -1,5 +1,6 @@
 export type Project = {
   title: string
+  description: string
   techs: string[]
   link: string
   isComingSoon?: boolean
@@ -8,20 +9,16 @@ export type Project = {
 const projects: Project[] = [
   {
     title: 'svelte-blog-template',
-    techs: ['Svelte (SvelteKit)', 'TypeScript'],
+    description: '基于 SvelteKit 的博客模板，开箱即用的内容结构与基础样式。',
+    techs: ['SvelteKit', 'TypeScript'],
     link: 'https://github.com/langliu/svelte-blog-template',
   },
   {
     title: 'svelte-devui',
-    techs: ['SvelteJS', 'TypeScript'],
+    description: '面向 Svelte 的组件实践项目，探索可复用 UI 与类型友好 API。',
+    techs: ['Svelte', 'TypeScript'],
     link: 'https://github.com/langliu/svelte-devui',
   },
-  // {
-  //   title: 'Portfolio / Template',
-  //   techs: ['Astro'],
-  //   link: '/',
-  //   isComingSoon: true,
-  // },
 ]
 
 export default projects
