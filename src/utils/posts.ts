@@ -8,7 +8,7 @@ export async function getPublishedPosts(): Promise<PostEntry[]> {
   publishedPostsPromise ??= getCollection('posts').then((posts) => {
     assertUniquePostSlugs(posts)
     return posts
-      .filter((post) => post.data.isPublish && !post.data.isDraft)
+      .filter((post) => post.data.isPublish)
       .sort((first, second) => second.data.publishedAt.getTime() - first.data.publishedAt.getTime())
   })
 

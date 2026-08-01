@@ -7,7 +7,6 @@ tags:
   - 嵌套
   - Sass
   - Less
-  - 原生CSS
   - 最佳实践
 slug: css-nesting-complete-guide
 isPublish: true

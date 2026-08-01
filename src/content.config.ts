@@ -1,6 +1,6 @@
 import { defineCollection } from 'astro:content'
-import { z } from 'astro/zod'
 import { glob } from 'astro/loaders'
+import { z } from 'astro/zod'
 import { POST_CATEGORIES } from './data/postCategories'
 
 const posts = defineCollection({
@@ -11,7 +11,6 @@ const posts = defineCollection({
     updatedAt: z.date().optional(),
     description: z.string(),
     isPublish: z.boolean(),
-    isDraft: z.boolean().default(false),
     slug: z.string().regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/, {
       message: 'slug 仅支持小写字母、数字和中划线（kebab-case）',
     }),
