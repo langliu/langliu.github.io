@@ -1,5 +1,6 @@
 ---
-import presentation from '@/data/presentation'
+import { Image } from 'astro:assets'
+import logoMark from '@/assets/brand/logo-mark.png'
 import removeTrailingSlash from '@/utils/removeTrailingSlash'
 
 const pathname = removeTrailingSlash(Astro.url.pathname)
@@ -26,7 +27,23 @@ const navItems = [
 ---
 
 <header class='z-40 flex w-full flex-col gap-3 sm:flex-row sm:items-center sm:justify-between'>
-  <a href={`mailto:${presentation.mail}`} class='hover:text-neutral-100'>{presentation.mail}</a>
+  <a
+    href='/'
+    class='group flex items-center gap-2 text-neutral-300 transition-colors hover:text-neutral-100'
+    aria-label='研之有物 首页'
+  >
+    <Image
+      src={logoMark}
+      alt=''
+      width={28}
+      height={28}
+      class='h-7 w-7 rounded-md'
+      densities={[1, 2]}
+      loading='eager'
+      fetchpriority='high'
+    />
+    <span class='text-sm font-medium tracking-wide sm:text-base'>研之有物</span>
+  </a>
 
   <nav aria-label='主导航'>
     <ul role='list' class='flex flex-row flex-wrap items-center gap-x-3 gap-y-2 text-sm sm:text-base'>
