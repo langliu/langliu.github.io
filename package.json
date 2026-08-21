@@ -18,19 +18,19 @@
     "pagefind": "pagefind --site dist"
   },
   "dependencies": {
-    "@astrojs/mdx": "^7.0.5",
+    "@astrojs/mdx": "^7.0.7",
     "@astrojs/rss": "^4.0.19",
     "@astrojs/sitemap": "^3.7.3",
     "@tailwindcss/vite": "^4.3.3",
     "@vercel/analytics": "^2.0.1",
-    "astro": "^7.1.6",
+    "astro": "^7.2.4",
     "astro-robots-txt": "^1.0.0",
     "astro-seo": "^1.1.0",
     "sharp": "^0.35.3",
     "tailwindcss": "^4.3.3"
   },
   "devDependencies": {
-    "@biomejs/biome": "^2.5.6",
+    "@biomejs/biome": "^2.5.9",
     "lefthook": "^2.1.10",
     "pagefind": "^1.5.2",
     "typescript": "^6.0.3"
