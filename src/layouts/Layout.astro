@@ -16,7 +16,7 @@ const shouldEnableGtm = import.meta.env.PROD && GTM_ID.length > 0
 <html lang='zh-CN'>
   <SEOTags {...headTags} />
   <body
-    class='relative mx-auto flex min-h-screen max-w-300 flex-col gap-9 bg-dot bg-[#0d1117] px-4 py-4 text-base/7 text-neutral-300 md:gap-8 md:px-10 md:py-8'
+    class='relative isolate flex min-h-screen flex-col bg-dot bg-[#0d1117] text-base/7 text-neutral-300'
   >
     {
       shouldEnableGtm && (
@@ -33,17 +33,21 @@ const shouldEnableGtm = import.meta.env.PROD && GTM_ID.length > 0
         </>
       )
     }
-    <a
-      href='#main-content'
-      class='sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-50 focus:rounded-md focus:bg-neutral-100 focus:px-4 focus:py-2 focus:text-neutral-900 focus:outline-none'
+    <div
+      class='relative mx-auto flex w-full max-w-300 flex-1 flex-col gap-9 px-4 py-4 md:gap-8 md:px-10 md:py-8'
     >
-      跳到正文
-    </a>
-    <Header />
-    <div id='main-content' class='flex flex-1 flex-col gap-9 md:gap-8' tabindex='-1'>
-      <slot />
+      <a
+        href='#main-content'
+        class='sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-50 focus:rounded-md focus:bg-neutral-100 focus:px-4 focus:py-2 focus:text-neutral-900 focus:outline-none'
+      >
+        跳到正文
+      </a>
+      <Header />
+      <div id='main-content' class='flex flex-1 flex-col gap-9 md:gap-8' tabindex='-1'>
+        <slot />
+      </div>
+      <Footer />
     </div>
-    <Footer />
     <script>
       import { inject } from '@vercel/analytics'
 
