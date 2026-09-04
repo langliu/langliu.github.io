@@ -10,10 +10,6 @@ export default defineConfig({
   compressHTML: true,
   integrations: [sitemap(), robotsTxt(), mdx()],
   site: SITE_URL,
-  redirects: {
-    '/posts/windows-use-7zip-bitch-zip': '/posts/windows-use-7zip-batch-zip',
-    '/categories/其他': '/categories/others',
-  },
   markdown: {
     syntaxHighlight: 'shiki',
     shikiConfig: {
