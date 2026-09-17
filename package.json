@@ -35,12 +35,8 @@
     "pagefind": "^1.5.2",
     "typescript": "^6.0.3"
   },
-  "packageManager": "pnpm@12.3.4",
-  "devEngines": {
-    "runtime": {
-      "name": "node",
-      "version": "24.18.0",
-      "onFail": "download"
-    }
-  }
+  "engines": {
+    "node": ">=22.21.0"
+  },
+  "packageManager": "pnpm@12.4.2"
 }
