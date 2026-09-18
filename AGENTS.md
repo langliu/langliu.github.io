@@ -3,7 +3,7 @@
 ## 项目概况
 
 - Astro 中文个人博客，静态部署到 GitHub Pages
-- 包管理器：pnpm 12.1.0；Node：24.18.0（由 `package.json` 中的 `devEngines.runtime` 管理）
+- 包管理器：以 `package.json` 的 `packageManager` 为准；Node 由开发者自行管理，需满足项目依赖的版本要求
 - 文章目录：`/posts/`，格式为 `.md` 或 `.mdx`
 - 用户界面和文章内容使用中文，代码使用英文
 - 不主动执行 `git commit`
