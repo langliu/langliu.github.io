@@ -5,14 +5,21 @@ export type PostEntry = CollectionEntry<'posts'>
 let publishedPostsPromise: Promise<PostEntry[]> | undefined
 
 export async function getPublishedPosts(): Promise<PostEntry[]> {
-  publishedPostsPromise ??= getCollection('posts').then((posts) => {
+  if (import.meta.env.DEV) {
+    return loadPublishedPosts()
+  }
+
+  publishedPostsPromise ??= loadPublishedPosts()
+  return publishedPostsPromise
+}
+
+async function loadPublishedPosts(): Promise<PostEntry[]> {
+  return getCollection('posts').then((posts) => {
     assertUniquePostSlugs(posts)
     return posts
       .filter((post) => post.data.isPublish)
       .sort((first, second) => second.data.publishedAt.getTime() - first.data.publishedAt.getTime())
   })
-
-  return publishedPostsPromise
 }
 
 export function getPostSlug(post: PostEntry): string {
@@ -24,7 +31,7 @@ export function getPostPath(post: PostEntry): string {
 }
 
 export function getPostTags(post: PostEntry): string[] {
-  return post.data.tags?.filter((tag): tag is string => Boolean(tag?.trim())) ?? []
+  return [...new Set(post.data.tags?.map((tag) => tag.trim()).filter(Boolean) ?? [])]
 }
 
 export function getTagPath(tag: string): string {

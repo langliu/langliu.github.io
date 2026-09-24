@@ -25,3 +25,4 @@ jobs:
       - run: pnpm run format:check
       - run: pnpm run content:lint
       - run: pnpm run build
+      - run: pnpm run test:smoke

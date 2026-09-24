@@ -48,11 +48,6 @@ const shouldEnableGtm = import.meta.env.PROD && GTM_ID.length > 0
       </div>
       <Footer />
     </div>
-    <script>
-      import { inject } from '@vercel/analytics'
-
-      inject({ framework: 'astro' })
-    </script>
   </body>
 </html>
 

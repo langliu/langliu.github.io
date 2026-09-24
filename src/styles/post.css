@@ -1,5 +1,107 @@
 @reference 'tailwindcss';
 
+.post-layout,
+.post {
+  min-width: 0;
+}
+
+.post {
+  overflow-wrap: anywhere;
+}
+
+.post :is(h2, h3, h4, h5, h6)[id] {
+  scroll-margin-top: 6rem;
+}
+
+.post pre,
+.post table {
+  overflow-x: auto;
+}
+
+.post table {
+  display: block;
+}
+
+.post-toc {
+  min-width: 0;
+  margin-bottom: 1.5rem;
+  color: #a3a3a3;
+  font-size: 0.875rem;
+  overflow-wrap: anywhere;
+}
+
+.post-toc summary,
+.post-toc__title {
+  padding-block: 0.75rem;
+  color: #f5f5f5;
+  font-weight: 600;
+}
+
+.post-toc summary {
+  cursor: pointer;
+}
+
+.post-toc ul {
+  max-height: 60vh;
+  overflow-y: auto;
+  list-style: none;
+  padding: 0.25rem;
+  margin: 0;
+}
+
+.post-toc a {
+  display: block;
+  padding: 0.375rem 0.25rem;
+}
+
+.post-toc a:hover,
+.post-toc a:focus-visible {
+  color: #f5f5f5;
+  text-decoration: underline;
+}
+
+.post-toc__nested {
+  padding-left: 1rem;
+}
+
+.post-toc__desktop {
+  display: none;
+}
+
+@media (min-width: 64rem) {
+  .post-layout--with-toc {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 15rem;
+    align-items: start;
+    gap: 2rem;
+  }
+
+  .post-layout--with-toc > .post {
+    grid-column: 1;
+    grid-row: 1;
+  }
+
+  .post-toc {
+    grid-column: 2;
+    grid-row: 1;
+    position: sticky;
+    top: 6rem;
+    margin-bottom: 0;
+  }
+
+  .post-toc__mobile {
+    display: none;
+  }
+
+  .post-toc__desktop {
+    display: block;
+  }
+
+  .post-toc ul {
+    max-height: calc(100dvh - 11rem);
+  }
+}
+
 .post p {
   line-height: 1.75rem;
   margin-bottom: 1.25rem;

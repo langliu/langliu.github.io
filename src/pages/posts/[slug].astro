@@ -2,6 +2,7 @@
 import { type CollectionEntry, render } from 'astro:content'
 import CodeCopy from '@/components/CodeCopy.astro'
 import ReadingProgress from '@/components/ReadingProgress.astro'
+import TableOfContents from '@/components/TableOfContents.astro'
 import { SITE_URL } from '@/data/config'
 import { getCategoryPath } from '@/data/postCategories'
 import presentation from '@/data/presentation'
@@ -35,7 +36,9 @@ type Props = {
 }
 
 const { post, posts } = Astro.props as Props
-const { Content } = await render(post)
+const { Content, headings } = await render(post)
+const tocHeadings = headings.filter(({ depth }) => depth === 2 || depth === 3)
+const showToc = tocHeadings.length >= 3
 
 const tags = getPostTags(post)
 const postPath = getPostPath(post)
@@ -150,7 +153,11 @@ const jsonLd = {
     </div>
 
     <header class='flex flex-col gap-4'>
-      <h1 class='text-3xl font-bold text-neutral-100 md:text-4xl'>{post.data.title}</h1>
+      <h1
+        class='text-3xl font-bold text-neutral-100 md:text-4xl'
+        data-pagefind-body
+        data-pagefind-meta='title'
+      >{post.data.title}</h1>
 
       <div class='flex flex-col gap-3 text-sm text-neutral-400'>
         <div class='flex flex-row flex-wrap items-center gap-x-2 gap-y-2'>
@@ -178,6 +185,7 @@ const jsonLd = {
           </span>
           <a
             href={getCategoryPath(post.data.category)}
+            data-pagefind-filter='分类'
             class='inline-flex items-center rounded-full border border-neutral-700 px-2.5 py-0.5 text-neutral-300 no-underline transition-colors hover:border-neutral-400 hover:text-neutral-100'
           >
             {post.data.category}
@@ -191,6 +199,7 @@ const jsonLd = {
                 <li class='m-0 list-none p-0'>
                   <a
                     href={getTagPath(tag)}
+                    data-pagefind-filter='标签'
                     class='inline-flex items-center rounded-md bg-neutral-800 px-2.5 py-1 text-xs text-neutral-300 no-underline transition-colors hover:bg-neutral-700 hover:text-neutral-100'
                   >
                     {tag}
@@ -202,12 +211,19 @@ const jsonLd = {
         }
       </div>
 
-      <p class='m-0 text-base leading-7 text-neutral-300 italic'>{post.data.description}</p>
+      <p
+        class='m-0 text-base leading-7 text-neutral-300 italic'
+        data-pagefind-body
+        data-pagefind-weight='2'
+      >{post.data.description}</p>
     </header>
 
-    <article class='post' data-pagefind-body>
-      <Content />
-    </article>
+    <div class:list={['post-layout', { 'post-layout--with-toc': showToc }]}>
+      {showToc && <TableOfContents headings={tocHeadings} />}
+      <article class='post' data-pagefind-body>
+        <Content />
+      </article>
+    </div>
 
     <CodeCopy />
 

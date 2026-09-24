@@ -14,6 +14,7 @@
     "format": "biome check . --write --linter-enabled=false --assist-enabled=false",
     "format:check": "biome check . --linter-enabled=false --assist-enabled=false",
     "content:lint": "node scripts/content-lint.mjs",
+    "test:smoke": "node scripts/smoke-test.mjs",
     "pagefind": "pagefind --site dist"
   },
   "dependencies": {
@@ -21,8 +22,7 @@
     "@astrojs/rss": "^4.0.19",
     "@astrojs/sitemap": "^3.7.4",
     "@tailwindcss/vite": "^4.3.3",
-    "@vercel/analytics": "^2.0.1",
-    "astro": "^7.3.2",
+    "astro": "^7.3.3",
     "astro-robots-txt": "^1.0.0",
     "astro-seo": "^1.2.0",
     "sharp": "^0.35.4",

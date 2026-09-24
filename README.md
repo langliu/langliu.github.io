@@ -9,7 +9,8 @@
 - TypeScript
 - Biome
 - Tailwind CSS
-- Sentry（可选，用于错误监控与构建相关集成）
+- Pagefind（构建时生成的本地中文搜索索引）
+- Google Tag Manager（统计入口；当前没有 Sentry 集成）
 
 ## 内容与目录结构
 
@@ -48,6 +49,7 @@
 | `pnpm run dev`               | 启动本地开发服务器（默认 `localhost:4321`） |
 | `pnpm run start`             | 启动开发服务器（等同 Astro dev）            |
 | `pnpm run build`             | 构建产物到 `./dist/`                        |
+| `pnpm run test:smoke`        | 验证构建产物与 Pagefind 搜索索引（先 build） |
 | `pnpm run preview`           | 本地预览构建产物                            |
 | `pnpm run check`             | Astro 类型/内容检查                         |
 | `pnpm run lint`              | 使用 Biome 进行代码检查                     |
@@ -60,12 +62,41 @@
 
 - 新增文章：在 `posts/` 下添加 `.md`/`.mdx` 文件，并补充 Frontmatter
 - 本地检查：`pnpm run check`
-- 本地构建验证：`pnpm run build && pnpm run preview`
+- 本地构建验证：`pnpm run build && pnpm run test:smoke`
+- 浏览器预览：`pnpm run preview`
+
+### 构建后冒烟测试
+
+`test:smoke` 对应 `node scripts/smoke-test.mjs`，使用 Node 内置测试与断言，无新增依赖。
+Node 版本遵循 `package.json` 的 `engines`，pnpm 版本遵循 `packageManager`。
+先执行 `pnpm install --frozen-lockfile`，再运行构建与测试；不要使用过期的 `dist/`。
+
+覆盖范围：
+
+- 所有已发布文章的输出路由、模板文章标题与标题索引标记；草稿不生成文章页面。
+- 长文章的目录显示阈值，以及桌面和移动目录的标题锚点。
+- RSS 文章集合、标题和发布时间，sitemap 文章集合及输出文件；均排除草稿。
+- 生成页面导航链接，以及文章正文指向 `/posts`、`/tags`、`/categories` 的站内链接。
+- 真实 Pagefind 索引中的文章集合、标题、分类过滤，以及正文未出现的中文标题词检索。
+
+边界与限制：
+
+- 这是静态产物测试，不启动浏览器，不覆盖搜索 UI、客户端交互、视觉样式或线上部署。
+- Pagefind 包的 Node API 仅用于构建索引；测试直接导入 `dist/pagefind/pagefind.js`，
+  用仅允许读取该索引目录的 `fetch` 适配器运行真实搜索/WASM，不重新建立测试专用索引。
+- 普通链接检查只验证目标输出文件，忽略 fragment 和 query；仅目录检查锚点，不检查外链可用性。
+  开发文章正文中的 `/login`、`/about` 等非博客路由可能是教学示例，因此不检查；
+  正文中的博客路由及正文之外的站内导航不享有此豁免。
+- HTML/XML 提取针对当前 Astro 生成格式；frontmatter 读取只支持当前使用的单行字段，
+  不是通用 HTML/XML/YAML 解析器。修改输出结构或字段格式时需同步更新测试。
 
 ## CI / 部署
 
-- `/.github/workflows/ci-check.yaml`：在 push / PR 时运行 `pnpm install --frozen-lockfile` + `pnpm run check` + `pnpm run lint` + `pnpm run build`
-- `/.github/workflows/deploy.yml`：使用 Astro 官方 GitHub Action 构建站点并部署到 GitHub Pages（已配置为使用 pnpm）
+- `.github/workflows/ci-check.yaml`：PR 与非 main 分支 push 时，安装锁定依赖，
+  运行 Astro check、Biome lint / format:check、content:lint、build、test:smoke。
+- `.github/workflows/deploy.yml`：main push 或手动触发，先完成同样的质量检查，
+  再用 pnpm 构建并运行冒烟测试。只有测试成功才上传 `dist/` Pages artifact，
+  然后使用 GitHub Pages Actions 部署；不使用 Astro 官方构建 Action。
 
 ## License
 

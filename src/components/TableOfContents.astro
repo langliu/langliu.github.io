@@ -1,0 +1,32 @@
+---
+import type { TableOfContentsProps } from '@/utils/types/TableOfContents'
+
+type Props = TableOfContentsProps
+
+const { headings } = Astro.props
+---
+
+<aside class='post-toc'>
+  <details class='post-toc__mobile'>
+    <summary aria-label='展开或收起文章目录'>文章目录</summary>
+    <nav aria-label='文章目录'>
+      <ul>
+        {headings.map(({ depth, slug, text }) => (
+          <li class:list={{ 'post-toc__nested': depth === 3 }}>
+            <a href={`#${encodeURIComponent(slug)}`}>{text}</a>
+          </li>
+        ))}
+      </ul>
+    </nav>
+  </details>
+  <nav class='post-toc__desktop' aria-label='文章目录'>
+    <p class='post-toc__title'>文章目录</p>
+    <ul>
+      {headings.map(({ depth, slug, text }) => (
+        <li class:list={{ 'post-toc__nested': depth === 3 }}>
+          <a href={`#${encodeURIComponent(slug)}`}>{text}</a>
+        </li>
+      ))}
+    </ul>
+  </nav>
+</aside>

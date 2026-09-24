@@ -5,7 +5,10 @@
   class='reading-progress pointer-events-none fixed inset-x-0 top-0 z-50 h-0.5 bg-transparent'
   aria-hidden='true'
 >
-  <div class='reading-progress__bar h-full w-0 bg-linear-to-r from-orange-400 to-purple-500'></div>
+  <div
+    class='reading-progress__bar h-full w-full origin-left bg-linear-to-r from-orange-400 to-purple-500'
+    style='transform: scaleX(0)'
+  ></div>
 </div>
 
 <script>
@@ -13,7 +16,10 @@
   const article = document.querySelector<HTMLElement>('article.post')
 
   if (bar && article) {
+    let frame: number | undefined
+
     const update = () => {
+      frame = undefined
       const rect = article.getBoundingClientRect()
       const articleTop = window.scrollY + rect.top
       const articleHeight = article.offsetHeight
@@ -21,11 +27,21 @@
       const readable = Math.max(articleHeight - viewport, 1)
       const progressed = Math.min(Math.max(window.scrollY - articleTop, 0), readable)
       const ratio = progressed / readable
-      bar.style.width = `${(ratio * 100).toFixed(2)}%`
+      bar.style.transform = `scaleX(${ratio})`
     }
 
-    update()
-    window.addEventListener('scroll', update, { passive: true })
-    window.addEventListener('resize', update)
+    const scheduleUpdate = () => {
+      if (frame === undefined) {
+        frame = window.requestAnimationFrame(update)
+      }
+    }
+
+    scheduleUpdate()
+    window.addEventListener('scroll', scheduleUpdate, { passive: true })
+    window.addEventListener('resize', scheduleUpdate)
+
+    const resizeObserver = new ResizeObserver(scheduleUpdate)
+    resizeObserver.observe(article)
+    resizeObserver.observe(document.body)
   }
 </script>
