@@ -22,7 +22,7 @@ const openGraph = {
   image: og?.image ? new URL(og.image, DEFAULT_URL_SITE).toString() : defaultOgImageUrl,
   alt: og?.alt || '研之有物',
   url: currentUrl,
-  description: og?.description || DEFAULT_DESCRIPTION_PAGE,
+  description: og?.description || description || DEFAULT_DESCRIPTION_PAGE,
 }
 
 // 避免 frontmatter 中的 </script> 打断 JSON-LD
