@@ -1,0 +1,13 @@
+---
+import PostContent from '@/components/PostContent.astro'
+import type { PostListProps } from '@/utils/types/Post'
+
+type Props = PostListProps
+const { node } = Astro.props
+const Tag = node.listItem === 'number' ? 'ol' : 'ul'
+const start = node.listItem === 'number' && node.start !== 1 ? node.start : undefined
+---
+
+<Tag start={start}>
+  {node.items.map((item) => <li><PostContent value={item.content} /></li>)}
+</Tag>

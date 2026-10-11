@@ -1,0 +1,31 @@
+name: 验证 EmDash 博客
+description: 安装依赖并验证迁移、代码质量与 Node 生产服务
+runs:
+  using: composite
+  steps:
+    - uses: pnpm/setup@v2
+      with:
+        cache: true
+        install: false
+    - run: pnpm install --frozen-lockfile
+      shell: bash
+    - run: pnpm run content:migrate
+      shell: bash
+    - run: pnpm run cf:types
+      shell: bash
+    - run: pnpm run check
+      shell: bash
+    - run: pnpm run lint
+      shell: bash
+    - run: pnpm run format:check
+      shell: bash
+    - run: pnpm run content:lint
+      shell: bash
+    - run: pnpm run test:migration
+      shell: bash
+    - run: pnpm run test:dev
+      shell: bash
+    - run: pnpm run build
+      shell: bash
+    - run: pnpm run test:smoke
+      shell: bash

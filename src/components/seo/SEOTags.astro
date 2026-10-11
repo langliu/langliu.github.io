@@ -1,15 +1,15 @@
 ---
 import { SEO } from 'astro-seo'
-import { GTM_ID, SITE_URL } from '@/data/config'
+import { GTM_ID } from '@/data/config'
 import type { HeadTags } from '@/utils/types/HeadTags'
 
 type Props = HeadTags
 
-const { title, description, noindex, og, jsonLd } = Astro.props
+const { title, description, noindex, canonical, og, jsonLd } = Astro.props
 
 const DEFAULT_TITLE_PAGE = '研之有物 - 首页'
 const DEFAULT_DESCRIPTION_PAGE = '研之有物 - 前端技术博客'
-const DEFAULT_URL_SITE = SITE_URL
+const DEFAULT_URL_SITE = Astro.site ?? new URL(Astro.url.origin)
 const shouldEnableGtm = import.meta.env.PROD && GTM_ID.length > 0
 
 // 动态构建当前页面 URL
@@ -34,7 +34,7 @@ const jsonLdHtml = jsonLd ? JSON.stringify(jsonLd).replace(/</g, '\\u003c') : un
     charset='UTF-8'
     title={title || DEFAULT_TITLE_PAGE}
     description={description || DEFAULT_DESCRIPTION_PAGE}
-    canonical={currentUrl}
+    canonical={canonical ?? currentUrl}
     noindex={noindex || false}
     openGraph={{
       basic: {
@@ -60,7 +60,7 @@ const jsonLdHtml = jsonLd ? JSON.stringify(jsonLd).replace(/</g, '\\u003c') : un
         { rel: 'icon', href: '/favicon-512.png', type: 'image/png', sizes: '512x512' },
         { rel: 'icon', href: '/favicon.ico', sizes: 'any' },
         { rel: 'apple-touch-icon', href: '/apple-touch-icon.png', sizes: '180x180' },
-        { rel: 'sitemap', href: '/sitemap-index.xml' },
+        { rel: 'sitemap', href: '/sitemap.xml' },
         {
           rel: 'alternate',
           type: 'application/rss+xml',

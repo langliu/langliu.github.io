@@ -1,0 +1,11 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "langliu-blog",
+  "main": "./src/worker.ts",
+  "compatibility_date": "2026-10-11",
+  "compatibility_flags": ["nodejs_compat"],
+  "d1_databases": [{ "binding": "DB", "database_name": "langliu-blog" }],
+  "r2_buckets": [{ "binding": "MEDIA", "bucket_name": "langliu-blog-media" }],
+  "triggers": { "crons": ["* * * * *"] },
+  "observability": { "enabled": true, "head_sampling_rate": 1 }
+}

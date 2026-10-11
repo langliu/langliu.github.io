@@ -3,9 +3,9 @@
   "type": "module",
   "version": "0.0.2",
   "scripts": {
-    "dev": "astro dev --host",
-    "start": "astro dev",
-    "build": "astro build && pagefind --site dist",
+    "dev": "astro dev --host 127.0.0.1",
+    "start": "astro dev --host 127.0.0.1",
+    "build": "astro build",
     "preview": "astro preview",
     "check": "astro check",
     "astro": "astro",
@@ -15,28 +15,55 @@
     "format:check": "biome check . --linter-enabled=false --assist-enabled=false",
     "content:lint": "node scripts/content-lint.mjs",
     "test:smoke": "node scripts/smoke-test.mjs",
-    "pagefind": "pagefind --site dist"
+    "build:cloudflare": "DEPLOY_TARGET=cloudflare astro build",
+    "deploy": "pnpm run build:cloudflare && wrangler deploy",
+    "cf:types": "wrangler types",
+    "content:migrate": "node scripts/migrate-emdash.mjs",
+    "test:migration": "node --test scripts/migrate-emdash.test.mjs",
+    "test:dev": "node --test scripts/dev-test.mjs"
   },
   "dependencies": {
-    "@astrojs/mdx": "^8.0.3",
+    "@astrojs/cloudflare": "^14.3.4",
+    "@astrojs/node": "^11.1.7",
+    "@astrojs/react": "^7.0.1",
     "@astrojs/rss": "^4.0.19",
-    "@astrojs/sitemap": "^3.7.4",
+    "@emdash-cms/cloudflare": "1.2.0",
     "@tailwindcss/vite": "^4.3.3",
     "astro": "^7.3.8",
-    "astro-robots-txt": "^1.0.0",
+    "astro-portabletext": "^1.0.1",
     "astro-seo": "^1.2.0",
+    "emdash": "1.2.0",
+    "github-slugger": "^2.0.0",
+    "kysely": "^0.29.6",
+    "react": "^19.3.0",
+    "react-dom": "^19.3.0",
     "sharp": "^0.35.5",
+    "shiki": "^4.5.0",
     "tailwindcss": "^4.3.3"
   },
   "devDependencies": {
     "@astrojs/check": "^0.9.10",
     "@biomejs/biome": "^2.5.15",
+    "@cloudflare/workers-types": "^5.20261010.1",
+    "@emdash-cms/gutenberg-to-portable-text": "^1.2.0",
+    "@types/node": "^26.6.5",
+    "@types/react": "^19.3.0",
+    "@types/react-dom": "^19.3.0",
+    "gray-matter": "^4.0.3",
     "lefthook": "^2.2.1",
-    "pagefind": "^1.5.2",
-    "typescript": "^6.0.3"
+    "rehype-stringify": "^10.0.1",
+    "remark-gfm": "^4.0.1",
+    "remark-parse": "^11.0.0",
+    "remark-rehype": "^11.1.2",
+    "typescript": "^6.0.3",
+    "unified": "^11.0.5",
+    "wrangler": "^4.149.0"
   },
   "engines": {
     "node": ">=22.21.0"
   },
-  "packageManager": "pnpm@12.11.2"
+  "packageManager": "pnpm@12.11.2",
+  "emdash": {
+    "seed": "seed/seed.json"
+  }
 }

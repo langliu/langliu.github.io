@@ -1,253 +1,201 @@
 import assert from 'node:assert/strict'
-import { access, readdir, readFile } from 'node:fs/promises'
-import path from 'node:path'
-import test from 'node:test'
-import { fileURLToPath, pathToFileURL } from 'node:url'
-import { SITE_URL } from '../src/data/config.ts'
+import { spawn } from 'node:child_process'
+import { cp, mkdir, mkdtemp, rm } from 'node:fs/promises'
+import { createServer } from 'node:net'
+import { tmpdir } from 'node:os'
+import { resolve } from 'node:path'
+import { backup, DatabaseSync } from 'node:sqlite'
+import { after, before, test } from 'node:test'
+import { setTimeout as delay } from 'node:timers/promises'
+import { ContentRepository } from 'emdash'
+import { createDialect } from 'emdash/db/sqlite'
+import { Kysely } from 'kysely'
+import { readSourcePosts } from './migrate-emdash.mjs'
 
-const root = fileURLToPath(new URL('../', import.meta.url))
-const dist = path.join(root, 'dist')
-const site = SITE_URL
-const normalize = (url) => decodeURIComponent(new URL(url, site).pathname).replace(/\/$/, '') || '/'
-const read = (file) => readFile(path.join(dist, file), 'utf8')
-const decode = (text) =>
-  text
-    .replace(/&#x([0-9a-f]+);/gi, (_, value) => String.fromCodePoint(Number.parseInt(value, 16)))
-    .replace(/&#(\d+);/g, (_, value) => String.fromCodePoint(Number(value)))
-    .replace(/&quot;/g, '"')
-    .replace(/&apos;|&#39;/g, "'")
-    .replace(/&lt;/g, '<')
-    .replace(/&gt;/g, '>')
-    .replace(/&amp;/g, '&')
-const textContent = (html) => decode(html.replace(/<[^>]*>/g, ''))
-const compact = (text) => text.replace(/[\s\u200b]/g, '')
-const values = (xml, tag) =>
-  [...xml.matchAll(new RegExp(`<${tag}>([\\s\\S]*?)</${tag}>`, 'g'))].map((match) =>
-    decode(match[1]),
-  )
-
-async function walk(directory) {
-  const entries = await readdir(directory, { withFileTypes: true })
-  const files = await Promise.all(
-    entries.map((entry) => {
-      const file = path.join(directory, entry.name)
-      return entry.isDirectory() ? walk(file) : [file]
-    }),
-  )
-  return files.flat()
+let directory
+let server
+let origin
+let db
+let logs = ''
+const sources = await readSourcePosts()
+const published = sources.filter((post) => post.data.isPublish)
+const drafts = sources.filter((post) => !post.data.isPublish)
+const html = async (path) => {
+  const response = await fetch(`${origin}${path}`)
+  assert.equal(response.status, 200, path)
+  return response.text()
 }
 
-// 和 content:lint 一样，只接受本仓库当前使用的单行 frontmatter 字段。
-const posts = await Promise.all(
-  (await walk(path.join(root, 'posts')))
-    .filter((file) => /^[^_].*\.mdx?$/.test(path.basename(file)))
-    .map(async (file) => {
-      const raw = await readFile(file, 'utf8')
-      const frontmatter = raw.match(/^---\r?\n([\s\S]*?)\r?\n---/)?.[1]
-      assert.ok(frontmatter, `${file}: 缺少 frontmatter`)
-      const field = (name) => {
-        const value = frontmatter.match(new RegExp(`^${name}:\\s*(.+)$`, 'm'))?.[1]?.trim()
-        assert.ok(value && !/^[>|]/.test(value), `${file}: ${name} 必须是单行字段`)
-        return value.replace(/^(['"])(.*)\1$/, '$2')
-      }
-      const published = field('isPublish')
-      assert.match(published, /^(true|false)$/, `${file}: isPublish`)
-      return {
-        title: field('title'),
-        slug: field('slug'),
-        category: field('category'),
-        published: published === 'true',
-        route: `/posts/${field('slug')}`,
-      }
-    }),
-)
-const published = posts.filter((post) => post.published)
-const drafts = posts.filter((post) => !post.published)
-const expectedRoutes = published.map((post) => post.route).sort()
-assert.ok(published.length, '至少需要一篇已发布文章')
-assert.equal(new Set(posts.map((post) => post.slug)).size, posts.length, '文章 slug 不得重复')
+before(async () => {
+  directory = await mkdtemp(resolve(tmpdir(), 'langliu-emdash-test-'))
+  await mkdir(resolve(directory, '.emdash'))
+  const source = new DatabaseSync('.emdash/data.db')
+  await backup(source, resolve(directory, '.emdash/data.db'))
+  source.close()
+  await cp('.emdash/uploads', resolve(directory, '.emdash/uploads'), { recursive: true })
+  const portServer = createServer()
+  await new Promise((done) => portServer.listen(0, '127.0.0.1', done))
+  const { port } = portServer.address()
+  await new Promise((done) => portServer.close(done))
+  origin = `http://127.0.0.1:${port}`
+  server = spawn(process.execPath, [resolve('dist/server/entry.mjs')], {
+    cwd: directory,
+    env: { ...process.env, HOST: '127.0.0.1', PORT: String(port) },
+    stdio: ['ignore', 'pipe', 'pipe'],
+  })
+  server.stdout.on('data', (data) => {
+    logs += data
+  })
+  server.stderr.on('data', (data) => {
+    logs += data
+  })
+  for (let count = 0; count < 100; count++) {
+    try {
+      if ((await fetch(origin)).status === 200) break
+    } catch {}
+    if (server.exitCode !== null) throw new Error(logs)
+    if (count === 99) throw new Error(`服务未启动：${logs}`)
+    await delay(100)
+  }
+  db = new Kysely({
+    dialect: createDialect({ url: `file:${resolve(directory, '.emdash/data.db')}` }),
+  })
+})
 
-test('构建文章路由、标题和草稿隔离', async () => {
-  const actualRoutes = (await walk(path.join(dist, 'posts')))
-    .filter((file) => file.endsWith('.html'))
-    .map((file) => normalize(path.relative(dist, file).replace(/index\.html$/, '')))
-    .filter((route) => route !== '/posts')
-    .sort()
-  assert.deepEqual(actualRoutes, expectedRoutes, '文章输出必须恰好等于已发布文章')
+after(async () => {
+  if (db) await db.destroy()
+  if (server && server.exitCode === null) {
+    server.kill('SIGTERM')
+    await new Promise((done) => server.once('exit', done))
+  }
+  if (directory) await rm(directory, { recursive: true, force: true })
+})
+
+test('全部文章标题、原始日期、目录锚点与静态资源可访问，草稿返回 404', async () => {
   for (const post of published) {
-    const html = await read(`posts/${post.slug}/index.html`)
-    // 正文可能含历史文章自己的 h1，只验证模板提供的文章标题。
-    const template = html.replace(/<article\b[^>]*>[\s\S]*?<\/article>/g, '')
-    const headings = [...template.matchAll(/<h1\b[^>]*>([\s\S]*?)<\/h1>/g)]
-    assert.equal(headings.length, 1, `${post.route}: 模板需要唯一文章标题`)
-    assert.equal(textContent(headings[0][1]).trim(), post.title, `${post.route}: 标题`)
-    assert.match(headings[0][0], /data-pagefind-body/, `${post.route}: 标题必须参与搜索`)
+    const page = await html(`/posts/${post.data.slug}`)
+    assert.ok(page.includes(post.data.title.replaceAll('&', '&amp;')), post.file)
+    assert.ok(page.includes(new Date(post.data.publishedAt).toISOString()), post.file)
+    for (const match of page.matchAll(/href="#([^"]+)"/g)) {
+      assert.ok(page.includes(`id="${decodeURIComponent(match[1])}"`), `${post.file} #${match[1]}`)
+    }
+    for (const match of page.matchAll(/(?:src|href)="(\/(?:_astro|_emdash\/api\/media)[^"]+)"/g)) {
+      assert.equal((await fetch(`${origin}${match[1]}`)).status, 200, match[1])
+    }
+    for (const match of page.matchAll(/<img[^>]+src="([^"]+)"/g)) {
+      const image = new URL(match[1].replaceAll('&amp;', '&'), origin)
+      if (!/^\/(?:_image|_astro|_emdash\/api\/media)/.test(image.pathname)) continue
+      assert.equal(
+        (await fetch(`${origin}${image.pathname}${image.search}`)).status,
+        200,
+        image.href,
+      )
+    }
+  }
+  for (const post of sources.filter(({ data }) => data.cover && data.isPublish)) {
+    const page = await html(`/posts/${post.data.slug}`)
+    const image = page.match(/property="og:image" content="([^"]+)"/)?.[1]
+    assert.ok(image, post.file)
+    const imageUrl = new URL(image)
+    assert.equal(
+      (await fetch(`${origin}${imageUrl.pathname}${imageUrl.search}`)).status,
+      200,
+      image,
+    )
+  }
+  for (const post of drafts)
+    assert.equal((await fetch(`${origin}/posts/${post.data.slug}`)).status, 404)
+})
+
+test('RSS、sitemap 和列表完整覆盖已发布文章，排除草稿', async () => {
+  const rss = await html('/rss.xml')
+  const sitemap = await html('/sitemap-posts.xml')
+  const list = await html('/posts')
+  for (const post of published) {
+    for (const page of [rss, sitemap, list])
+      assert.ok(page.includes(`/posts/${post.data.slug}`), post.file)
   }
   for (const post of drafts) {
-    await assert.rejects(access(path.join(dist, `posts/${post.slug}/index.html`)), {
-      code: 'ENOENT',
-    })
+    for (const page of [rss, sitemap, list])
+      assert.ok(!page.includes(`/posts/${post.data.slug}`), post.file)
   }
+  assert.ok((await html('/sitemap.xml')).includes('/sitemap-posts.xml'))
+  const legacy = await fetch(`${origin}/sitemap-index.xml`, { redirect: 'manual' })
+  assert.equal(legacy.status, 301)
 })
 
-test('长文章目录阈值和锚点有效', async () => {
-  for (const post of published) {
-    const html = await read(`posts/${post.slug}/index.html`)
-    const article = html.match(/<article\b[^>]*>([\s\S]*?)<\/article>/)?.[1] ?? ''
-    const headings = [...article.matchAll(/<h[23]\b[^>]*\bid="([^"]+)"/g)]
-    const toc = html.match(/<aside class="post-toc"[^>]*>([\s\S]*?)<\/aside>/)?.[1]
-    assert.equal(Boolean(toc), headings.length >= 3, `${post.route}: 目录显示阈值`)
-    if (!toc) continue
-    const targets = headings.map((heading) => decode(heading[1]))
-    const links = [...toc.matchAll(/href="#([^"]+)"/g)].map((link) =>
-      decodeURIComponent(decode(link[1])),
-    )
-    assert.deepEqual(links, [...targets, ...targets], `${post.route}: 桌面与移动目录锚点`)
-  }
-})
-
-test('RSS 和 sitemap 完整覆盖文章且不泄漏草稿', async () => {
-  const rss = await read('rss.xml')
-  const items = [...rss.matchAll(/<item>([\s\S]*?)<\/item>/g)]
-  const rssRoutes = items.map((item) => {
-    const links = values(item[1], 'link')
-    assert.equal(links.length, 1, 'RSS item 必须有一个 link')
-    assert.equal(new URL(links[0]).origin, new URL(site).origin)
-    return normalize(links[0])
-  })
-  assert.deepEqual(rssRoutes.sort(), expectedRoutes, 'RSS 文章集合')
-  for (const post of published) {
-    const item = items.find((entry) => normalize(values(entry[1], 'link')[0]) === post.route)
-    assert.deepEqual(values(item[1], 'title'), [post.title], `${post.route}: RSS 标题`)
-    assert.ok(Number.isFinite(Date.parse(values(item[1], 'pubDate')[0])), 'RSS 发布时间')
-  }
-
-  const maps = values(await read('sitemap-index.xml'), 'loc')
-  assert.ok(maps.length, 'sitemap index 不能为空')
-  const sitemapRoutes = []
-  for (const map of maps) {
-    assert.equal(new URL(map).origin, new URL(site).origin)
-    for (const location of values(await read(new URL(map).pathname.slice(1)), 'loc')) {
-      assert.equal(new URL(location).origin, new URL(site).origin)
-      sitemapRoutes.push(normalize(location))
-    }
-  }
-  assert.deepEqual(
-    sitemapRoutes.filter((route) => route.startsWith('/posts/')).sort(),
-    expectedRoutes,
-    'sitemap 文章集合',
+test('支持两字中文搜索、分类与标签筛选，未知路由返回 404', async () => {
+  assert.ok(
+    (await html('/search?q=%E9%97%AD%E5%8C%85')).includes('href="/posts/debounce-and-throttle"'),
   )
-  for (const route of sitemapRoutes) {
-    await assertTargetExists(route, 'sitemap')
-  }
+  const page = await html('/search?q=React&category=CSS')
+  assert.ok(!page.includes('href="/posts/react-i18next"'))
+  assert.equal((await fetch(`${origin}/categories/unknown`)).status, 404)
+  assert.equal((await fetch(`${origin}/tags/unknown-tag`)).status, 404)
 })
 
-async function assertTargetExists(route, source) {
-  const relative = route.replace(/^\//, '')
-  const candidates = [relative, `${relative}/index.html`]
-  for (const candidate of candidates) {
-    try {
-      const files = await readFile(path.join(dist, candidate))
-      if (files.length > 0) return
-    } catch (error) {
-      if (!['ENOENT', 'EISDIR'].includes(error.code)) throw error
-    }
-  }
-  assert.fail(`${source}: 站内链接无输出文件 ${route}`)
-}
-
-test('站点导航和文章中的博客路由链接有效', async () => {
-  for (const file of (await walk(dist)).filter((file) => file.endsWith('.html'))) {
-    if (file.includes(`${path.sep}pagefind${path.sep}`)) continue
-    const source = path.relative(dist, file)
-    const base = new URL(source.replace(/index\.html$/, ''), site)
-    const html = await readFile(file, 'utf8')
-    const articles = [...html.matchAll(/<article\b[^>]*>([\s\S]*?)<\/article>/g)]
-    const navigation = html.replace(/<article\b[^>]*>[\s\S]*?<\/article>/g, '')
-    const sections = [
-      { html: navigation, article: false },
-      ...articles.map((article) => ({ html: article[1], article: true })),
-    ]
-    for (const section of sections) {
-      // 跳过脚本、注释和转义后的代码示例，不尝试用正则解析任意 HTML。
-      const markup = section.html.replace(/<!--[\s\S]*?-->|<script\b[^>]*>[\s\S]*?<\/script>/g, '')
-      for (const match of markup.matchAll(/<a\b[^>]*\bhref=(?:"([^"]*)"|'([^']*)')/g)) {
-        const href = decode(match[1] ?? match[2])
-        const url = new URL(href, base)
-        if (url.origin !== new URL(site).origin) continue
-        const route = normalize(url.href)
-        // 正文中的 /login、/about 等是教学示例；博客自己的路由不豁免。
-        if (section.article && !/^\/(?:posts|tags|categories)(?:\/|$)/.test(route)) continue
-        await assertTargetExists(route, source)
-      }
-    }
-  }
+test('iframe、表格、代码高亮与复制脚本保留', async () => {
+  const page = await html('/posts/react-i18next')
+  assert.match(page, /<iframe[^>]+src="https:\/\/codesandbox.io\//)
+  assert.match(page, /class="(?:astro-code|shiki)/)
+  assert.match(await html('/posts/how-array-is-array'), /<table/)
 })
 
-test('Pagefind 实际索引、分类过滤和标题中文搜索', { timeout: 30000 }, async () => {
-  const originalFetch = globalThis.fetch
-  const indexRoot = path.join(dist, 'pagefind')
-  let pagefind
-  try {
-    // 包的 Node API 只能建索引；直接加载构建的搜索运行时，文件适配器不允许联网。
-    globalThis.fetch = async (input) => {
-      const url = new URL(input)
-      assert.equal(url.protocol, 'file:', `不允许访问网络: ${url}`)
-      const file = fileURLToPath(url)
-      assert.ok(file.startsWith(`${indexRoot}${path.sep}`), `越界读取: ${file}`)
-      return new Response(await readFile(file))
-    }
-    pagefind = await import(pathToFileURL(path.join(indexRoot, 'pagefind.js')).href)
-    await pagefind.options({ language: 'zh-cn', baseUrl: '/' })
-    const all = await pagefind.search(null)
-    const entries = await Promise.all(all.results.map((result) => result.data()))
-    assert.deepEqual(entries.map((entry) => normalize(entry.url)).sort(), expectedRoutes)
-    for (const post of published) {
-      const entry = entries.find((result) => normalize(result.url) === post.route)
-      assert.equal(entry.meta.title, post.title, `${post.route}: 索引标题`)
-      assert.ok(
-        compact(entry.content).includes(compact(post.title)),
-        `${post.route}: 标题不仅是 metadata`,
-      )
-    }
-    for (const category of new Set(published.map((post) => post.category))) {
-      const response = await pagefind.search(null, { filters: { 分类: category } })
-      const results = await Promise.all(response.results.map((result) => result.data()))
-      assert.deepEqual(
-        results.map((entry) => normalize(entry.url)).sort(),
-        published
-          .filter((post) => post.category === category)
-          .map((post) => post.route)
-          .sort(),
-        `分类过滤: ${category}`,
-      )
-    }
+test('真实文章的连续步骤与代码块保持在同一列表项内', async () => {
+  const page = await html('/posts/claude-code-guide')
+  const section = page.slice(page.indexOf('macOS 环境</h3>'), page.indexOf('Windows 环境</h3>'))
+  assert.equal([...section.matchAll(/<ol(?:\s|>)/g)].length, 1)
+  assert.equal([...section.matchAll(/<li(?:\s|>)/g)].length, 3)
+  const items = [...section.matchAll(/<li(?:\s[^>]*)?>([\s\S]*?)<\/li>/g)]
+  assert.match(items[0][1], /<pre[\s\S]*?<\/pre>/)
+  assert.match(items[0][1].replace(/<[^>]+>/g, ''), /brew install claude-code/)
+  assert.match(items[1][1], /<pre[\s\S]*?<\/pre>/)
+  assert.match(items[1][1].replace(/<[^>]+>/g, ''), /npm install -g @anthropic-ai\/claude-code/)
+})
 
-    // 选择正文中不存在的中文标题词，避免“正文碰巧命中”掩盖标题未被索引。
-    const segmenter = new Intl.Segmenter('zh-CN', { granularity: 'word' })
-    let titleOnlyChecks = 0
-    for (const post of published) {
-      const html = await read(`posts/${post.slug}/index.html`)
-      const body = textContent(html.match(/<article\b[^>]*>([\s\S]*?)<\/article>/)?.[1] ?? '')
-      const words = [...segmenter.segment(post.title)]
-        .filter((part) => part.isWordLike && /^[\p{Script=Han}]{2,}$/u.test(part.segment))
-        .map((part) => part.segment)
-      const keyword = words.find((word) => !body.includes(word))
-      if (!keyword) continue
-      const response = await pagefind.search(keyword)
-      const results = await Promise.all(response.results.map((result) => result.data()))
-      assert.ok(
-        results.some((entry) => normalize(entry.url) === post.route),
-        `${post.route}: 标题中文词 "${keyword}" 应可搜索`,
-      )
-      titleOnlyChecks += 1
-    }
-    assert.ok(titleOnlyChecks > 0, '至少需要一个正文未出现的中文标题关键词样本')
-    console.log(
-      `索引验证：${entries.length} 篇文章，${drafts.length} 篇草稿，${titleOnlyChecks} 个标题词`,
-    )
-  } finally {
-    await pagefind?.destroy()
-    globalThis.fetch = originalFetch
-  }
+test('后台写入后无需重建，页面、搜索和 RSS 立即更新', async () => {
+  const repository = new ContentRepository(db)
+  const post = await repository.findBySlug('posts', published[0].data.slug)
+  const title = '更新测试中文关键词'
+  await repository.update('posts', post.id, { data: { title } })
+  assert.ok((await html(`/posts/${post.slug}`)).includes(title))
+  assert.ok((await html('/search?q=%E6%9B%B4%E6%96%B0%E6%B5%8B%E8%AF%95')).includes(title))
+  assert.ok((await html('/rss.xml')).includes(title))
+})
+
+test('生产环境启用后台认证，开发绕过接口不可用', async () => {
+  const admin = await fetch(`${origin}/_emdash/admin`, { redirect: 'manual' })
+  assert.equal(admin.status, 302)
+  const write = await fetch(`${origin}/_emdash/api/content/posts`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ data: {} }),
+  })
+  assert.ok([401, 403].includes(write.status))
+  assert.ok(
+    [403, 404].includes(
+      (await fetch(`${origin}/_emdash/api/setup/dev-bypass`, { redirect: 'manual' })).status,
+    ),
+  )
+})
+
+test('后台 SEO 标题、摘要、canonical 和 noindex 在文章页面生效', async () => {
+  const repository = new ContentRepository(db)
+  const post = await repository.findBySlug('posts', published[1].data.slug)
+  await db
+    .insertInto('_emdash_seo')
+    .values({
+      collection: 'posts',
+      content_id: post.id,
+      seo_title: '后台 SEO 标题',
+      seo_description: '后台 SEO 摘要',
+      seo_canonical: 'https://example.com/canonical',
+      seo_no_index: 1,
+    })
+    .execute()
+  const page = await html(`/posts/${post.slug}`)
+  assert.ok(page.includes('<title>后台 SEO 标题</title>'))
+  assert.ok(page.includes('name="description" content="后台 SEO 摘要"'))
+  assert.ok(page.includes('rel="canonical" href="https://example.com/canonical"'))
+  assert.match(page, /name="robots" content="noindex/)
 })

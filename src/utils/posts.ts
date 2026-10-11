@@ -1,25 +1,73 @@
-import { type CollectionEntry, getCollection } from 'astro:content'
+import { z } from 'astro/zod'
+import { getEmDashCollection, getEmDashEntry } from 'emdash'
 import { POST_CATEGORIES } from '@/data/postCategories'
+import { getContentText } from '@/utils/portableText'
+import type { PostEntry } from '@/utils/types/Post'
 
-export type PostEntry = CollectionEntry<'posts'>
-let publishedPostsPromise: Promise<PostEntry[]> | undefined
+export type { PostEntry } from '@/utils/types/Post'
 
-export async function getPublishedPosts(): Promise<PostEntry[]> {
-  if (import.meta.env.DEV) {
-    return loadPublishedPosts()
+const postSchema = z.object({
+  seo: z
+    .object({
+      title: z.string().nullable(),
+      description: z.string().nullable(),
+      image: z.string().nullable(),
+      canonical: z.string().nullable(),
+      noIndex: z.boolean(),
+    })
+    .nullish(),
+  title: z.string(),
+  description: z.string(),
+  slug: z.string(),
+  published_date: z.coerce.date(),
+  updated_date: z.coerce.date().nullish(),
+  category: z.enum(POST_CATEGORIES),
+  tags: z.array(z.string()).nullish(),
+  cover: z.object({ src: z.string() }).nullish(),
+  content: z.array(z.object({ _type: z.string(), _key: z.string() }).loose()),
+})
+
+function normalizePost(entry: { id: string; data: unknown }): PostEntry {
+  const data = postSchema.parse(entry.data)
+  return {
+    id: entry.id,
+    body: getContentText(data.content),
+    readingText: getContentText(data.content, false),
+    data: {
+      ...data,
+      publishedAt: data.published_date,
+      updatedAt: data.updated_date ?? undefined,
+      tags: data.tags ?? [],
+      cover: data.cover?.src,
+      seo: data.seo ?? undefined,
+    },
   }
-
-  publishedPostsPromise ??= loadPublishedPosts()
-  return publishedPostsPromise
 }
 
-async function loadPublishedPosts(): Promise<PostEntry[]> {
-  return getCollection('posts').then((posts) => {
-    assertUniquePostSlugs(posts)
-    return posts
-      .filter((post) => post.data.isPublish)
-      .sort((first, second) => second.data.publishedAt.getTime() - first.data.publishedAt.getTime())
-  })
+export async function getPublishedPosts(): Promise<PostEntry[]> {
+  const posts: PostEntry[] = []
+  let cursor: string | undefined
+  do {
+    const result = await getEmDashCollection('posts', {
+      status: 'published',
+      limit: 100,
+      cursor,
+      orderBy: { published_date: 'desc' },
+    })
+    if (result.error) throw result.error
+    posts.push(...result.entries.map(normalizePost))
+    cursor = result.nextCursor
+  } while (cursor)
+  assertUniquePostSlugs(posts)
+  return posts.sort(
+    (first, second) => second.data.publishedAt.getTime() - first.data.publishedAt.getTime(),
+  )
+}
+
+export async function getPostBySlug(slug: string): Promise<PostEntry | undefined> {
+  const { entry, error } = await getEmDashEntry('posts', slug)
+  if (error) throw error
+  return entry ? normalizePost(entry) : undefined
 }
 
 export function getPostSlug(post: PostEntry): string {

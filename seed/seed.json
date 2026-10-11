@@ -1,0 +1,151 @@
+{
+  "version": "1",
+  "defaultLocale": "en",
+  "meta": {
+    "name": "研之有物",
+    "description": "从 Markdown / MDX 博客迁移到 EmDash",
+    "author": "刘浪"
+  },
+  "settings": {
+    "title": "研之有物",
+    "tagline": "前端技术博客",
+    "timezone": "Asia/Shanghai"
+  },
+  "collections": [
+    {
+      "slug": "posts",
+      "label": "文章",
+      "labelSingular": "文章",
+      "urlPattern": "/posts/{slug}",
+      "supports": ["drafts", "revisions", "preview", "scheduling", "seo"],
+      "titleField": "title",
+      "dateField": "published_date",
+      "fields": [
+        {
+          "slug": "title",
+          "label": "标题",
+          "type": "string",
+          "required": true,
+          "searchable": true
+        },
+        {
+          "slug": "description",
+          "label": "摘要",
+          "type": "text",
+          "required": true,
+          "searchable": true
+        },
+        {
+          "slug": "published_date",
+          "label": "发布日期",
+          "type": "datetime",
+          "required": true,
+          "indexed": true
+        },
+        {
+          "slug": "updated_date",
+          "label": "更新日期",
+          "type": "datetime"
+        },
+        {
+          "slug": "category",
+          "label": "分类",
+          "type": "select",
+          "required": true,
+          "validation": {
+            "options": ["CSS", "Vue", "React", "其他", "HTML", "JavaScript", "TypeScript"]
+          }
+        },
+        {
+          "slug": "tags",
+          "label": "标签",
+          "type": "multiSelect",
+          "required": true,
+          "validation": {
+            "options": [
+              "7-Zip",
+              "AI",
+              "AI Coding",
+              "Agentic AI",
+              "BetterAuth",
+              "CSS",
+              "Canvas",
+              "Claude",
+              "Cloudflare",
+              "Cloudflare Workers",
+              "D1",
+              "Drizzle",
+              "Git",
+              "Golang",
+              "HTML",
+              "HTTP",
+              "Hono",
+              "Intl",
+              "JavaScript",
+              "LLM",
+              "LangChain",
+              "Less",
+              "Node.js",
+              "Oh My Zsh",
+              "OutputParser",
+              "Prompt",
+              "React",
+              "SQL",
+              "SQLite",
+              "Sass",
+              "Tools",
+              "TypeScript",
+              "Vite",
+              "Web Components",
+              "Web 标准",
+              "WebAssembly",
+              "WebView",
+              "Webpack",
+              "Windows",
+              "Workers",
+              "XSS",
+              "fnm",
+              "i18n",
+              "macOS",
+              "zsh",
+              "代码规范",
+              "伪类",
+              "兼容性",
+              "命令行",
+              "国产浏览器",
+              "安全",
+              "小程序",
+              "嵌套",
+              "工程实践",
+              "性能优化",
+              "日期时间",
+              "最佳实践",
+              "构建工具",
+              "浏览器",
+              "渐进增强",
+              "状态管理",
+              "组件",
+              "组件库",
+              "软件工程",
+              "软件设计原则",
+              "选择器"
+            ],
+            "minItems": 1
+          }
+        },
+        {
+          "slug": "cover",
+          "label": "封面",
+          "type": "image"
+        },
+        {
+          "slug": "content",
+          "label": "正文",
+          "type": "portableText",
+          "required": true,
+          "searchable": true
+        }
+      ]
+    }
+  ]
+}

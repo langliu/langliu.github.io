@@ -1,6 +1,7 @@
 allowBuilds:
   esbuild: true
   lefthook: true
+  workerd: true
 minimumReleaseAgeExclude:
   - '@biomejs/biome@2.5.12'
   - '@biomejs/cli-darwin-arm64@2.5.12'

@@ -10,7 +10,7 @@ type Props = {
 }
 
 const { post } = Astro.props as Props
-const readingTimeMinutes = getReadingTimeMinutes(post.body)
+const readingTimeMinutes = getReadingTimeMinutes(post.readingText)
 const postPath = getPostPath(post)
 const categoryPath = getCategoryPath(post.data.category)
 ---

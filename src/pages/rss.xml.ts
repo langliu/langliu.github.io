@@ -4,7 +4,7 @@ import { getPostPath, getPublishedPosts } from '@/utils/posts'
 
 export async function GET(context: APIContext) {
   const posts = await getPublishedPosts()
-  const site = context.site
+  const site = context.site ?? new URL(context.url.origin)
 
   if (!site) {
     throw new Error('RSS 需要在 astro.config 中配置 site')

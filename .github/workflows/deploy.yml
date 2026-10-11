@@ -1,60 +1,24 @@
-name: 部署 GitHub Pages
+name: 部署 EmDash 到 Cloudflare Workers
 
 on:
-  push:
-    branches: [main]
   workflow_dispatch:
 
 permissions:
   contents: read
-  pages: write
-  id-token: write
+
+concurrency:
+  group: emdash-production
+  cancel-in-progress: false
 
 jobs:
-  quality:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v5
-      - name: Setup pnpm and Node.js
-        uses: pnpm/setup@v2
-        with:
-          cache: true
-          install: false
-
-      - run: pnpm install --frozen-lockfile
-      - run: pnpm run check
-      - run: pnpm run lint
-      - run: pnpm run format:check
-      - run: pnpm run content:lint
-
-  build:
-    needs: quality
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v5
-      - name: Setup pnpm and Node.js
-        uses: pnpm/setup@v2
-        with:
-          cache: true
-          install: false
-      - run: pnpm install --frozen-lockfile
-      - run: pnpm run build
-      - run: pnpm run test:smoke
-      - name: Upload Pages artifact
-        uses: actions/upload-pages-artifact@v5
-        with:
-          path: dist
-          include-hidden-files: true
-
   deploy:
-    needs: build
     runs-on: ubuntu-latest
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
+    environment: cloudflare-production
+    env:
+      CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+      CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+      SITE_URL: ${{ vars.SITE_URL }}
     steps:
-      - name: Deploy to GitHub Pages
-        id: deployment
-        uses: actions/deploy-pages@v5
+      - uses: actions/checkout@v5
+      - uses: ./.github/actions/verify
+      - run: pnpm run deploy

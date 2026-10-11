@@ -1,76 +1,66 @@
 ---
+import PostListItem from '@/components/PostListItem.astro'
+import { POST_CATEGORIES } from '@/data/postCategories'
 import Layout from '@/layouts/Layout.astro'
+import { getPostTags, getPublishedPosts, getSortedTagStats } from '@/utils/posts'
+
+const query = (Astro.url.searchParams.get('q') ?? '').trim().slice(0, 200)
+const category = Astro.url.searchParams.get('category') ?? ''
+const tag = Astro.url.searchParams.get('tag') ?? ''
+const posts = await getPublishedPosts()
+const tags = getSortedTagStats(posts)
+const hasSearch = Boolean(query || category || tag)
+const words = query.toLocaleLowerCase('zh-CN').split(/\s+/).filter(Boolean)
+const matches = hasSearch
+  ? posts.filter((post) => {
+      const text = [post.data.title, post.data.description, post.body, ...getPostTags(post)]
+        .join(' ')
+        .toLocaleLowerCase('zh-CN')
+      return (
+        words.every((word) => text.includes(word)) &&
+        (!category || post.data.category === category) &&
+        (!tag || getPostTags(post).includes(tag))
+      )
+    })
+  : []
 ---
 
-<Layout title='研之有物 - 搜索' description='搜索博客文章与内容'>
+<Layout title='研之有物 - 搜索' description='搜索博客文章与内容' noindex={true}>
   <main class='flex flex-col gap-8'>
     <div class='flex flex-col gap-3'>
       <h1 class='text-2xl text-neutral-100'>搜索</h1>
       <p class='text-neutral-400'>输入关键词，查找文章标题、摘要与正文，也可以按分类和标签筛选。</p>
     </div>
-
-    <div id='search' class='search'></div>
+    <form action='/search' method='get' class='flex flex-col gap-4' role='search'>
+      <label for='search-query' class='sr-only'>搜索本站</label>
+      <div class='flex gap-3'>
+        <input id='search-query' name='q' type='search' value={query} maxlength='200'
+          placeholder='搜索文章…' class='min-w-0 flex-1 rounded-md border border-neutral-700 bg-neutral-900 px-4 py-3' />
+        <button type='submit' aria-label='搜索文章' class='rounded-md bg-orange-400 px-5 py-3 text-neutral-950'>搜索</button>
+      </div>
+      <div class='flex flex-wrap gap-3'>
+        <label class='flex items-center gap-2'>
+          分类
+          <select name='category' aria-label='按分类筛选' class='rounded-md border border-neutral-700 bg-neutral-900 px-3 py-2'>
+            <option value=''>全部分类</option>
+            {POST_CATEGORIES.map((value) => <option value={value} selected={category === value}>{value}</option>)}
+          </select>
+        </label>
+        <label class='flex items-center gap-2'>
+          标签
+          <select name='tag' aria-label='按标签筛选' class='rounded-md border border-neutral-700 bg-neutral-900 px-3 py-2'>
+            <option value=''>全部标签</option>
+            {tags.map(([value]) => <option value={value} selected={tag === value}>{value}</option>)}
+          </select>
+        </label>
+        {hasSearch && <a href='/search' class='self-center text-neutral-400 underline'>清空筛选</a>}
+      </div>
+    </form>
+    {hasSearch && (
+      <section aria-label='搜索结果' class='flex flex-col gap-4'>
+        <p role='status'>{matches.length ? `找到 ${matches.length} 篇文章` : '没有找到匹配的文章'}</p>
+        {matches.map((post) => <PostListItem post={post} />)}
+      </section>
+    )}
   </main>
 </Layout>
-
-<link href='/pagefind/pagefind-ui.css' rel='stylesheet' />
-<script is:inline src='/pagefind/pagefind-ui.js'></script>
-<script is:inline>
-  window.addEventListener('DOMContentLoaded', () => {
-    if (!window.PagefindUI) {
-      const root = document.querySelector('#search')
-      if (root) {
-        root.innerHTML =
-          '<p class="text-neutral-400">搜索索引尚未生成。请先执行生产构建后再试。</p>'
-      }
-      return
-    }
-
-    new window.PagefindUI({
-      element: '#search',
-      showImages: false,
-      showSubResults: true,
-      showEmptyFilters: false,
-      excerptLength: 20,
-      translations: {
-        placeholder: '搜索文章…',
-        clear_search: '清空',
-        load_more: '加载更多',
-        search_label: '搜索本站',
-        filters_label: '筛选',
-        zero_results: '没有找到「[SEARCH_TERM]」相关内容',
-        many_results: '找到 [COUNT] 条与「[SEARCH_TERM]」相关的结果',
-        one_result: '找到 [COUNT] 条与「[SEARCH_TERM]」相关的结果',
-        alt_search: '没有找到「[SEARCH_TERM]」。显示「[DIFFERENT_TERM]」的结果',
-        search_suggestion: '没有找到「[SEARCH_TERM]」。试试以下搜索：',
-        searching: '正在搜索「[SEARCH_TERM]」…',
-      },
-    })
-  })
-</script>
-
-<style is:global>
-  .search .pagefind-ui {
-    --pagefind-ui-scale: 0.95;
-    --pagefind-ui-primary: #fb923c;
-    --pagefind-ui-text: #d4d4d4;
-    --pagefind-ui-background: #0d1117;
-    --pagefind-ui-border: #404040;
-    --pagefind-ui-tag: #262626;
-    --pagefind-ui-border-width: 1px;
-    --pagefind-ui-border-radius: 8px;
-    --pagefind-ui-font: inherit;
-  }
-
-  .search .pagefind-ui__search-input {
-    background: #111827;
-  }
-
-  .search .pagefind-ui__result-link {
-    color: #f5f5f5;
-  }
-
-  .search .pagefind-ui__result-excerpt {
-    color: #a3a3a3;
-  }
-</style>
