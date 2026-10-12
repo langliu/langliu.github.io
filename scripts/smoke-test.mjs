@@ -7,7 +7,7 @@ import { resolve } from 'node:path'
 import { backup, DatabaseSync } from 'node:sqlite'
 import { after, before, test } from 'node:test'
 import { setTimeout as delay } from 'node:timers/promises'
-import { ContentRepository } from 'emdash'
+import { ContentRepository, MediaRepository, normalizeMediaValue } from 'emdash'
 import { createDialect } from 'emdash/db/sqlite'
 import { Kysely } from 'kysely'
 import { readSourcePosts } from './migrate-emdash.mjs'
@@ -161,6 +161,26 @@ test('后台写入后无需重建，页面、搜索和 RSS 立即更新', async 
   assert.ok((await html(`/posts/${post.slug}`)).includes(title))
   assert.ok((await html('/search?q=%E6%9B%B4%E6%96%B0%E6%B5%8B%E8%AF%95')).includes(title))
   assert.ok((await html('/rss.xml')).includes(title))
+})
+
+test('官方接口规范化封面后，列表、详情与封面图片仍可访问', async () => {
+  const source = published.find((post) => post.data.cover)
+  const repository = new ContentRepository(db)
+  const media = new MediaRepository(db)
+  const post = await repository.findBySlug('posts', source.data.slug)
+  const cover = await normalizeMediaValue(post.data.cover, () => ({
+    get: async (id) => {
+      const item = await media.findById(id)
+      return item ? { ...item, meta: { storageKey: item.storageKey } } : null
+    },
+  }))
+  assert.equal(cover.src, undefined)
+  await repository.update('posts', post.id, { data: { cover } })
+  await repository.publish('posts', post.id)
+  const path = `/_emdash/api/media/file/${cover.meta.storageKey}`
+  assert.ok((await html('/posts')).includes(post.data.title.replaceAll('&', '&amp;')))
+  assert.ok((await html(`/posts/${post.slug}`)).includes(path))
+  assert.equal((await fetch(`${origin}${path}`)).status, 200)
 })
 
 test('生产环境启用后台认证，开发绕过接口不可用', async () => {

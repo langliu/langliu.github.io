@@ -279,16 +279,47 @@ export async function createRemoteImporter(origin, receiptDirectory = resolve(RO
       body: body instanceof FormData ? body : body ? JSON.stringify(body) : undefined,
       redirect: 'error',
     })
-    const result = await response.json()
+    let result
+    try {
+      result = await response.json()
+    } catch {
+      throw new Error(
+        `${method} ${path}: HTTP ${response.status}, ${response.headers.get('content-type') ?? 'unknown content type'}`,
+      )
+    }
     if (!response.ok || !result.success)
       throw new Error(`${method} ${path}: ${result.error?.message ?? response.status}`)
     return result.data
   }
+  let existingMediaPromise
+  const getExistingMedia = () => {
+    existingMediaPromise ??= (async () => {
+      const items = new Map()
+      let cursor
+      do {
+        const params = new URLSearchParams({ limit: '100' })
+        if (cursor) params.set('cursor', cursor)
+        const result = await request(`media?${params}`)
+        for (const item of result.items) {
+          if (item.status === 'ready' && item.contentHash) items.set(item.contentHash, item)
+        }
+        cursor = result.nextCursor
+      } while (cursor)
+      return items
+    })()
+    return existingMediaPromise
+  }
   return {
     async upload(file, bytes) {
-      const form = new FormData()
-      form.append('file', new Blob([bytes], { type: 'image/webp' }), basename(file))
-      const { item } = await request('media', 'POST', form)
+      const existing = await getExistingMedia()
+      const hash = `sha1:${createHash('sha1').update(bytes).digest('hex')}`
+      let item = existing.get(hash)
+      if (!item) {
+        const form = new FormData()
+        form.append('file', new Blob([bytes], { type: 'image/webp' }), basename(file))
+        item = (await request('media', 'POST', form)).item
+        existing.set(hash, item)
+      }
       return {
         id: item.id,
         url: item.url ?? `/_emdash/api/media/file/${item.id}`,

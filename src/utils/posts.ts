@@ -2,6 +2,7 @@ import { z } from 'astro/zod'
 import { getEmDashCollection, getEmDashEntry } from 'emdash'
 import { POST_CATEGORIES } from '@/data/postCategories'
 import { getContentText } from '@/utils/portableText'
+import { postCoverSchema } from '@/utils/postCover'
 import type { PostEntry } from '@/utils/types/Post'
 
 export type { PostEntry } from '@/utils/types/Post'
@@ -23,7 +24,7 @@ const postSchema = z.object({
   updated_date: z.coerce.date().nullish(),
   category: z.enum(POST_CATEGORIES),
   tags: z.array(z.string()).nullish(),
-  cover: z.object({ src: z.string() }).nullish(),
+  cover: postCoverSchema,
   content: z.array(z.object({ _type: z.string(), _key: z.string() }).loose()),
 })
 

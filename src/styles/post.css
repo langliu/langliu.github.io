@@ -205,6 +205,31 @@
   padding: 4px 12px;
 }
 
+/* 保留 EmDash 的表格结构，并覆盖组件默认的浅色主题和间距。 */
+.post div.emdash-table-wrapper {
+  --color-border: oklch(55.4% 0.046 257.417);
+  --color-surface: transparent;
+  --color-bg-subtle: transparent;
+  margin-block: 0;
+
+  + p {
+    margin-top: 1.25rem;
+  }
+}
+
+.post .emdash-table-wrapper table.emdash-table {
+  font-size: inherit;
+}
+
+.post .emdash-table-wrapper table.emdash-table :is(td, th) {
+  padding: 4px 12px;
+  vertical-align: middle;
+}
+
+.post .emdash-table-wrapper table.emdash-table th {
+  font-weight: 700;
+}
+
 .post ol {
   list-style-type: decimal;
   padding-left: 1rem;

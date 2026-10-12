@@ -1,4 +1,5 @@
 import assert from 'node:assert/strict'
+import { createHash } from 'node:crypto'
 import { mkdtemp, rm } from 'node:fs/promises'
 import { createServer } from 'node:http'
 import { tmpdir } from 'node:os'
@@ -7,6 +8,7 @@ import { backup, DatabaseSync } from 'node:sqlite'
 import test from 'node:test'
 import {
   ContentRepository,
+  normalizeMediaValue,
   portableTextToProsemirror,
   prosemirrorToPortableText,
   RevisionRepository,
@@ -16,6 +18,7 @@ import { Kysely } from 'kysely'
 import remarkParse from 'remark-parse'
 import { unified } from 'unified'
 import { preparePostContent } from '../src/utils/portableText.ts'
+import { postCoverSchema } from '../src/utils/postCover.ts'
 import {
   convertMarkdown,
   createRemoteImporter,
@@ -247,4 +250,90 @@ test('远程发布中断可恢复，重跑不会覆盖已有文章或发布已�
     await new Promise((done) => server.close(done))
     await rm(directory, { recursive: true, force: true })
   }
+})
+
+test('远程媒体按内容哈希复用，非 JSON 响应可诊断且失败上传可重试', async () => {
+  const directory = await mkdtemp(join(tmpdir(), 'emdash-media-test-'))
+  const previousToken = process.env.EMDASH_TOKEN
+  process.env.EMDASH_TOKEN = 'test-only-token'
+  const oldBytes = Buffer.from('existing-image')
+  const newBytes = Buffer.from('new-image')
+  const hash = (bytes) => `sha1:${createHash('sha1').update(bytes).digest('hex')}`
+  const oldItem = { id: 'old-media', status: 'ready', contentHash: hash(oldBytes) }
+  const newItem = { id: 'new-media', status: 'ready', contentHash: hash(newBytes) }
+  let uploaded = false
+  let uploadRequests = 0
+  let mediaPages = 0
+  const server = createServer(async (request, response) => {
+    assert.equal(request.headers.authorization, 'Bearer test-only-token')
+    let result
+    if (request.method === 'GET') {
+      mediaPages++
+      result = request.url.includes('cursor=next')
+        ? { items: uploaded ? [newItem] : [] }
+        : { items: [oldItem], nextCursor: 'next' }
+    } else {
+      for await (const _chunk of request) {
+        // 消费上传请求，模拟第一次上游错误。
+      }
+      uploadRequests++
+      if (uploadRequests === 1) {
+        response.writeHead(503, { 'Content-Type': 'text/html' })
+        response.end('<!DOCTYPE html><title>Unavailable</title>')
+        return
+      }
+      uploaded = true
+      result = { item: newItem }
+    }
+    response.writeHead(200, { 'Content-Type': 'application/json' })
+    response.end(JSON.stringify({ success: true, data: result }))
+  })
+  await new Promise((done) => server.listen(0, '127.0.0.1', done))
+  try {
+    const origin = `http://127.0.0.1:${server.address().port}`
+    const importer = await createRemoteImporter(origin, directory)
+    assert.equal((await importer.upload('renamed.webp', oldBytes)).id, oldItem.id)
+    assert.equal(uploadRequests, 0)
+    await assert.rejects(importer.upload('new.webp', newBytes), /POST media: HTTP 503, text\/html/)
+    assert.equal((await importer.upload('new.webp', newBytes)).id, newItem.id)
+    assert.equal((await importer.upload('new.webp', newBytes)).id, newItem.id)
+    assert.equal(mediaPages, 2)
+    assert.equal(uploadRequests, 2)
+    const retry = await createRemoteImporter(origin, directory)
+    assert.equal((await retry.upload('new.webp', newBytes)).id, newItem.id)
+    assert.equal(uploadRequests, 2)
+  } finally {
+    if (previousToken === undefined) delete process.env.EMDASH_TOKEN
+    else process.env.EMDASH_TOKEN = previousToken
+    await new Promise((done) => server.close(done))
+    await rm(directory, { recursive: true, force: true })
+  }
+})
+
+test('官方接口规范化的封面与旧导入封面均能生成可访问路径', async () => {
+  const original = { id: 'media-id', provider: 'local', src: '/legacy.webp' }
+  const normalized = await normalizeMediaValue(original, () => ({
+    get: async () => ({
+      id: 'media-id',
+      filename: 'cover.webp',
+      mimeType: 'image/webp',
+      width: 800,
+      height: 600,
+      meta: { storageKey: 'uploads/cover.webp' },
+    }),
+  }))
+  assert.equal(normalized.src, undefined)
+  assert.equal(postCoverSchema.parse(normalized).src, '/_emdash/api/media/file/uploads/cover.webp')
+  assert.equal(postCoverSchema.parse({ src: '/legacy.webp' }).src, '/legacy.webp')
+  assert.equal(
+    postCoverSchema.parse({ provider: 'external', id: '', src: 'https://example.com/cover.webp' })
+      .src,
+    'https://example.com/cover.webp',
+  )
+  assert.equal(
+    postCoverSchema.parse({ provider: 'local', id: 'media-id' }).src,
+    '/_emdash/api/media/file/media-id',
+  )
+  assert.equal(postCoverSchema.parse(null), null)
+  assert.equal(postCoverSchema.parse(undefined), undefined)
 })
