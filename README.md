@@ -84,7 +84,7 @@ unset EMDASH_TOKEN
 
 PR 和各分支推送运行完整迁移、类型、格式、内容、转换、Node 生产冒烟测试及 Workers 构建预检。
 
-生产部署改为手动触发 `.github/workflows/deploy.yml`。在 `cloudflare-production` 环境配置 `CLOUDFLARE_API_TOKEN`、`CLOUDFLARE_ACCOUNT_ID` 两个 Secret，以及可选 `SITE_URL` Variable。令牌需具备 Workers 部署和对应 D1、R2、KV 等绑定资源权限。先完成首次资源及管理员初始化，再使用该工作流更新代码。
+生产部署由 `.github/workflows/deploy.yml` 在推送到 `main` 时自动触发，也支持手动触发。在仓库或 `cloudflare-production` 环境配置 `CLOUDFLARE_API_TOKEN`、`CLOUDFLARE_ACCOUNT_ID` 两个 Secret，以及可选 `SITE_URL` Variable。未创建的部署环境会在工作流首次运行时自动创建。令牌需具备 Workers 部署和对应 D1、R2、KV 等绑定资源权限。先完成首次资源及管理员初始化，再使用该工作流更新代码。
 
 也可以在现有 Worker 的 **Settings → Builds → Connect** 使用 [Workers Builds](https://developers.cloudflare.com/workers/ci-cd/builds/) 连接 GitHub 仓库 `langliu/langliu.github.io`，由 Cloudflare 在推送后构建并部署。启用前，先将迁移代码、正式资源绑定和线上修复提交到目标分支；`main` 尚未合入迁移时不能直接作为新站的部署源。
 
@@ -102,7 +102,7 @@ PR 和各分支推送运行完整迁移、类型、格式、内容、转换、No
 
 首次连接需要 Cloudflare 的 GitHub 集成具有该仓库权限，并选择具有对应 Workers、D1、R2、KV 和路由权限的部署令牌。构建变量与运行时变量分开配置；正式运行时地址已写入 `wrangler.jsonc`。暂时关闭非生产分支构建，待配置独立测试数据库和媒体存储后再开启预览。
 
-Workers Builds 只更新应用代码和静态资源，不运行生产内容导入。EmDash 后台发布的文章和图片继续保存在 D1 / R2，不需要触发代码部署。GitHub Actions 的手动部署工作流可保留用于补充发布。
+Workers Builds 只更新应用代码和静态资源，不运行生产内容导入。EmDash 后台发布的文章和图片继续保存在 D1 / R2，不需要触发代码部署。GitHub Actions 部署工作流同时支持 `main` 推送自动部署和手动触发。
 
 ## License
 
