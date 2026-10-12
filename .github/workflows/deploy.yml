@@ -1,8 +1,6 @@
 name: 部署 EmDash 到 Cloudflare Workers
 
 on:
-  push:
-    branches: [main]
   workflow_dispatch:
 
 permissions:
