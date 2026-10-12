@@ -43,15 +43,15 @@
 可选：`updatedAt`、`cover`、`tags`。已发布文章必须设置至少一个 `tags`。
 
 EmDash 字段定义在 `seed/seed.json`。发布日期对应 `published_date`，更新日期对应
-`updated_date`，正文使用 Portable Text。重复导入跳过现有 slug，后台内容为后续编辑来源。
+`updated_date`，正文使用 Portable Text。迁移已完成，后台内容为后续编辑来源，存档不再导入数据库。
 
 分类仅限：`CSS`、`Vue`、`React`、`其他`、`HTML`、`JavaScript`、`TypeScript`。
 
 ## CI、Hooks 与提交
 
-- PR/push 运行迁移、质量检查、Node 冒烟测试和 Workers 构建预检
-- 生产部署通过 Cloudflare 工作流手动触发；本地内容导入不写入生产 D1 / R2
-- 检查前运行 `pnpm run cf:types`；Node 冒烟测试前依次运行本地迁移与 `pnpm run build`
+- PR/push 运行类型、Lint、格式检查和 Workers 构建预检
+- 生产部署通过 Cloudflare 工作流手动触发
+- 检查前运行 `pnpm run cf:types`
 - 使用 `pnpm install --frozen-lockfile`；Lefthook 在提交前运行 Biome，推送前运行检查和 Lint
 - 提交格式：`<type>: <subject>`；主题使用祈使句、不超过 50 字符、不加句号，正文每行不超过 72 字符
 - 常用 type：`feat`、`fix`、`docs`、`style`、`refactor`、`perf`、`test`、`chore`、`ci`、`revert`

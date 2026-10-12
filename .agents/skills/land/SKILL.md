@@ -49,15 +49,16 @@ metadata:
   来源：`AGENTS.md`、`.github/workflows/ci-check.yaml` 和
   `.github/workflows/deploy.yml` 的安装步骤；运行时来源：`package.json`。
   不为让安装通过而修改锁文件，除非该修改本就是请求范围。
-- 按修改范围做本地验证，以下精确命令均定义于 `package.json` 的 scripts，
-  并由 `.github/workflows/ci-check.yaml` 执行：
+- 按修改范围做本地验证，以下命令与
+  `.github/actions/verify/action.yml` 和 `.github/workflows/ci-check.yaml` 一致：
 
   ```sh
+  pnpm run cf:types
   pnpm run check
   pnpm run lint
   pnpm run format:check
-  pnpm run content:lint
-  pnpm run build
+  pnpm run build:cloudflare
+  pnpm exec wrangler deploy --dry-run
   ```
 
   应用、依赖、配置或文章变更运行完整组；纯技能或说明文档变更可先做
@@ -65,15 +66,14 @@ metadata:
   没有独立 test 脚本，不杜撰 `pnpm test`。界面行为修改另做相关实际使用验证。
   安装或验证失败时分析具体原因，不更换锁文件策略、不把跳过的检查说成通过。
 - 文章修改须满足 `AGENTS.md` 的必填字段、发布文章 tags 和第三方链接要求；
-  技术 schema 见 `src/content.config.ts`，内容检查实现见 `scripts/content-lint.mjs`。
-  schema 允许的默认值不取消明确的内容政策。
+  EmDash 字段定义见 `seed/seed.json`。历史存档变更按 `AGENTS.md` 人工核对。
 - 仅暂存本次相关文件或明确的相关片段，检查暂存差异及敏感信息。
   提交格式按 `AGENTS.md`：`<type>: <subject>`，祈使句，主题不超过 50 字符、
   不加句号，正文每行不超过 72 字符。
   Git 提交和合并使用 `GIT_EDITOR=true` 并提供非交互消息。
   保留签名要求，不伪造作者或关闭签名来规避失败。
 - 不绕过 hooks。`lefthook.yml` 定义提交前 Biome 自动修正，以及推送前
-  check、lint、content:lint；若 hook 修改文件，检查其范围并重新验证。
+  check、lint；若 hook 修改文件，检查其范围并重新验证。
   不假定 hooks 已安装，必要验证由上述命令和 CI 保证。
 
 ## 3. 发布、检查与合并
@@ -82,8 +82,8 @@ metadata:
   的 PR，提供非交互标题和正文，遵守提交模板、说明修改内容及实际验证结果。
   推送主题分支或创建 PR 都不是落地完成。
 - 确认 PR 最新 head SHA、base 分支及 base 的最新状态，检查完整远端 CI。
-  `.github/workflows/ci-check.yaml` 在 PR 和非 main 推送运行 `check-astro`，
-  包含上列全部五项验证。即便没有配置 required checks，也必须确认这个完整
+  `.github/workflows/ci-check.yaml` 在 PR 和各分支推送运行 `check`，
+  包含上列完整验证。即便没有配置 required checks，也必须确认这个完整
   CI 对待合入版本成功，不能仅依赖 `gh pr checks --required` 的空结果。
 - 可用 `gh pr checks <PR> --watch` 观察，再通过 PR/check/run 数据确认对应 SHA、
   结论和真实 URL。对长时间监听设置终端超时，超时后查询状态而非假定成功。

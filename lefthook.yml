@@ -14,5 +14,3 @@ pre-push:
       run: pnpm run check
     - name: lint
       run: pnpm run lint
-    - name: content-lint
-      run: pnpm run content:lint
