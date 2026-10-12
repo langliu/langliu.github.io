@@ -27,5 +27,11 @@ worktrees/
 # Lefthook local overrides
 lefthook-local.yml
 
-# Pagefind
-pagefind/
+# EmDash 本地数据库、上传文件及生成类型
+.emdash/
+.wrangler/
+emdash-env.d.ts
+worker-configuration.d.ts
+.dev.vars*
+.env.*
+!.env.example

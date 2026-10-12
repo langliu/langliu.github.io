@@ -1,31 +1,14 @@
 ---
 import PostListItem from '@/components/PostListItem.astro'
-import { CATEGORY_SLUG_BY_NAME, getCategoryBySlug, type PostCategory } from '@/data/postCategories'
+import { getCategoryBySlug } from '@/data/postCategories'
 import Layout from '@/layouts/Layout.astro'
 import { getPublishedPosts } from '@/utils/posts'
 
-export async function getStaticPaths() {
-  const posts = await getPublishedPosts()
-  const categories = [...new Set(posts.map((post) => post.data.category))]
-
-  return categories.map((category) => ({
-    params: { category: CATEGORY_SLUG_BY_NAME[category] },
-    props: { category },
-  }))
-}
-
-type Props = {
-  category: PostCategory
-}
-
-const { category } = Astro.props as Props
-const categoryFromParam = getCategoryBySlug(Astro.params.category ?? '')
-
-if (!categoryFromParam || categoryFromParam !== category) {
-  throw new Error(`未知分类路由: ${Astro.params.category}`)
-}
+const category = getCategoryBySlug(Astro.params.category ?? '')
+if (!category) return Astro.rewrite('/404')
 
 const posts = (await getPublishedPosts()).filter((post) => post.data.category === category)
+if (posts.length === 0) return Astro.rewrite('/404')
 ---
 
 <Layout title={`研之有物 - ${category} 分类`} description={`${category} 分类下的全部文章`}>

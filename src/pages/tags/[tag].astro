@@ -3,22 +3,9 @@ import PostListItem from '@/components/PostListItem.astro'
 import Layout from '@/layouts/Layout.astro'
 import { getPostTags, getPublishedPosts } from '@/utils/posts'
 
-export async function getStaticPaths() {
-  const posts = await getPublishedPosts()
-  const tags = [...new Set(posts.flatMap((post) => getPostTags(post)))]
-
-  return tags.map((tag) => ({
-    params: { tag },
-    props: { tag },
-  }))
-}
-
-type Props = {
-  tag: string
-}
-
-const { tag } = Astro.props as Props
+const tag = Astro.params.tag ?? ''
 const posts = (await getPublishedPosts()).filter((post) => getPostTags(post).includes(tag))
+if (posts.length === 0) return Astro.rewrite('/404')
 ---
 
 <Layout title={`研之有物 - ${tag} 标签`} description={`标签「${tag}」下的全部文章`}>

@@ -1,0 +1,21 @@
+---
+
+import type { PostBlockProps } from '@/utils/types/Post'
+
+type Props = PostBlockProps
+const { node } = Astro.props
+const style = typeof node.style === 'string' ? node.style : 'normal'
+const TAG_BY_STYLE = {
+  h1: 'h1',
+  h2: 'h2',
+  h3: 'h3',
+  h4: 'h4',
+  h5: 'h5',
+  h6: 'h6',
+  blockquote: 'blockquote',
+} as const
+const Tag = TAG_BY_STYLE[style as keyof typeof TAG_BY_STYLE] ?? 'p'
+const id = typeof node.headingId === 'string' ? node.headingId : undefined
+---
+
+<Tag id={id}><slot /></Tag>

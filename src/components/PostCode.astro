@@ -1,0 +1,11 @@
+---
+import { highlightCode } from '@/utils/highlightCode'
+
+import type { PostCodeProps } from '@/utils/types/Post'
+
+type Props = PostCodeProps
+const { node } = Astro.props
+const html = await highlightCode(node.code ?? '', node.language)
+---
+
+<Fragment set:html={html} />

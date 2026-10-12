@@ -3,26 +3,16 @@ name: CI
 on:
   pull_request:
   push:
-    branches-ignore:
-      - main
+    branches: ['**']
+
+permissions:
+  contents: read
 
 jobs:
-  check-astro:
+  check:
     runs-on: ubuntu-latest
-
     steps:
-      - name: Checkout
-        uses: actions/checkout@v5
-      - name: Setup pnpm and Node.js
-        uses: pnpm/setup@v2
-        with:
-          cache: true
-          install: false
-
-      - run: pnpm install --frozen-lockfile
-      - run: pnpm run check
-      - run: pnpm run lint
-      - run: pnpm run format:check
-      - run: pnpm run content:lint
-      - run: pnpm run build
-      - run: pnpm run test:smoke
+      - uses: actions/checkout@v5
+      - uses: ./.github/actions/verify
+      - run: pnpm run build:cloudflare
+      - run: pnpm exec wrangler deploy --dry-run

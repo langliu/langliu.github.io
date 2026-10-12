@@ -1,0 +1,12 @@
+---
+import { PortableText } from 'emdash/ui'
+import PostBlock from '@/components/PostBlock.astro'
+import PostCode from '@/components/PostCode.astro'
+import PostList from '@/components/PostList.astro'
+import type { PostContentProps } from '@/utils/types/Post'
+
+type Props = PostContentProps
+const { value } = Astro.props
+---
+
+<PortableText value={value} components={{ block: PostBlock, type: { code: PostCode, postList: PostList } }} />

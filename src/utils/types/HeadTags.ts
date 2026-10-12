@@ -2,6 +2,7 @@ export type HeadTags = {
   title?: string
   description?: string
   noindex?: boolean
+  canonical?: string
   og?: {
     title?: string
     type?: string

@@ -1,18 +1,19 @@
 ---
-import { type CollectionEntry, render } from 'astro:content'
+import { getSeoMeta } from 'emdash'
 import CodeCopy from '@/components/CodeCopy.astro'
+import PostContent from '@/components/PostContent.astro'
 import ReadingProgress from '@/components/ReadingProgress.astro'
 import TableOfContents from '@/components/TableOfContents.astro'
-import { SITE_URL } from '@/data/config'
 import { getCategoryPath } from '@/data/postCategories'
 import presentation from '@/data/presentation'
 import Layout from '@/layouts/Layout.astro'
 import '@/styles/post.css'
 import formatDate from '@/utils/formatDate'
+import { preparePostContent } from '@/utils/portableText'
 import {
   getAdjacentPosts,
+  getPostBySlug,
   getPostPath,
-  getPostSlug,
   getPostTags,
   getPostUpdatedAt,
   getPublishedPosts,
@@ -21,22 +22,11 @@ import {
 } from '@/utils/posts'
 import getReadingTimeMinutes from '@/utils/readingTime'
 
-export async function getStaticPaths() {
-  const publishedPosts = await getPublishedPosts()
-
-  return publishedPosts.map((post) => ({
-    params: { slug: getPostSlug(post) },
-    props: { post, posts: publishedPosts },
-  }))
-}
-
-type Props = {
-  post: CollectionEntry<'posts'>
-  posts: CollectionEntry<'posts'>[]
-}
-
-const { post, posts } = Astro.props as Props
-const { Content, headings } = await render(post)
+const post = await getPostBySlug(Astro.params.slug ?? '')
+if (!post) return Astro.rewrite('/404')
+const posts = await getPublishedPosts()
+const { content, headings } = preparePostContent(post.data.content)
+const SITE_URL = Astro.site ?? new URL(Astro.url.origin)
 const tocHeadings = headings.filter(({ depth }) => depth === 2 || depth === 3)
 const showToc = tocHeadings.length >= 3
 
@@ -48,43 +38,19 @@ const updatedAtDate = getPostUpdatedAt(post)
 const publishedAt = publishedAtDate.toISOString()
 const updatedAt = updatedAtDate.toISOString()
 const showUpdatedAt = updatedAtDate.getTime() !== publishedAtDate.getTime()
-const readingTimeMinutes = getReadingTimeMinutes(post.body)
+const readingTimeMinutes = getReadingTimeMinutes(post.readingText)
 const { newer, older } = getAdjacentPosts(posts, post)
 const relatedPosts = getRelatedPosts(posts, post, 3)
 const cover = post.data.cover
-const postImageModules = import.meta.glob<{ default: { src: string } }>(
-  '../../assets/posts/*.{webp,png,jpg,jpeg,avif}',
-  { eager: true },
-)
+const ogImage = cover ? new URL(cover, SITE_URL).toString() : undefined
 
-function resolveCoverUrl(coverValue: string | undefined): string | undefined {
-  if (!coverValue) {
-    return undefined
-  }
-
-  if (coverValue.startsWith('http://') || coverValue.startsWith('https://')) {
-    return coverValue
-  }
-
-  if (coverValue.startsWith('/')) {
-    return new URL(coverValue.slice(1), SITE_URL).toString()
-  }
-
-  const fileName = coverValue.split('/').pop()
-  if (!fileName) {
-    return undefined
-  }
-
-  const matched = Object.entries(postImageModules).find(([path]) => path.endsWith(`/${fileName}`))
-  if (!matched) {
-    return undefined
-  }
-
-  const assetSrc = matched[1].default.src
-  return new URL(assetSrc.replace(/^\//, ''), SITE_URL).toString()
-}
-
-const ogImage = resolveCoverUrl(cover)
+const seo = getSeoMeta(post, {
+  siteUrl: SITE_URL.toString(),
+  path: postPath,
+  defaultTitle: post.data.title,
+  defaultDescription: post.data.description,
+  defaultOgImage: ogImage,
+})
 
 const jsonLd = {
   '@context': 'https://schema.org',
@@ -117,13 +83,15 @@ const jsonLd = {
 ---
 
 <Layout
-  title={post.data.title}
-  description={post.data.description}
+  title={seo.title}
+  description={seo.description ?? post.data.description}
+  noindex={Boolean(post.data.seo?.noIndex)}
+  canonical={seo.canonical ?? postUrl}
   og={{
-    title: post.data.title,
-    description: post.data.description,
+    title: seo.ogTitle,
+    description: seo.ogDescription ?? post.data.description,
     type: 'article',
-    image: ogImage,
+    image: seo.ogImage ?? ogImage,
     alt: post.data.title,
   }}
   jsonLd={jsonLd}
@@ -155,8 +123,6 @@ const jsonLd = {
     <header class='flex flex-col gap-4'>
       <h1
         class='text-3xl font-bold text-neutral-100 md:text-4xl'
-        data-pagefind-body
-        data-pagefind-meta='title'
       >{post.data.title}</h1>
 
       <div class='flex flex-col gap-3 text-sm text-neutral-400'>
@@ -185,7 +151,6 @@ const jsonLd = {
           </span>
           <a
             href={getCategoryPath(post.data.category)}
-            data-pagefind-filter='分类'
             class='inline-flex items-center rounded-full border border-neutral-700 px-2.5 py-0.5 text-neutral-300 no-underline transition-colors hover:border-neutral-400 hover:text-neutral-100'
           >
             {post.data.category}
@@ -199,7 +164,6 @@ const jsonLd = {
                 <li class='m-0 list-none p-0'>
                   <a
                     href={getTagPath(tag)}
-                    data-pagefind-filter='标签'
                     class='inline-flex items-center rounded-md bg-neutral-800 px-2.5 py-1 text-xs text-neutral-300 no-underline transition-colors hover:bg-neutral-700 hover:text-neutral-100'
                   >
                     {tag}
@@ -213,15 +177,13 @@ const jsonLd = {
 
       <p
         class='m-0 text-base leading-7 text-neutral-300 italic'
-        data-pagefind-body
-        data-pagefind-weight='2'
       >{post.data.description}</p>
     </header>
 
     <div class:list={['post-layout', { 'post-layout--with-toc': showToc }]}>
       {showToc && <TableOfContents headings={tocHeadings} />}
-      <article class='post' data-pagefind-body>
-        <Content />
+      <article class='post'>
+        <PostContent value={content} />
       </article>
     </div>
 

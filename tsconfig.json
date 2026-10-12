@@ -10,6 +10,6 @@
     "moduleResolution": "bundler",
     "target": "ESNext"
   },
-  "include": [".astro/types.d.ts", "astro.config.mjs", "src/**/*"],
+  "include": [".astro/types.d.ts", "astro.config.mjs", "src/**/*", "worker-configuration.d.ts"],
   "exclude": ["dist", ".worktrees", "worktrees", "public", "node_modules"]
 }
