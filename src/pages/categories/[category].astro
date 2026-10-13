@@ -1,25 +1,27 @@
 ---
 import PostListItem from '@/components/PostListItem.astro'
-import { getCategoryBySlug } from '@/data/postCategories'
 import Layout from '@/layouts/Layout.astro'
-import { getPublishedPosts } from '@/utils/posts'
+import { getCategoryBySlug } from '@/utils/categories'
+import { getPublishedPosts, getSortedCategoryStats } from '@/utils/posts'
 
-const category = getCategoryBySlug(Astro.params.category ?? '')
+const allPosts = await getPublishedPosts()
+const categories = getSortedCategoryStats(allPosts).map(([category]) => category)
+const category = getCategoryBySlug(Astro.params.category ?? '', categories)
 if (!category) return Astro.rewrite('/404')
 
-const posts = (await getPublishedPosts()).filter((post) => post.data.category === category)
+const posts = allPosts.filter((post) => post.data.category.slug === category.slug)
 if (posts.length === 0) return Astro.rewrite('/404')
 ---
 
-<Layout title={`研之有物 - ${category} 分类`} description={`${category} 分类下的全部文章`}>
+<Layout title={`研之有物 - ${category.label} 分类`} description={`${category.label} 分类下的全部文章`}>
   <main class='flex flex-col gap-12'>
     <div class='flex flex-col gap-4'>
       <div class='flex items-center gap-2 text-sm text-neutral-500'>
         <a href='/categories' class='hover:text-neutral-300'>分类</a>
         <span>/</span>
-        <span class='text-neutral-100'>{category}</span>
+        <span class='text-neutral-100'>{category.label}</span>
       </div>
-      <h1 class='text-2xl text-neutral-100'>{category}</h1>
+      <h1 class='text-2xl text-neutral-100'>{category.label}</h1>
       <p class='text-neutral-400'>共 {posts.length} 篇文章</p>
     </div>
 

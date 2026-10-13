@@ -1,7 +1,7 @@
 ---
 import ArrowIcon from '@/components/shared/ArrowIcon.astro'
-import { getCategoryPath } from '@/data/postCategories'
 import Layout from '@/layouts/Layout.astro'
+import { getCategoryPath } from '@/utils/categories'
 import { getPublishedPosts, getSortedCategoryStats } from '@/utils/posts'
 
 const posts = await getPublishedPosts()
@@ -21,10 +21,10 @@ const categories = getSortedCategoryStats(posts)
           <a
             href={getCategoryPath(category)}
             class='group flex flex-col gap-2 rounded-md border border-neutral-700 p-6 transition-all duration-300 hover:-translate-y-1 hover:border-neutral-400'
-            aria-label={`查看 ${category} 分类的 ${count} 篇文章`}
+            aria-label={`查看 ${category.label} 分类的 ${count} 篇文章`}
           >
             <div class='flex items-center justify-between gap-3'>
-              <h2 class='text-lg text-neutral-100 group-hover:text-white'>{category}</h2>
+              <h2 class='text-lg text-neutral-100 group-hover:text-white'>{category.label}</h2>
               <span class='rounded-full bg-neutral-800 px-3 py-1 text-sm text-neutral-400'>
                 {count} 篇
               </span>

@@ -4,9 +4,9 @@ import CodeCopy from '@/components/CodeCopy.astro'
 import PostContent from '@/components/PostContent.astro'
 import ReadingProgress from '@/components/ReadingProgress.astro'
 import TableOfContents from '@/components/TableOfContents.astro'
-import { getCategoryPath } from '@/data/postCategories'
 import presentation from '@/data/presentation'
 import Layout from '@/layouts/Layout.astro'
+import { getCategoryPath } from '@/utils/categories'
 import '@/styles/post.css'
 import formatDate from '@/utils/formatDate'
 import { preparePostContent } from '@/utils/portableText'
@@ -57,7 +57,7 @@ const jsonLd = {
   '@type': 'BlogPosting',
   headline: post.data.title,
   description: post.data.description,
-  datePublished: publishedAt,
+  datePublished: post.data.hasPublicationDate ? publishedAt : undefined,
   dateModified: updatedAt,
   mainEntityOfPage: {
     '@type': 'WebPage',
@@ -74,8 +74,8 @@ const jsonLd = {
     name: '刘浪',
     url: SITE_URL,
   },
-  articleSection: post.data.category,
-  keywords: tags.length > 0 ? tags.join(', ') : post.data.category,
+  articleSection: post.data.category.label,
+  keywords: tags.length > 0 ? tags.join(', ') : post.data.category.label,
   inLanguage: 'zh-CN',
   timeRequired: `PT${readingTimeMinutes}M`,
   ...(ogImage ? { image: [ogImage] } : {}),
@@ -128,7 +128,8 @@ const jsonLd = {
       <div class='flex flex-col gap-3 text-sm text-neutral-400'>
         <div class='flex flex-row flex-wrap items-center gap-x-2 gap-y-2'>
           <span>
-            发布于 <time datetime={publishedAt}>{formatDate(publishedAtDate)}</time>
+            {post.data.hasPublicationDate ? '发布于' : '创建于'}
+            <time datetime={publishedAt}>{formatDate(publishedAtDate)}</time>
           </span>
           {
             showUpdatedAt && (
@@ -153,7 +154,7 @@ const jsonLd = {
             href={getCategoryPath(post.data.category)}
             class='inline-flex items-center rounded-full border border-neutral-700 px-2.5 py-0.5 text-neutral-300 no-underline transition-colors hover:border-neutral-400 hover:text-neutral-100'
           >
-            {post.data.category}
+            {post.data.category.label}
           </a>
         </div>
 
@@ -202,7 +203,7 @@ const jsonLd = {
                   href={getPostPath(related)}
                   class='flex h-full flex-col gap-2 rounded-md border border-neutral-700 p-4 transition-colors hover:border-neutral-400'
                 >
-                  <span class='text-sm text-neutral-500'>{related.data.category}</span>
+                  <span class='text-sm text-neutral-500'>{related.data.category.label}</span>
                   <span class='text-neutral-100'>{related.data.title}</span>
                 </a>
               </li>

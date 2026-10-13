@@ -1,6 +1,6 @@
 ---
 import ArrowIcon from '@/components/shared/ArrowIcon.astro'
-import { getCategoryPath } from '@/data/postCategories'
+import { getCategoryPath } from '@/utils/categories'
 import formatDate from '@/utils/formatDate'
 import { getPostPath, type PostEntry } from '@/utils/posts'
 import getReadingTimeMinutes from '@/utils/readingTime'
@@ -35,9 +35,9 @@ const categoryPath = getCategoryPath(post.data.category)
     <a
       href={categoryPath}
       class='transition-colors hover:text-neutral-300'
-      aria-label={`查看分类 ${post.data.category}`}
+      aria-label={`查看分类 ${post.data.category.label}`}
     >
-      {post.data.category}
+      {post.data.category.label}
     </a>
     <span aria-hidden='true'>·</span>
     <span>{`约 ${readingTimeMinutes} 分钟`}</span>

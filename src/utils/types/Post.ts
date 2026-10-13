@@ -1,5 +1,9 @@
 import type { ContentSeo, PortableTextBlock } from 'emdash'
-import type { PostCategory } from '@/data/postCategories'
+
+export type PostCategory = {
+  label: string
+  slug: string
+}
 
 export type PostEntry = {
   id: string
@@ -10,7 +14,8 @@ export type PostEntry = {
     description: string
     slug: string
     publishedAt: Date
-    updatedAt?: Date
+    hasPublicationDate: boolean
+    updatedAt: Date
     category: PostCategory
     tags: string[]
     cover?: string

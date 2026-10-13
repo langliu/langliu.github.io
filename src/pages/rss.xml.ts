@@ -19,7 +19,7 @@ export async function GET(context: APIContext) {
       description: post.data.description,
       pubDate: post.data.publishedAt,
       link: getPostPath(post),
-      categories: [post.data.category, ...(post.data.tags ?? [])],
+      categories: [post.data.category.label, ...(post.data.tags ?? [])],
     })),
     customData: '<language>zh-CN</language>',
   })

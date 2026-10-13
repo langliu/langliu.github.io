@@ -1,15 +1,22 @@
 ---
 import PostListItem from '@/components/PostListItem.astro'
-import { POST_CATEGORIES } from '@/data/postCategories'
 import Layout from '@/layouts/Layout.astro'
-import { getPostTags, getPublishedPosts, getSortedTagStats } from '@/utils/posts'
+import { getCategoryByFilter } from '@/utils/categories'
+import {
+  getPostTags,
+  getPublishedPosts,
+  getSortedCategoryStats,
+  getSortedTagStats,
+} from '@/utils/posts'
 
 const query = (Astro.url.searchParams.get('q') ?? '').trim().slice(0, 200)
-const category = Astro.url.searchParams.get('category') ?? ''
+const categoryFilter = Astro.url.searchParams.get('category') ?? ''
 const tag = Astro.url.searchParams.get('tag') ?? ''
 const posts = await getPublishedPosts()
+const categories = getSortedCategoryStats(posts).map(([category]) => category)
+const category = getCategoryByFilter(categoryFilter, categories)
 const tags = getSortedTagStats(posts)
-const hasSearch = Boolean(query || category || tag)
+const hasSearch = Boolean(query || categoryFilter || tag)
 const words = query.toLocaleLowerCase('zh-CN').split(/\s+/).filter(Boolean)
 const matches = hasSearch
   ? posts.filter((post) => {
@@ -18,7 +25,7 @@ const matches = hasSearch
         .toLocaleLowerCase('zh-CN')
       return (
         words.every((word) => text.includes(word)) &&
-        (!category || post.data.category === category) &&
+        (!categoryFilter || post.data.category.slug === category?.slug) &&
         (!tag || getPostTags(post).includes(tag))
       )
     })
@@ -43,7 +50,7 @@ const matches = hasSearch
           分类
           <select name='category' aria-label='按分类筛选' class='rounded-md border border-neutral-700 bg-neutral-900 px-3 py-2'>
             <option value=''>全部分类</option>
-            {POST_CATEGORIES.map((value) => <option value={value} selected={category === value}>{value}</option>)}
+            {categories.map((value) => <option value={value.slug} selected={category?.slug === value.slug}>{value.label}</option>)}
           </select>
         </label>
         <label class='flex items-center gap-2'>

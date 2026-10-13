@@ -1,6 +1,5 @@
 import { z } from 'astro/zod'
 import { getEmDashCollection, getEmDashEntry } from 'emdash'
-import { POST_CATEGORIES } from '@/data/postCategories'
 import { getContentText } from '@/utils/portableText'
 import { postCoverSchema } from '@/utils/postCover'
 import type { PostEntry } from '@/utils/types/Post'
@@ -20,10 +19,13 @@ const postSchema = z.object({
   title: z.string(),
   description: z.string(),
   slug: z.string(),
-  published_date: z.coerce.date(),
-  updated_date: z.coerce.date().nullish(),
-  category: z.enum(POST_CATEGORIES),
-  tags: z.array(z.string()).nullish(),
+  publishedAt: z.date().nullable(),
+  createdAt: z.date(),
+  updatedAt: z.date(),
+  terms: z.object({
+    category: z.array(z.object({ label: z.string(), slug: z.string() })).optional(),
+    tag: z.array(z.object({ label: z.string() })).optional(),
+  }),
   cover: postCoverSchema,
   content: z.array(z.object({ _type: z.string(), _key: z.string() }).loose()),
 })
@@ -36,9 +38,10 @@ function normalizePost(entry: { id: string; data: unknown }): PostEntry {
     readingText: getContentText(data.content, false),
     data: {
       ...data,
-      publishedAt: data.published_date,
-      updatedAt: data.updated_date ?? undefined,
-      tags: data.tags ?? [],
+      publishedAt: data.publishedAt ?? data.createdAt,
+      hasPublicationDate: data.publishedAt !== null,
+      category: data.terms.category?.[0] ?? { label: '其他', slug: 'others' },
+      tags: data.terms.tag?.map((term) => term.label) ?? [],
       cover: data.cover?.src,
       seo: data.seo ?? undefined,
     },
@@ -53,7 +56,7 @@ export async function getPublishedPosts(): Promise<PostEntry[]> {
       status: 'published',
       limit: 100,
       cursor,
-      orderBy: { published_date: 'desc' },
+      orderBy: { published_at: 'desc' },
     })
     if (result.error) throw result.error
     posts.push(...result.entries.map(normalizePost))
@@ -88,7 +91,7 @@ export function getTagPath(tag: string): string {
 }
 
 export function getPostUpdatedAt(post: PostEntry): Date {
-  return post.data.updatedAt ?? post.data.publishedAt
+  return post.data.updatedAt
 }
 
 export function getSortedTagStats(posts: PostEntry[]): Array<[string, number]> {
@@ -135,7 +138,7 @@ export function getRelatedPosts(posts: PostEntry[], current: PostEntry, limit = 
     .filter((post) => post.id !== current.id)
     .map((post) => {
       const sharedTags = getPostTags(post).filter((tag) => currentTags.has(tag)).length
-      const sameCategory = post.data.category === current.data.category ? 1 : 0
+      const sameCategory = post.data.category.slug === current.data.category.slug ? 1 : 0
       const score = sharedTags * 2 + sameCategory
 
       return { post, score }
@@ -155,21 +158,18 @@ export function getRelatedPosts(posts: PostEntry[], current: PostEntry, limit = 
 export function getSortedCategoryStats(
   posts: PostEntry[],
 ): Array<[PostEntry['data']['category'], number]> {
-  const initialCategoryStats = Object.fromEntries(
-    POST_CATEGORIES.map((category) => [category, 0]),
-  ) as Record<PostEntry['data']['category'], number>
+  const categoryStats = new Map<string, [PostEntry['data']['category'], number]>()
 
-  const categoryStats = posts.reduce<Record<PostEntry['data']['category'], number>>((acc, post) => {
+  for (const post of posts) {
     const category = post.data.category
-    acc[category] = (acc[category] ?? 0) + 1
-    return acc
-  }, initialCategoryStats)
+    const existing = categoryStats.get(category.slug)
+    if (existing) existing[1] += 1
+    else categoryStats.set(category.slug, [category, 1])
+  }
 
-  return Object.entries(categoryStats)
-    .filter(([, count]) => count > 0)
-    .sort(([, first], [, second]) => second - first) as Array<
-    [PostEntry['data']['category'], number]
-  >
+  return [...categoryStats.values()].sort(
+    (left, right) => right[1] - left[1] || left[0].label.localeCompare(right[0].label, 'zh-CN'),
+  )
 }
 
 function assertUniquePostSlugs(posts: PostEntry[]): void {

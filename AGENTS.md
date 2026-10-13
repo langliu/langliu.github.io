@@ -42,10 +42,15 @@
 
 可选：`updatedAt`、`cover`、`tags`。已发布文章必须设置至少一个 `tags`。
 
-EmDash 字段定义在 `seed/seed.json`。发布日期对应 `published_date`，更新日期对应
-`updated_date`，正文使用 Portable Text。迁移已完成，后台内容为后续编辑来源，存档不再导入数据库。
+EmDash 字段定义在 `seed/seed.json`。发布日期使用原生 `publishedAt`，查询排序使用
+`published_at`；前台更新时间与 SEO 修改时间使用系统 `updatedAt`，不维护自定义日期字段。
+正文使用 Portable Text。迁移已完成，后台内容为后续编辑来源，存档不再导入数据库。
 
-分类仅限：`CSS`、`Vue`、`React`、`其他`、`HTML`、`JavaScript`、`TypeScript`。
+分类和标签使用 EmDash 原生 `category` / `tag`，前台读取 `entry.data.terms`；
+每篇文章选择一个分类，已发布文章至少关联一个标签。
+
+分类由 EmDash 后台管理；前台按原生分类的 `slug` 识别、按 `label` 展示，
+不维护固定分类枚举。保留历史分类 URL 的兼容映射。
 
 ## CI、Hooks 与提交
 
