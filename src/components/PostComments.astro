@@ -1,0 +1,51 @@
+---
+import { getCollectionInfo } from 'emdash'
+import { CommentForm, Comments } from 'emdash/ui/comments'
+import type { PostCommentsProps } from '@/utils/types/Post'
+import '@/styles/comments.css'
+
+const { contentId, publishedAt } = Astro.props as PostCommentsProps
+const collection = await getCollectionInfo('posts')
+const closedAfterDays = collection?.commentsClosedAfterDays ?? 0
+const closesAt = new Date(publishedAt)
+closesAt.setDate(closesAt.getDate() + closedAfterDays)
+const isClosed = closedAfterDays > 0 && Date.now() > closesAt.getTime()
+---
+
+{collection?.commentsEnabled && (
+  <section id='comments' class='post-comments' aria-labelledby='comments-title'>
+    <h2 id='comments-title'>评论</h2>
+    <Comments
+      collection='posts'
+      contentId={contentId}
+      threaded
+      locale='zh-CN'
+      labels={{
+        heading: (count) => count ? `${count} 条评论` : '暂无评论，欢迎分享你的想法',
+        member: '站点成员',
+      }}
+    />
+    {isClosed ? (
+      <p class='comment-note'>这篇文章已关闭新评论，已有评论仍可阅读。</p>
+    ) : (
+      <>
+        <p class='comment-note'>邮箱不会公开显示。请围绕文章内容交流。</p>
+        <CommentForm
+          collection='posts'
+          contentId={contentId}
+          labels={{
+            name: '昵称',
+            email: '邮箱',
+            comment: '评论内容',
+            submit: '提交评论',
+            submitting: '提交中…',
+            published: '评论已发布，刷新页面即可查看',
+            pending: '评论已提交，审核通过后显示',
+            error: '提交失败，请检查内容或稍后重试',
+            networkError: '网络异常，请稍后重试',
+          }}
+        />
+      </>
+    )}
+  </section>
+)}

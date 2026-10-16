@@ -1,0 +1,59 @@
+.post-comments {
+  --ec-form-bg: #171717;
+  --ec-form-border: #404040;
+  --ec-form-color: #e5e5e5;
+  --ec-form-user-bg: #171717;
+  --ec-form-user-border: #404040;
+  --ec-form-submit-bg: #fb923c;
+  --ec-form-submit-color: #0a0a0a;
+
+  border-top: 1px solid #262626;
+  padding-top: 2rem;
+}
+
+.post-comments h2 {
+  color: #f5f5f5;
+  font-size: 1.125rem;
+  margin-bottom: 1rem;
+}
+
+.post-comments .ec-comments {
+  --ec-comment-border: 1px solid #404040;
+}
+
+.post-comments .ec-comments-heading,
+.post-comments .comment-note {
+  color: #a3a3a3;
+  font-size: 0.875rem;
+  margin-bottom: 1rem;
+}
+
+.post-comments .comment-note {
+  margin-top: 1.5rem;
+}
+
+.post-comments .ec-comment-form-field input,
+.post-comments .ec-comment-form-field textarea {
+  min-width: 0;
+  width: 100%;
+  border-radius: 0.375rem;
+}
+
+.post-comments .ec-comment-form-field textarea {
+  resize: vertical;
+}
+
+.post-comments :is(input, textarea, button):focus-visible {
+  outline: 2px solid #fb923c;
+  outline-offset: 3px;
+}
+
+.post-comments .ec-comment-user-info {
+  flex-wrap: wrap;
+  overflow-wrap: anywhere;
+}
+
+.post-comments .ec-comment-body a {
+  color: #fb923c;
+  text-decoration: underline;
+}

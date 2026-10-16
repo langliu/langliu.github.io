@@ -10,6 +10,7 @@ export type PostEntry = {
   body: string
   readingText: string
   data: {
+    id: string
     title: string
     description: string
     slug: string
@@ -25,6 +26,7 @@ export type PostEntry = {
 }
 
 export type PostBlockProps = { node: PortableTextBlock }
+export type PostCommentsProps = { contentId: string; publishedAt: Date }
 export type PostCodeProps = { node: { code?: string; language?: string } }
 export type PostContentProps = { value: PortableTextBlock[] }
 export type PostListNode = PortableTextBlock & {

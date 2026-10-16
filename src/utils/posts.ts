@@ -7,6 +7,7 @@ import type { PostEntry } from '@/utils/types/Post'
 export type { PostEntry } from '@/utils/types/Post'
 
 const postSchema = z.object({
+  id: z.string(),
   seo: z
     .object({
       title: z.string().nullable(),

@@ -55,7 +55,9 @@ EmDash 字段定义在 `seed/seed.json`。发布日期使用原生 `publishedAt`
 ## CI、Hooks 与提交
 
 - PR/push 运行类型、Lint、格式检查和 Workers 构建预检
-- 生产部署通过 Cloudflare 工作流手动触发
+- 涉及代码修改的任务默认只完成本地修改和验证，禁止自动部署到生产环境
+- 生产部署必须获得用户针对当次改动的明确授权，再通过 Cloudflare 工作流手动触发；不得沿用此前任务的部署授权，也不得将实现、修复、检查通过或提交代码视为部署授权
+- 推送代码、修改生产后台设置或生产数据库同样需要针对当次操作的明确授权；代码修改请求不包含这些操作
 - 检查前运行 `pnpm run cf:types`
 - 使用 `pnpm install --frozen-lockfile`；Lefthook 在提交前运行 Biome，推送前运行检查和 Lint
 - 提交格式：`<type>: <subject>`；主题使用祈使句、不超过 50 字符、不加句号，正文每行不超过 72 字符

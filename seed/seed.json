@@ -19,6 +19,7 @@
       "urlPattern": "/posts/{slug}",
       "supports": ["drafts", "revisions", "preview", "scheduling", "seo"],
       "titleField": "title",
+      "commentsEnabled": true,
       "fields": [
         {
           "slug": "title",

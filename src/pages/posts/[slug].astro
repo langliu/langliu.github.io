@@ -1,6 +1,7 @@
 ---
-import { getSeoMeta } from 'emdash'
+import { getRequestContext, getSeoMeta } from 'emdash'
 import CodeCopy from '@/components/CodeCopy.astro'
+import PostComments from '@/components/PostComments.astro'
 import PostContent from '@/components/PostContent.astro'
 import ReadingProgress from '@/components/ReadingProgress.astro'
 import TableOfContents from '@/components/TableOfContents.astro'
@@ -244,5 +245,8 @@ const jsonLd = {
         </nav>
       )
     }
+    {!getRequestContext()?.preview && post.data.hasPublicationDate && (
+      <PostComments contentId={post.data.id} publishedAt={publishedAtDate} />
+    )}
   </main>
 </Layout>
