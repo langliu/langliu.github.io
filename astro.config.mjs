@@ -37,7 +37,7 @@ export default defineConfig({
     emdash({
       middleware: { outer: new URL('./src/middleware/security.ts', import.meta.url) },
       database: isCloudflare
-        ? d1({ binding: 'DB', session: 'auto' })
+        ? d1({ binding: 'DB', session: 'auto', coalesce: true })
         : sqlite({ url: 'file:./.emdash/data.db' }),
       storage: isCloudflare
         ? r2({ binding: 'MEDIA' })
