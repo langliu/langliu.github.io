@@ -18,38 +18,38 @@
     "cf:types": "wrangler types"
   },
   "dependencies": {
-    "@astrojs/cloudflare": "^14.3.4",
-    "@astrojs/node": "^11.1.7",
-    "@astrojs/react": "^7.0.1",
+    "@astrojs/cloudflare": "^14.4.8",
+    "@astrojs/node": "^11.1.13",
+    "@astrojs/react": "^7.1.9",
     "@astrojs/rss": "^4.0.19",
-    "@emdash-cms/cloudflare": "1.2.0",
-    "@tailwindcss/vite": "^4.3.3",
-    "astro": "^7.3.8",
+    "@emdash-cms/cloudflare": "1.5.0",
+    "@tailwindcss/vite": "^4.3.5",
+    "astro": "^7.4.12",
     "astro-seo": "^1.2.0",
-    "emdash": "1.2.0",
+    "emdash": "1.5.0",
     "github-slugger": "^2.0.0",
-    "kysely": "^0.29.6",
-    "react": "^19.3.0",
-    "react-dom": "^19.3.0",
+    "kysely": "^0.29.9",
+    "react": "^19.3.1",
+    "react-dom": "^19.3.1",
     "sharp": "^0.35.5",
-    "shiki": "^4.5.0",
-    "tailwindcss": "^4.3.3"
+    "shiki": "^4.6.0",
+    "tailwindcss": "^4.3.5"
   },
   "devDependencies": {
-    "@astrojs/check": "^0.9.10",
-    "@biomejs/biome": "^2.5.15",
-    "@cloudflare/workers-types": "^5.20261012.1",
-    "@types/node": "^26.6.5",
+    "@astrojs/check": "^0.9.12",
+    "@biomejs/biome": "^2.6.8",
+    "@cloudflare/workers-types": "^5.20261118.1",
+    "@types/node": "^26.6.6",
     "@types/react": "^19.3.0",
     "@types/react-dom": "^19.3.0",
-    "lefthook": "^2.2.1",
+    "lefthook": "^2.2.2",
     "typescript": "^6.0.3",
-    "wrangler": "^4.149.0"
+    "wrangler": "^4.164.0"
   },
   "engines": {
     "node": ">=22.21.0"
   },
-  "packageManager": "pnpm@12.11.2",
+  "packageManager": "pnpm@12.21.0",
   "emdash": {
     "seed": "seed/seed.json"
   }
